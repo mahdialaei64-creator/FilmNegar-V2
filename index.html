@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>فیلم نگار</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f5f2;--card:#fff;--tx:#1d1d1f;--mu:#6b6b70;--ac:#c0392b;--bd:#e3e1dc;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141416;--card:#202024;--tx:#f1f1f3;--mu:#9a9aa2;--ac:#e8604f;--bd:#34343a}}
+:root[data-theme="dark"]{--bg:#141416;--card:#202024;--tx:#f1f1f3;--mu:#9a9aa2;--ac:#e8604f;--bd:#34343a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.7;padding-bottom:70px}
+main{max-width:760px;margin:auto;padding:14px}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 12% 0%,#c0392b40,transparent 45%),radial-gradient(circle at 95% 100%,#f1c40f26,transparent 42%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23888' stroke-opacity='.2' stroke-width='2'%3E%3Ccircle cx='30' cy='30' r='16'/%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3Crect x='70' y='70' width='36' height='28' rx='4'/%3E%3Cpath d='M70 82h36M80 70l-6 12M92 70l-6 12M104 70l-6 12'/%3E%3C/g%3E%3C/svg%3E")}
+h2{font-size:17px;margin:18px 0 8px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav button{flex:1;border:0;background:none;color:var(--mu);padding:10px 2px;font:inherit;font-size:12px;cursor:pointer}
+nav button.on{color:var(--ac);font-weight:700}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px;margin-bottom:8px}
+.row{display:flex;gap:10px;align-items:center}
+.poster{width:46px;height:62px;border-radius:8px;display:grid;place-items:center;font-size:24px;flex:none}
+.grow{flex:1;min-width:0}.mu{color:var(--mu);font-size:12px}
+.tag{display:inline-block;font-size:11px;border:1px solid var(--bd);border-radius:20px;padding:0 8px;margin-left:4px;color:var(--mu)}
+button.b,select,input,textarea{font:inherit;font-size:13px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;padding:5px 10px}
+button.b{cursor:pointer}button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+input,textarea{width:100%;margin-bottom:8px}
+.tabs{display:flex;gap:6px;margin:8px 0;flex-wrap:wrap}
+.tabs button{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:20px;padding:4px 14px;font:inherit;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.stat{text-align:center}.stat b{font-size:22px;display:block}
+#modal{position:fixed;inset:0;background:#0009;display:none;align-items:flex-end;justify-content:center;z-index:9}
+#modal.show{display:flex}#box{background:var(--bg);width:100%;max-width:560px;max-height:88vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px}
+</style></head><body>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div id="modal"><div id="box"></div></div>
+<script>
+const COL=['#e74c3c','#3498db','#27ae60','#8e44ad','#e67e22','#16a085','#2c3e50','#d35400'];
+const DB=[
+[1,'جدایی نادر از سیمین','film','ایرانی',2011,'درام','روایت یک جدایی و پیامدهای اخلاقی آن؛ برنده اسکار بهترین فیلم خارجی.'],
+[2,'فروشنده','film','ایرانی',2016,'درام','زوجی بازیگر پس از حادثه‌ای در خانه جدید با بحران روبه‌رو می‌شوند.'],
+[3,'قهرمان','film','ایرانی',2021,'درام','مردی زندانی با یک کیف پر از سکه شهرتی غیرمنتظره پیدا می‌کند.'],
+[4,'پایتخت','series','ایرانی',2011,'کمدی','ماجراهای خانواده نقی معمولی در فصل‌های مختلف.'],
+[5,'شهرزاد','series','ایرانی',2015,'درام','سریالی دربارهٔ دوران پس از کودتای ۲۸ مرداد.'],
+[6,'آژانس شیشه‌ای','film','ایرانی',1998,'درام','جانباز جنگ و گروگان‌گیری در یک آژانس مسافرتی.'],
+[7,'طعم گیلاس','film','ایرانی',1997,'درام','مردی در جستجوی کسی است که در کارش به او کمک کند؛ نخل طلای کن.'],
+[8,'ماهی و گربه','film','ایرانی',2013,'هیجانی','فیلمی تک‌برش دربارهٔ گروهی جوان در کنار دریای خزر.'],
+[9,'بازی مرکب','series','خارجی',2021,'هیجانی','صدها نفر برای جایزه‌ای کلان در بازی‌های مرگبار شرکت می‌کنند.'],
+[10,'برکینگ بد','series','خارجی',2008,'جنایی','معلم شیمی بیمار وارد دنیای تولید مواد مخدر می‌شود.'],
+[11,'تلقین','film','خارجی',2010,'علمی‌تخیلی','دزدی که ایده‌ها را از رویاها می‌دزدد.'],
+[12,'پدرخوانده','film','خارجی',1972,'جنایی','حماسهٔ یک خانوادهٔ مافیایی ایتالیایی‌تبار.'],
+[13,'بین‌ستارگانی','film','خارجی',2014,'علمی‌تخیلی','سفر فضانوردان برای یافتن سیارهٔ جدید برای بشر.'],
+[14,'انگل','film','خارجی',2019,'درام','خانواده‌ای فقیر به زندگی خانواده‌ای ثروتمند نفوذ می‌کند.'],
+[15,'چرنوبیل','series','خارجی',2019,'درام','بازسازی فاجعهٔ هسته‌ای چرنوبیل.'],
+[16,'اوپنهایمر','film','خارجی',2023,'زندگی‌نامه','داستان پدر بمب اتم و پیامدهای اخلاقی ساخت آن.'],
+[17,'بازی تاج و تخت','series','خارجی',2011,'فانتزی','نبرد خاندان‌ها بر سر تخت آهنین.'],
+[18,'رستگاری در شاوشنک','film','خارجی',1994,'درام','دوستی دو زندانی و امید به آزادی.']
+].map(a=>({id:'d'+a[0],t:a[1],k:a[2],o:a[3],y:a[4],g:a[5],d:a[6]}));
+const FR=[
+{id:'f1',n:'سارا',e:'👩‍🎤',act:[['d14','watched',5,'شاهکار طبقاتی، حتماً ببینید.'],['d9','watching'],['d3','want']]},
+{id:'f2',n:'علی',e:'🧔',act:[['d1','watched',5,'بهترین فیلم ایرانی دهه اخیر.'],['d16','watched',4,'سنگین ولی ارزشمند.'],['d5','watching']]},
+{id:'f3',n:'مهسا',e:'👩',act:[['d12','watched',4,'کلاسیک بی‌نقص.'],['d13','want'],['d4','watched',3,'سرگرم‌کننده.']]}];
+const ST={want:'می‌خواهم ببینم',watching:'در حال تماشا',watched:'دیده‌ام'};
+const DEF={custom:[],lib:{},fol:[],tab:'home',lt:'want',q:'',fk:'all',fo:'all',cl:[]};
+let S={...DEF};
+const SBU='https://mrshvucwpohsrkmjhmfi.supabase.co',SBK='sb_publishable_cllLZZIC9Ejjp5pxDJAqmw_SWVUoD38';
+let AU=null,PF=null,SYNC='',PT;
+const pk=()=>({custom:S.custom,lib:S.lib,fol:S.fol,cl:S.cl});
+const save=()=>{if(!AU)return;try{localStorage.setItem('mt_'+AU.id,JSON.stringify(pk()))}catch(e){}clearTimeout(PT);SYNC='saving';PT=setTimeout(push,800)};
+async function sb(path,o={}){
+const {anon,...f}=o;const h={apikey:SBK,'Content-Type':'application/json',...(f.headers||{})};
+if(!anon&&AU)h.Authorization='Bearer '+AU.access_token;
+const r=await fetch(SBU+path,{...f,headers:h});const x=await r.text();let j=null;try{j=x?JSON.parse(x):null}catch(e){}
+if(!r.ok)throw {status:r.status,msg:(j&&(j.msg||j.error_description||j.message||j.error))||'خطا'};return j}
+const sess=()=>{try{return JSON.parse(localStorage.getItem('sb')||'null')}catch(e){return null}};
+function setSess(d){AU={access_token:d.access_token,refresh_token:d.refresh_token,exp:Date.now()+(d.expires_in-60)*1000,id:d.user.id,email:d.user.email};localStorage.setItem('sb',JSON.stringify(AU))}
+async function ensure(){if(AU&&Date.now()>=AU.exp){const d=await sb('/auth/v1/token?grant_type=refresh_token',{method:'POST',anon:1,body:JSON.stringify({refresh_token:AU.refresh_token})});setSess(d)}}
+const syncTxt=()=>SYNC==='ok'?'✅ همگام با حساب شما':SYNC==='saving'?'⏳ در حال ذخیره…':SYNC==='err'?'⚠️ ذخیرهٔ ابری ناموفق بود؛ دوباره تلاش می‌شود':'';
+function updSync(){const e=document.getElementById('sync');if(e)e.textContent=syncTxt()}
+async function push(){if(!AU)return;try{await ensure();await sb('/rest/v1/user_data',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify({user_id:AU.id,data:pk(),updated_at:new Date().toISOString()})});SYNC='ok'}catch(e){SYNC='err';setTimeout(push,15000)}updSync()}
+function mg(a,b){a=a||{};b=b||{};const u=(x,y)=>{const m=new Map();[...(x||[]),...(y||[])].forEach(i=>m.set(i.id,i));return[...m.values()]};
+return{custom:u(a.custom,b.custom),lib:{...(a.lib||{}),...(b.lib||{})},cl:u(a.cl,b.cl),fol:[...new Set([...(a.fol||[]),...(b.fol||[])])]}}
+const jl=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}};
+async function enter(){
+await ensure();
+const p=await sb('/rest/v1/profiles?select=username&id=eq.'+AU.id);PF=p[0]||null;
+if(PF)localStorage.setItem('pf_'+AU.id,JSON.stringify(PF));
+const loc=jl('mt_'+AU.id),old=jl('mt');
+const c=await sb('/rest/v1/user_data?select=data&user_id=eq.'+AU.id);
+S={...DEF,...mg(mg(old,loc),c[0]?.data)};
+await push();
+if(old&&SYNC==='ok'){localStorage.setItem('mt_old',JSON.stringify(old));localStorage.removeItem('mt')}}
+async function boot(){
+const s0=sess();
+if(s0){AU=s0;try{await enter()}catch(e){
+if(e.status===401||e.status===400||e.status===403){localStorage.removeItem('sb');AU=null}
+else{PF=jl('pf_'+AU.id);S={...DEF,...(jl('mt_'+AU.id)||{})}}}}
+render()}
+const ERR={'Invalid login credentials':'ایمیل یا رمز عبور اشتباه است','User already registered':'این ایمیل قبلاً ثبت شده است'};
+const em=e=>ERR[e.msg]||(e.status?e.msg:'اتصال به سرور برقرار نشد؛ اینترنت را بررسی کنید');
+function shell(h){document.getElementById('nav').innerHTML='';document.getElementById('app').innerHTML=`<div style="max-width:380px;margin:36px auto"><h2 style="text-align:center;font-size:24px">🎬 فیلم نگار</h2>${h}</div>`}
+function authView(m){m=m||'in';shell(`<div class="card"><input id="ae" type="email" dir="ltr" placeholder="ایمیل" autocomplete="email"><input id="ap" type="password" dir="ltr" placeholder="رمز عبور (حداقل ۶ کاراکتر)" autocomplete="${m==='in'?'current-password':'new-password'}"><div id="aerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="abtn" class="b p" style="width:100%" onclick="doAuth('${m}')">${m==='in'?'ورود':'ساخت حساب'}</button><div style="text-align:center;margin-top:12px"><a href="#" style="color:var(--ac);font-size:13px" onclick="authView('${m==='in'?'up':'in'}');return false">${m==='in'?'حساب ندارید؟ ثبت‌نام':'حساب دارید؟ ورود'}</a></div></div>`)}
+async function doAuth(m){
+const g=i=>document.getElementById(i),e=g('ae').value.trim(),p=g('ap').value,er=g('aerr'),b=g('abtn');er.textContent='';
+if(!e||p.length<6){er.textContent='ایمیل و رمز عبور (حداقل ۶ کاراکتر) را وارد کنید';return}
+b.disabled=true;b.textContent='صبر کنید…';
+try{
+const d=await sb(m==='in'?'/auth/v1/token?grant_type=password':'/auth/v1/signup',{method:'POST',anon:1,body:JSON.stringify({email:e,password:p})});
+if(!d.access_token)throw {msg:'ثبت‌نام انجام شد ولی ورود خودکار ممکن نیست؛ ایمیل خود را تأیید کنید و وارد شوید.',status:1};
+setSess(d);await enter();render()}
+catch(x){er.textContent=em(x);b.disabled=false;b.textContent=m==='in'?'ورود':'ساخت حساب'}}
+function nameView(){shell(`<div class="card"><b>یک نام کاربری انتخاب کنید</b><div class="mu" style="margin:4px 0 8px">دوستانتان با همین نام پیدایتان می‌کنند. ۳ تا ۲۰ حرف انگلیسی کوچک، عدد یا _</div><input id="au" dir="ltr" placeholder="username" autocapitalize="none" autocomplete="off"><div id="aerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="abtn" class="b p" style="width:100%" onclick="saveName()">ادامه</button><div style="text-align:center;margin-top:12px"><a href="#" style="color:var(--mu);font-size:13px" onclick="logout();return false">خروج</a></div></div>`)}
+async function saveName(){
+const u=document.getElementById('au').value.trim().toLowerCase(),er=document.getElementById('aerr');er.textContent='';
+if(!/^[a-z0-9_]{3,20}$/.test(u)){er.textContent='نام کاربری معتبر نیست';return}
+try{await ensure();await sb('/rest/v1/profiles',{method:'POST',body:JSON.stringify({id:AU.id,username:u})});PF={username:u};localStorage.setItem('pf_'+AU.id,JSON.stringify(PF));render()}
+catch(x){er.textContent=x.status===409?'این نام کاربری قبلاً گرفته شده':em(x)}}
+function logout(){localStorage.removeItem('sb');AU=null;PF=null;SYNC='';S={...DEF};render()}
+function me(){return `<h2>👤 پروفایل</h2><div class="card"><b>@${esc(PF?.username)}</b><div class="mu" dir="ltr" style="text-align:right">${esc(AU.email)}</div><div class="mu" id="sync" style="margin-top:6px">${syncTxt()}</div><br><button class="b" onclick="logout()">خروج از حساب</button></div><div class="card mu">لیست‌های شما به حساب‌تان متصل است و با ورود به همین حساب، از هر گوشی در دسترس است.</div>`}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const all=()=>[...DB,...S.custom];
+const get=id=>all().find(m=>m.id===id);
+const kt=m=>m.k==='series'?'سریال':'فیلم';
+const col=id=>COL[[...id].reduce((a,c)=>a+c.charCodeAt(0),0)%COL.length];
+const pos=m=>m.img?`<div class="poster" style="background:url(${m.img}) center/cover"></div>`:`<div class="poster" style="background:${col(m.id)}33">${m.k==='series'?'📺':'🎬'}</div>`;
+function setSt(id,st){if(!st){delete S.lib[id]}else S.lib[id]={...(S.lib[id]||{}),st};save();render()}
+function stSel(id){const c=S.lib[id]?.st||'';return `<select onchange="setSt('${id}',this.value)"><option value="">— افزودن به لیست —</option>${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${c===k?'selected':''}>${v}</option>`).join('')}</select>`}
+function item(m,extra=''){const l=S.lib[m.id];return `<div class="card row" onclick="detail('${m.id}')" style="cursor:pointer">${pos(m)}<div class="grow"><b>${esc(m.t)}</b> ${m.custom?`<span class="tag">${m.tm?'TMDB':'دستی'}</span>`:''}<div class="mu">${kt(m)} ${esc(m.o)} · ${esc(m.y||'—')} · ${esc(m.g||'')}</div>${l?.se||l?.ep?`<div class="mu">📺 فصل ${l.se||'؟'} · قسمت ${l.ep||'؟'}</div>`:''}${l?.rating?`<div class="mu">⭐ ${l.rating}/۵</div>`:''}</div><div onclick="event.stopPropagation()">${extra||stSel(m.id)}</div></div>`}
+function home(){
+const day=Math.floor(Date.now()/864e5),pick=[0,1,2,3].map(i=>DB[(day*4+i)%DB.length]);
+const c=s=>Object.values(S.lib).filter(x=>x.st===s).length;
+const feed=S.fol.flatMap(fid=>{const f=FR.find(x=>x.id===fid);return f.act.map(a=>({f,a}))}).slice(0,6);
+return `<h2>🎬 فیلم نگار</h2><div class="card row" style="border-color:var(--ac)"><div class="grow"><b>لیست شخصی خودت رو بساز</b><div class="mu">هر فیلم یا سریالی که در کاتالوگ نبود را دستی اضافه کن؛ بدون محدودیت.</div></div><button class="b p" onclick="openForm()">＋ افزودن دستی</button></div><div class="row"><div class="card stat grow"><b>${c('want')}</b>می‌خواهم ببینم</div><div class="card stat grow"><b>${c('watching')}</b>در حال تماشا</div><div class="card stat grow"><b>${c('watched')}</b>دیده‌ام</div></div>
+<h2>🔥 پیشنهاد امروز</h2><div class="grid">${pick.map(m=>`<div class="card" onclick="detail('${m.id}')" style="cursor:pointer;text-align:center"><div class="poster" style="width:100%;height:90px;background:${col(m.id)}33;font-size:34px">${m.k==='series'?'📺':'🎬'}</div><b>${esc(m.t)}</b><div class="mu">${m.o} · ${m.y}</div></div>`).join('')}</div>
+<h2>🧑‍🤝‍🧑 فعالیت دوستان</h2>${feed.length?feed.map(({f,a})=>`<div class="card">${f.e} <b>${f.n}</b> ${a[1]==='watched'?'دید':a[1]==='watching'?'در حال دیدن است':'می‌خواهد ببیند'}: <a href="#" onclick="detail('${a[0]}');return false" style="color:var(--ac)">${esc(get(a[0]).t)}</a>${a[2]?` ⭐${a[2]}`:''}</div>`).join(''):'<div class="card mu">هنوز کسی را دنبال نکرده‌اید.</div>'}
+<h2>💡 نکته</h2><div class="card mu">فیلم مورد نظر در کاتالوگ نیست؟ از تب «کاتالوگ» با دکمهٔ «افزودن دستی» اضافه‌اش کنید.</div>`}
+function catalog(){
+let L=all().filter(m=>(S.fk==='all'||m.k===S.fk)&&(S.fo==='all'||m.o===S.fo)&&m.t.includes(S.q));
+return `<input id="q" placeholder="🔍 جستجوی فیلم یا سریال..." value="${esc(S.q)}" oninput="S.q=this.value;document.getElementById('res').innerHTML=res();tmdb()">
+<div class="tabs">${[['all','همه'],['film','فیلم'],['series','سریال']].map(([k,v])=>`<button class="${S.fk===k?'on':''}" onclick="S.fk='${k}';render()">${v}</button>`).join('')}${[['all','هر مبدأ'],['ایرانی','ایرانی'],['خارجی','خارجی']].map(([k,v])=>`<button class="${S.fo===k?'on':''}" onclick="S.fo='${k}';render()">${v}</button>`).join('')}</div>
+<button class="b p" onclick="openForm()">＋ افزودن دستی</button><div id="res">${res()}</div><div id="tm"></div>`}
+function nz(s){return String(s||'').replace(/ي/g,'ی').replace(/ك/g,'ک').toLowerCase()}
+function res(){const L=all().filter(m=>(S.fk==='all'||m.k===S.fk)&&(S.fo==='all'||m.o===S.fo)&&nz(m.t).includes(nz(S.q)));return `<h2>${L.length} نتیجه</h2>${L.map(m=>item(m)).join('')||`<div class="card mu">پیدا نشد. می‌توانید «${esc(S.q)}» را دستی اضافه کنید.</div>`}`}
+function lists(){
+const cl=S.cl.find(c=>'c:'+c.id===S.lt);const L=cl?cl.ids.map(get).filter(Boolean):all().filter(m=>S.lt==='all'?S.lib[m.id]?.st:S.lib[m.id]?.st===S.lt);
+return `<button class="b p" onclick="openForm()" style="width:100%;margin:8px 0">＋ افزودن دستی فیلم یا سریال به لیست</button><div class="tabs"><button class="${S.lt==='all'?'on':''}" onclick="S.lt='all';render()">همه</button>${Object.entries(ST).map(([k,v])=>`<button class="${S.lt===k?'on':''}" onclick="S.lt='${k}';render()">${v}</button>`).join('')}${S.cl.map(c=>`<button class="${S.lt==='c:'+c.id?'on':''}" onclick="S.lt='c:${c.id}';render()">📁 ${esc(c.name)}</button>`).join('')}<button onclick="newCl()">＋ لیست جدید</button></div>${cl?`<button class="b" onclick="delCl('${cl.id}')">🗑 حذف این لیست</button>`:''}
+${L.map(m=>item(m,cl?`<button class="b" onclick="rmCl('${cl.id}','${m.id}')">✕ حذف از لیست</button>`:S.lt==='all'?`<div style="color:var(--ac);font-weight:700;font-size:12px;margin-bottom:4px">${ST[S.lib[m.id].st]}</div>`+stSel(m.id):'')).join('')||'<div class="card mu">این لیست خالی است. از جزئیات هر فیلم می‌توانید آن را به لیست اضافه کنید.</div>'}
+<div class="mu">وضعیت هر مورد را مستقیماً از منوی کنار آن تغییر دهید؛ با انتخاب «— افزودن —» از لیست حذف می‌شود.</div>`}
+function friends(){
+return `<h2>دوستان</h2>${FR.map(f=>{const on=S.fol.includes(f.id);return `<div class="card"><div class="row"><div class="poster" style="width:46px;height:46px;border-radius:50%;background:${col(f.id)}33">${f.e}</div><div class="grow"><b>${f.n}</b><div class="mu">${f.act.length} مورد در لیست</div></div><button class="b ${on?'':'p'}" onclick="fol('${f.id}')">${on?'دنبال می‌کنید':'دنبال کردن'}</button></div>${on?f.act.map(a=>`<div class="mu" style="margin-top:4px">• ${esc(get(a[0]).t)} — ${ST[a[1]]}${a[2]?` ⭐${a[2]}`:''}</div>`).join(''):''}</div>`}).join('')}
+<div class="mu">دوستان این‌جا نمونهٔ نمایشی‌اند؛ برای دوستان واقعی به یک سرور و حساب کاربری نیاز است.</div>`}
+function fol(id){S.fol=S.fol.includes(id)?S.fol.filter(x=>x!==id):[...S.fol,id];save();render()}
+function detail(id){
+const m=get(id),l=S.lib[id]||{};
+const rv=FR.flatMap(f=>S.fol.includes(f.id)?f.act.filter(a=>a[0]===id&&a[3]).map(a=>`<div class="card">${f.e} <b>${f.n}</b> ⭐${a[2]}<div>${esc(a[3])}</div></div>`):[]).join('');
+open_(`<div class="row">${pos(m)}<div class="grow"><h3 style="margin:0">${esc(m.t)}</h3><div class="mu">${kt(m)} ${esc(m.o)} · ${esc(m.y||'—')} · ${esc(m.g||'')}</div></div></div>
+<p>${esc(m.d||'توضیحی ثبت نشده.')}</p>${stSel(id)}${clSel(id)}
+${m.k==='series'?`<h2>پیشرفت تماشا</h2><div class="row"><input id="se" type="number" min="0" placeholder="فصل" value="${l.se||''}"><input id="ep" type="number" min="0" placeholder="قسمت" value="${l.ep||''}"></div>`:''}
+<h2>نقد و امتیاز من</h2>
+<select id="rt"><option value="">بدون امتیاز</option>${[1,2,3,4,5].map(n=>`<option ${l.rating==n?'selected':''} value="${n}">${'⭐'.repeat(n)}</option>`).join('')}</select>
+<textarea id="rv" rows="4" placeholder="نقد یا یادداشت شما...">${esc(l.review||'')}</textarea>
+<button class="b p" onclick="rate('${id}')">ذخیرهٔ نقد</button>
+${m.custom?` <button class="b" onclick="openForm('${id}')">✏️ ویرایش</button> <button class="b" onclick="del('${id}')">🗑 حذف</button>`:''}
+${rv?`<h2>نقد دوستان</h2>${rv}`:''}<br><button class="b" onclick="close_()" style="margin-top:10px">بستن</button>`)}
+function rate(id){S.lib[id]={...(S.lib[id]||{st:'watched'}),rating:+document.getElementById('rt').value||0,review:document.getElementById('rv').value,se:+(document.getElementById('se')?.value)||0,ep:+(document.getElementById('ep')?.value)||0};save();close_();render()}
+function openForm(id){
+const m=id?get(id):{t:S.q,k:'film',o:'ایرانی',y:'',g:'',d:''};
+IMG=m.img||null;open_(`<h3>${id?'ویرایش':'افزودن دستی'}</h3><input id="ft" placeholder="نام" value="${esc(m.t)}">
+<div class="row"><select id="fk" class="grow"><option value="film" ${m.k==='film'?'selected':''}>فیلم</option><option value="series" ${m.k==='series'?'selected':''}>سریال</option></select>
+<select id="fo" class="grow"><option ${m.o==='ایرانی'?'selected':''}>ایرانی</option><option ${m.o==='خارجی'?'selected':''}>خارجی</option></select></div><br>
+<input id="fy" placeholder="سال" value="${esc(m.y)}"><input id="fg" placeholder="ژانر" value="${esc(m.g)}"><textarea id="fd" rows="3" placeholder="توضیحات">${esc(m.d)}</textarea>
+<div class="mu">پوستر (اختیاری)</div><input type="file" id="fi" accept="image/*" onchange="pickImg(this)"><img id="pv" src="${IMG||''}" style="display:${IMG?'block':'none'};width:90px;border-radius:8px;margin-bottom:8px"><button class="b p" onclick="saveF('${id||''}')">ذخیره</button> <button class="b" onclick="close_()">انصراف</button>`)}
+function saveF(id){
+const v=i=>document.getElementById(i).value.trim();if(!v('ft'))return;
+const o={t:v('ft'),k:v('fk'),o:v('fo'),y:v('fy'),g:v('fg'),d:v('fd'),img:IMG,custom:1};
+if(id){Object.assign(get(id),o)}else{const n='c'+Date.now();S.custom.push({id:n,...o});S.lib[n]={st:'want'}}
+save();close_();S.tab='lists';S.lt='want';render()}
+let IMG=null;
+function pickImg(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,220/im.width);c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);IMG=c.toDataURL('image/jpeg',.7);const p=document.getElementById('pv');p.src=IMG;p.style.display='block'};im.src=r.result};r.readAsDataURL(f)}
+const clSel=id=>S.cl.length?`<select onchange="toCl('${id}',this.value)"><option value="">📁 افزودن به لیست سفارشی…</option>${S.cl.map(c=>`<option value="${c.id}" ${c.ids.includes(id)?'disabled':''}>${esc(c.name)}${c.ids.includes(id)?' ✓':''}</option>`).join('')}</select>`:'';
+function toCl(id,cid){const c=S.cl.find(x=>x.id===cid);if(c&&!c.ids.includes(id))c.ids.push(id);save();detail(id)}
+function rmCl(cid,id){const c=S.cl.find(x=>x.id===cid);c.ids=c.ids.filter(x=>x!==id);save();render()}
+function newCl(){open_(`<h3>لیست جدید</h3><input id="cn" placeholder="نام لیست (مثلاً فیلم‌های آخر هفته)"><button class="b p" onclick="saveCl()">ساخت</button> <button class="b" onclick="close_()">انصراف</button>`)}
+function saveCl(){const n=document.getElementById('cn').value.trim();if(!n)return;const id='l'+Date.now();S.cl.push({id,name:n,ids:[]});S.tab='lists';S.lt='c:'+id;save();close_();render()}
+function delCl(cid){S.cl=S.cl.filter(c=>c.id!==cid);S.lt='want';save();render()}
+const GN={28:'اکشن',12:'ماجراجویی',16:'انیمیشن',35:'کمدی',80:'جنایی',99:'مستند',18:'درام',10751:'خانوادگی',14:'فانتزی',36:'تاریخی',27:'ترسناک',10402:'موسیقی',9648:'معمایی',10749:'عاشقانه',878:'علمی‌تخیلی',53:'هیجانی',10752:'جنگی',37:'وسترن',10759:'اکشن و ماجراجویی',10762:'کودکان',10764:'واقعیت',10765:'علمی‌تخیلی و فانتزی',10768:'جنگ و سیاست'};
+async function tmSearch(q){
+let k=localStorage.getItem('tmk');
+if(!k){k=(prompt('کلید TMDB خود را وارد کنید (فقط روی همین دستگاه ذخیره می‌شود):')||'').trim();if(!k)throw 0;localStorage.setItem('tmk',k)}
+const bearer=k.length>60;
+const r=await fetch('https://api.themoviedb.org/3/search/multi?include_adult=false&language=fa-IR&query='+encodeURIComponent(q)+(bearer?'':'&api_key='+k),bearer?{headers:{Authorization:'Bearer '+k}}:{});
+if(r.status===401){localStorage.removeItem('tmk');throw 0}
+if(!r.ok)throw 0;
+const d=await r.json();
+return (d.results||[]).filter(x=>x.media_type==='movie'||x.media_type==='tv').slice(0,10).map(x=>({id:'t'+x.media_type+x.id,t:x.title||x.name,k:x.media_type==='tv'?'series':'film',o:x.original_language==='fa'?'ایرانی':'خارجی',y:(x.release_date||x.first_air_date||'').slice(0,4),g:(x.genre_ids||[]).map(i=>GN[i]).filter(Boolean).slice(0,2).join('، '),d:x.overview||'',img:x.poster_path?'https://image.tmdb.org/t/p/w185'+x.poster_path:''}));
+}
+let TR=[],TT;
+function tmdb(){clearTimeout(TT);const b=document.getElementById('tm'),q=S.q.trim();if(!b)return;if(q.length<2){b.innerHTML='';return}
+b.innerHTML='<div class="mu">در حال جستجو در TMDB…</div>';
+TT=setTimeout(async()=>{try{TR=await tmSearch(q);
+b.innerHTML=TR.length?'<h2>🌐 نتایج TMDB</h2>'+TR.map(tmCard).join(''):'<div class="card mu">در TMDB هم پیدا نشد. می‌توانید دستی اضافه کنید.</div>'}catch(e){b.innerHTML='<div class="card mu">اتصال به TMDB برقرار نشد.</div>'}},400)}
+const tmCard=(m,i)=>get(m.id)?item(get(m.id)):`<div class="card row">${pos(m)}<div class="grow"><b>${esc(m.t)}</b> <span class="tag">TMDB</span><div class="mu">${kt(m)} ${m.o} · ${esc(m.y||'—')} · ${esc(m.g||'')}</div></div><select onchange="addTm(${i},this.value)"><option value="">— افزودن به لیست —</option>${Object.entries(ST).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>`;
+function addTm(i,st){if(!st)return;const m={...TR[i],custom:1,tm:1};S.custom.push(m);S.lib[m.id]={st};save();render()}
+function del(id){S.custom=S.custom.filter(m=>m.id!==id);delete S.lib[id];save();close_();render()}
+function open_(h){document.getElementById('box').innerHTML=h;document.getElementById('modal').classList.add('show')}
+function close_(){document.getElementById('modal').classList.remove('show')}
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')close_()};
+const TABS=[['home','🏠','خانه'],['catalog','🔍','کاتالوگ'],['lists','📋','لیست‌های من'],['friends','👥','دوستان'],['me','👤','من']];
+function render(keep){
+if(!AU){authView();return}if(!PF){nameView();return}const v={home,catalog,lists,friends,me}[S.tab]();
+const a=document.getElementById('app');a.innerHTML=v;if(S.tab==='catalog'&&S.q.trim().length>1)tmdb();
+document.getElementById('nav').innerHTML=TABS.map(([k,i,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';render()">${i}<br>${t}</button>`).join('');
+if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}}
+boot();
+</script></body></html>
