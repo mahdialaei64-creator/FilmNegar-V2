@@ -285,10 +285,64 @@ const cl=S.cl.find(c=>'c:'+c.id===S.lt);const L=cl?cl.ids.map(get).filter(Boolea
 return `<button class="b p" onclick="openForm()" style="width:100%;margin:8px 0">＋ افزودن دستی فیلم یا سریال به لیست</button><div class="row" style="margin-bottom:4px"><button class="b grow" onclick="shareList()">📤 ارسال لیست</button><button class="b grow" onclick="impOpen()">📥 ورود لیست</button></div><div class="tabs"><button class="${S.lt==='all'?'on':''}" onclick="S.lt='all';render()">همه</button>${Object.entries(ST).map(([k,v])=>`<button class="${S.lt===k?'on':''}" onclick="S.lt='${k}';render()">${v}</button>`).join('')}${S.cl.map(c=>`<button class="${S.lt==='c:'+c.id?'on':''}" onclick="S.lt='c:${c.id}';render()">📁 ${esc(c.name)}</button>`).join('')}<button onclick="newCl()">＋ لیست جدید</button></div>${cl?`<button class="b" onclick="delCl('${cl.id}')">🗑 حذف این لیست</button>`:''}
 ${L.map(m=>item(m,cl?`<button class="b" onclick="rmCl('${cl.id}','${m.id}')">✕ حذف از لیست</button>`:S.lt==='all'?`<div style="color:var(--ac);font-weight:700;font-size:12px;margin-bottom:4px">${ST[S.lib[m.id].st]}</div>`+stSel(m.id):'')).join('')||'<div class="card mu">این لیست خالی است. از جزئیات هر فیلم می‌توانید آن را به لیست اضافه کنید.</div>'}
 <div class="mu">وضعیت هر مورد را مستقیماً از منوی کنار آن تغییر دهید؛ با انتخاب «— افزودن —» از لیست حذف می‌شود.</div>`}
+let SOCIAL_USERS=[],SOCIAL_FOLLOWING=[],SOCIAL_FOLLOWERS=[],SOCIAL_NOTIFS=[],SOCIAL_BUSY=false;
 function friends(){
-return `<h2>دوستان</h2>${FR.map(f=>{const on=S.fol.includes(f.id);return `<div class="card"><div class="row"><div class="poster" style="width:46px;height:46px;border-radius:50%;background:${col(f.id)}33">${f.e}</div><div class="grow"><b>${f.n}</b><div class="mu">${f.act.length} مورد در لیست</div></div><button class="b ${on?'':'p'}" onclick="fol('${f.id}')">${on?'دنبال می‌کنید':'دنبال کردن'}</button></div>${on?f.act.map(a=>`<div class="mu" style="margin-top:4px">• ${esc(get(a[0]).t)} — ${ST[a[1]]}${a[2]?` ⭐${a[2]}`:''}</div>`).join(''):''}</div>`}).join('')}
-<div class="mu">دوستان این‌جا نمونهٔ نمایشی‌اند؛ برای دوستان واقعی به یک سرور و حساب کاربری نیاز است.</div>`}
-function fol(id){S.fol=S.fol.includes(id)?S.fol.filter(x=>x!==id):[...S.fol,id];save();render()}
+const unread=SOCIAL_NOTIFS.filter(n=>!n.read_at).length;
+return `<h2>👥 دوستان و دنبال‌کنندگان</h2>
+<div class="card"><b>🔎 پیدا کردن کاربران</b><div class="row" style="margin-top:8px"><input id="socialq" class="grow" dir="ltr" placeholder="نام کاربری، مثلاً filmfan" onkeydown="if(event.key==='Enter')searchUsers()"><button class="b p" onclick="searchUsers()">جستجو</button></div><div id="socialresults"></div></div>
+<div class="card"><div class="row"><b>🔔 اعلان‌ها</b><span class="grow"></span><span class="tag">${unread} خوانده‌نشده</span></div>
+${SOCIAL_NOTIFS.length?SOCIAL_NOTIFS.map(n=>`<div class="row" style="padding:8px 0;border-bottom:1px solid var(--bd)"><div class="grow"><b>@${esc(n.actor_name||'کاربر')}</b> شما را دنبال کرد<div class="mu">${new Date(n.created_at).toLocaleString('fa-IR')}</div></div>${!n.read_at?`<button class="b" onclick="readNotif(${n.id})">خواندم</button>`:''}</div>`).join(''):'<div class="mu" style="margin-top:8px">هنوز اعلانی ندارید.</div>'}
+</div>
+<div class="card"><b>شما دنبال می‌کنید (${SOCIAL_FOLLOWING.length})</b>
+${SOCIAL_FOLLOWING.map(u=>`<div class="row" style="padding:8px 0"><div class="grow">@${esc(u.username)}</div><button class="b" onclick="unfollowUser('${u.id}')">لغو دنبال‌کردن</button></div>`).join('')||'<div class="mu">هنوز کسی را دنبال نمی‌کنید.</div>'}</div>
+<div class="card"><b>دنبال‌کنندگان شما (${SOCIAL_FOLLOWERS.length})</b>
+${SOCIAL_FOLLOWERS.map(u=>`<div class="row" style="padding:8px 0"><div class="grow">@${esc(u.username)}</div><span class="tag">دنبال‌کننده</span></div>`).join('')||'<div class="mu">هنوز دنبال‌کننده‌ای ندارید.</div>'}</div>`;
+}
+async function socialProfiles(ids){
+if(!ids.length)return [];
+const q=ids.map(x=>'"'+x+'"').join(',');
+return await sb('/rest/v1/profiles?select=id,username&id=in.('+encodeURIComponent(q)+')');
+}
+async function refreshSocial(){
+if(!AU||SOCIAL_BUSY)return;SOCIAL_BUSY=true;
+try{
+const [f1,f2,nn]=await Promise.all([
+sb('/rest/v1/follows?select=following_id&follower_id=eq.'+AU.id),
+sb('/rest/v1/follows?select=follower_id&following_id=eq.'+AU.id),
+sb('/rest/v1/notifications?select=id,actor_id,created_at,read_at&recipient_id=eq.'+AU.id+'&order=created_at.desc&limit=30')
+]);
+SOCIAL_FOLLOWING=await socialProfiles(f1.map(x=>x.following_id));
+SOCIAL_FOLLOWERS=await socialProfiles(f2.map(x=>x.follower_id));
+const actors=await socialProfiles([...new Set(nn.map(x=>x.actor_id))]);
+SOCIAL_NOTIFS=nn.map(n=>({...n,actor_name:actors.find(a=>a.id===n.actor_id)?.username||'کاربر'}));
+if(S.tab==='friends')render();
+}catch(e){console.error('Social refresh',e);if(S.tab==='friends')document.getElementById('socialresults')?.insertAdjacentHTML('beforeend','<div class="mu">بارگذاری اطلاعات اجتماعی ممکن نشد. ابتدا مهاجرت دیتابیس نسخه ۱.۹ را اجرا کنید.</div>')}
+finally{SOCIAL_BUSY=false}
+}
+async function searchUsers(){
+const q=(document.getElementById('socialq')?.value||'').trim().toLowerCase(),box=document.getElementById('socialresults');
+if(!box)return;if(q.length<3){box.innerHTML='<div class="mu">حداقل ۳ حرف وارد کنید.</div>';return}
+box.innerHTML='<div class="mu">در حال جستجو…</div>';
+try{
+const rows=await sb('/rest/v1/profiles?select=id,username&username=ilike.*'+encodeURIComponent(q)+'*&limit=20');
+box.innerHTML=rows.filter(u=>u.id!==AU.id).map(u=>{
+const following=SOCIAL_FOLLOWING.some(x=>x.id===u.id);
+return `<div class="row" style="padding:8px 0"><div class="grow" dir="ltr" style="text-align:right">@${esc(u.username)}</div><button class="b ${following?'':'p'}" onclick="${following?`unfollowUser('${u.id}')`:`followUser('${u.id}')`}">${following?'دنبال می‌کنید':'＋ دنبال کردن'}</button></div>`
+}).join('')||'<div class="mu">کاربری با این نام پیدا نشد.</div>';
+}catch(e){box.innerHTML='<div class="mu">جستجو انجام نشد؛ مهاجرت دیتابیس را بررسی کنید.</div>'}
+}
+async function followUser(id){
+try{await ensure();await sb('/rest/v1/follows',{method:'POST',body:JSON.stringify({follower_id:AU.id,following_id:id})});await refreshSocial();searchUsers()}
+catch(e){alert('دنبال‌کردن انجام نشد: '+em(e))}
+}
+async function unfollowUser(id){
+try{await ensure();await sb('/rest/v1/follows?follower_id=eq.'+AU.id+'&following_id=eq.'+id,{method:'DELETE'});await refreshSocial();searchUsers()}
+catch(e){alert('لغو دنبال‌کردن انجام نشد: '+em(e))}
+}
+async function readNotif(id){
+try{await sb('/rest/v1/notifications?id=eq.'+id,{method:'PATCH',body:JSON.stringify({read_at:new Date().toISOString()})});await refreshSocial()}
+catch(e){alert('به‌روزرسانی اعلان انجام نشد.')}
+}
 function detail(id){
 const m=get(id),l=S.lib[id]||{};
 const rv=FR.flatMap(f=>S.fol.includes(f.id)?f.act.filter(a=>a[0]===id&&a[3]).map(a=>`<div class="card">${f.e} <b>${f.n}</b> ⭐${a[2]}<div>${esc(a[3])}</div></div>`):[]).join('');
@@ -428,7 +482,8 @@ const TABS=[['home','🏠','خانه'],['catalog','🔍','کاتالوگ'],['lis
 function render(keep){
 if(!AU){authView();return}if(!PF){nameView();return}const v={home,catalog,lists,friends,me}[S.tab]();
 const a=document.getElementById('app');a.innerHTML=v;if(S.tab==='catalog'&&S.q.trim().length>1)tmdb();
-document.getElementById('nav').innerHTML=TABS.map(([k,i,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';render()">${i}<br>${t}</button>`).join('');
+document.getElementById('nav').innerHTML=TABS.map(([k,i,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';render()">${i}<br>${t}${k==='friends'&&SOCIAL_NOTIFS.some(n=>!n.read_at)?' <span style=\"color:var(--ac)\">●</span>':''}</button>`).join('');
+ if(S.tab==='friends')refreshSocial();
 if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}}
 boot();
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
