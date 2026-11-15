@@ -288,7 +288,7 @@ ${L.map(m=>item(m,cl?`<button class="b" onclick="rmCl('${cl.id}','${m.id}')">✕
 let SOCIAL_USERS=[],SOCIAL_FOLLOWING=[],SOCIAL_FOLLOWERS=[],SOCIAL_NOTIFS=[],SOCIAL_BUSY=false;
 function friends(){
 const unread=SOCIAL_NOTIFS.filter(n=>!n.read_at).length;
-return `<h2>👥 دوستان و دنبال‌کنندگان</h2>
+return `<h2>👥 دوستان و دنبال‌کنندگان</h2><div class="card"><div class="row"><b>✉️ پیام‌های خصوصی</b><span class="grow"></span><button class="b p" onclick="openInbox()">ورود به صندوق پیام‌ها</button></div></div>
 <div class="card"><b>🔎 پیدا کردن کاربران</b><div class="row" style="margin-top:8px"><input id="socialq" class="grow" dir="ltr" placeholder="نام کاربری، مثلاً filmfan" onkeydown="if(event.key==='Enter')searchUsers()"><button class="b p" onclick="searchUsers()">جستجو</button></div><div id="socialresults"></div></div>
 <div class="card"><div class="row"><b>🔔 اعلان‌ها</b><span class="grow"></span><span class="tag">${unread} خوانده‌نشده</span></div>
 ${SOCIAL_NOTIFS.length?SOCIAL_NOTIFS.map(n=>`<div class="row" style="padding:8px 0;border-bottom:1px solid var(--bd)"><div class="grow"><b>@${esc(n.actor_name||'کاربر')}</b> شما را دنبال کرد<div class="mu">${new Date(n.created_at).toLocaleString('fa-IR')}</div></div>${!n.read_at?`<button class="b" onclick="readNotif(${n.id})">خواندم</button>`:''}</div>`).join(''):'<div class="mu" style="margin-top:8px">هنوز اعلانی ندارید.</div>'}
@@ -345,6 +345,90 @@ async function readNotif(id){
 try{await sb('/rest/v1/notifications?id=eq.'+id,{method:'PATCH',body:JSON.stringify({read_at:new Date().toISOString()})});await refreshSocial()}
 catch(e){alert('به‌روزرسانی اعلان انجام نشد.')}
 }
+
+let CHAT_USERS=[],CHAT_MESSAGES=[],CHAT_TARGET=null,CHAT_BUSY=false;
+function openInbox(){
+open_('<h3>✉️ پیام‌های خصوصی</h3><div class="row"><input id="msgsearch" class="grow" dir="ltr" placeholder="نام کاربری برای شروع گفتگو"><button class="b p" onclick="findMessageUser()">جستجو</button></div><div id="msgusers"></div><div id="inboxlist" class="mu" style="margin-top:12px">در حال بارگذاری گفتگوها…</div><button class="b" onclick="close_()">بستن</button>');
+loadInbox();
+}
+async function findMessageUser(){
+const q=(document.getElementById('msgsearch')?.value||'').trim().toLowerCase(),box=document.getElementById('msgusers');
+if(!box)return;if(q.length<3){box.textContent='حداقل ۳ حرف وارد کنید.';return}
+try{
+const rows=await sb('/rest/v1/profiles?select=id,username&username=ilike.*'+encodeURIComponent(q)+'*&limit=15');
+box.innerHTML=rows.filter(u=>u.id!==AU.id).map(u=>`<button class="b" style="margin:4px" onclick="openChat('${u.id}','${esc(u.username)}')">@${esc(u.username)} · گفتگو</button>`).join('')||'کاربری پیدا نشد.';
+}catch(e){box.textContent='جستجوی کاربران ممکن نشد.'}
+}
+async function loadInbox(){
+const box=document.getElementById('inboxlist');if(!box)return;
+try{
+const rows=await sb('/rest/v1/messages?select=id,sender_id,recipient_id,body,shared_list,created_at,read_at&or=(sender_id.eq.'+AU.id+',recipient_id.eq.'+AU.id+')&order=created_at.desc&limit=100');
+const peers=[...new Set(rows.map(m=>m.sender_id===AU.id?m.recipient_id:m.sender_id))];
+const users=await socialProfiles(peers);
+const last=new Map();rows.forEach(m=>{const id=m.sender_id===AU.id?m.recipient_id:m.sender_id;if(!last.has(id))last.set(id,m)});
+box.innerHTML=[...last.entries()].map(([id,m])=>{const u=users.find(x=>x.id===id);const unread=m.recipient_id===AU.id&&!m.read_at;return `<div class="row card" style="padding:10px"><div class="grow"><b>@${esc(u?.username||'کاربر')}</b><div class="mu">${m.shared_list?'🎬 فهرست فیلم: '+esc(m.shared_list.title||'بدون عنوان'):esc(m.body||'پیام')}</div></div><button class="b ${unread?'p':''}" onclick="openChat('${id}','${esc(u?.username||'کاربر')}')">بازکردن</button></div>`}).join('')||'هنوز گفتگویی ندارید.';
+}catch(e){box.textContent='دریافت پیام‌ها ممکن نشد. مهاجرت دیتابیس نسخه ۱.۹ را بررسی کنید.'}
+}
+async function openChat(id,username){
+CHAT_TARGET={id,username};
+const box=document.getElementById('inboxlist')||document.getElementById('box');
+if(!box)return;
+document.getElementById('box').innerHTML=`<h3>گفتگو با @${esc(username)}</h3><div id="chatbody" style="max-height:48vh;overflow:auto"></div><textarea id="chattext" rows="2" placeholder="پیام شما…"></textarea><div class="row"><button class="b p grow" onclick="sendChatMessage()">ارسال پیام</button><button class="b grow" onclick="shareCurrentListToChat()">ارسال فهرست فعلی</button></div><button class="b" onclick="openInbox()">بازگشت به پیام‌ها</button>`;
+await loadChat();
+}
+async function loadChat(){
+if(!CHAT_TARGET)return;
+const body=document.getElementById('chatbody');if(!body)return;
+try{
+const id=CHAT_TARGET.id;
+const rows=await sb('/rest/v1/messages?select=id,sender_id,recipient_id,body,shared_list,created_at,read_at&or=(and(sender_id.eq.'+AU.id+',recipient_id.eq.'+id+'),and(sender_id.eq.'+id+',recipient_id.eq.'+AU.id+'))&order=created_at.asc&limit=100');
+CHAT_MESSAGES=rows;
+const unread=rows.filter(m=>m.recipient_id===AU.id&&!m.read_at).map(m=>m.id);
+if(unread.length)await sb('/rest/v1/messages?id=in.('+unread.join(',')+')',{method:'PATCH',body:JSON.stringify({read_at:new Date().toISOString()})});
+body.innerHTML=rows.map(m=>`<div class="card" style="margin:6px 0;padding:9px"><div class="mu">${m.sender_id===AU.id?'شما':'@'+esc(CHAT_TARGET.username)} · ${new Date(m.created_at).toLocaleString('fa-IR')}</div>${m.body?'<div>'+esc(m.body)+'</div>':''}${m.shared_list?'<div style="margin-top:6px;border-top:1px solid var(--bd);padding-top:6px"><b>🎬 '+esc(m.shared_list.title||'فهرست پیشنهادی')+'</b><div class="mu">'+(m.shared_list.items||[]).length+' عنوان</div><button class="b p" onclick="importReceivedList('+m.id+')">افزودن به فهرست‌های من</button></div>':''}</div>`).join('')||'<div class="mu">شروع گفتگو</div>';
+body.scrollTop=body.scrollHeight;
+}catch(e){body.textContent='بارگذاری گفتگو ممکن نشد.'}
+}
+async function sendChatMessage(){
+const el=document.getElementById('chattext'),body=(el?.value||'').trim();if(!body||!CHAT_TARGET)return;
+try{await sb('/rest/v1/messages',{method:'POST',body:JSON.stringify({sender_id:AU.id,recipient_id:CHAT_TARGET.id,body})});el.value='';await loadChat()}
+catch(e){alert('ارسال پیام انجام نشد: '+em(e))}
+}
+function shareCurrentListToChat(){
+if(!CHAT_TARGET)return;const {name,L}=curList();if(!L.length){alert('این فهرست خالی است');return}
+const items=L.map(m=>{const l=S.lib[m.id]||{};return{id:m.id,t:m.t,e:m.en||'',k:m.k,o:m.o,y:m.y,g:m.g,img:/^https?:/.test(m.img||'')?m.img:'',r:l.rating||0,n:l.review||'',st:l.st||''}});
+open_('<h3>ارسال فهرست برای @'+esc(CHAT_TARGET.username)+'</h3><input id="chatlisttitle" value="'+esc(name)+'" placeholder="عنوان فهرست"><div class="mu">'+items.length+' عنوان در فهرست</div><button class="b p" onclick="sendListSnapshot('+JSON.stringify(items).replace(/</g,'\\u003c')+')">ارسال فهرست</button> <button class="b" onclick="close_()">انصراف</button>');
+}
+async function sendListSnapshot(items){
+const title=(document.getElementById('chatlisttitle')?.value||'فهرست پیشنهادی').trim();
+try{await sb('/rest/v1/messages',{method:'POST',body:JSON.stringify({sender_id:AU.id,recipient_id:CHAT_TARGET.id,shared_list:{title,author:PF.username,items}})});openChat(CHAT_TARGET.id,CHAT_TARGET.username)}
+catch(e){alert('ارسال فهرست ناموفق بود: '+em(e))}
+}
+async function importReceivedList(messageId){
+const msg=CHAT_MESSAGES.find(m=>m.id===messageId);if(!msg?.shared_list)return;
+const src=msg.shared_list,items=src.items||[];
+open_('<h3>📥 دریافت فهرست</h3><div class="mu">عنوان اصلی: '+esc(src.title||'فهرست')+' · '+items.length+' عنوان</div><input id="receivedTitle" placeholder="عنوان دلخواه شما" value="'+esc('پیشنهادهای @'+CHAT_TARGET.username)+'"><div class="mu">فهرست جدید و مستقل ساخته می‌شود؛ تغییرات فرستنده روی نسخه شما اثری ندارد.</div><button class="b p" onclick="commitReceivedList('+messageId+')">ساخت فهرست شخصی</button><button class="b" onclick="close_()">انصراف</button>');
+}
+async function commitReceivedList(messageId){
+const msg=CHAT_MESSAGES.find(m=>m.id===messageId);if(!msg?.shared_list)return;
+const title=(document.getElementById('receivedTitle')?.value||'فهرست دریافتی').trim();if(!title){alert('عنوان فهرست را وارد کنید');return}
+const src=msg.shared_list,items=src.items||[];
+const clid='l'+Date.now(),newList={id:clid,name:title,ids:[]};
+open_('<h3>در حال آماده‌سازی فهرست…</h3><div class="mu">در حال تطبیق عنوان‌ها با کتابخانه فیلم نگار</div>');
+const resolved=await Promise.all(items.map(async x=>{
+let m=all().find(z=>z.id===x.id)||null;
+if(!m){try{const rr=await tmSearch((x.e||x.t)+(x.y?' '+x.y:''));m=(x.y&&rr.find(z=>String(z.y)===String(x.y)))||rr.find(z=>z.k===(x.k||'film'))||rr[0]||null}catch(e){}}
+return {x,m};
+}));
+let added=0;
+resolved.forEach(({x,m},i)=>{
+if(!m){m={id:'c'+Date.now()+'_'+i,t:x.t,k:x.k||'film',o:x.o||'خارجی',y:x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
+else if(!all().some(z=>z.id===m.id))S.custom.push({...m,custom:1});
+if(!newList.ids.includes(m.id)){newList.ids.push(m.id);if(!S.lib[m.id])S.lib[m.id]={st:x.st||'want'};added++}
+});
+S.cl.push(newList);save();close_();S.tab='lists';S.lt='c:'+clid;render();alert('فهرست «'+title+'» با '+added+' عنوان به کتابخانه شما اضافه شد.');
+}
+
 function detail(id){
 const m=get(id),l=S.lib[id]||{};
 const rv=FR.flatMap(f=>S.fol.includes(f.id)?f.act.filter(a=>a[0]===id&&a[3]).map(a=>`<div class="card">${f.e} <b>${f.n}</b> ⭐${a[2]}<div>${esc(a[3])}</div></div>`):[]).join('');
