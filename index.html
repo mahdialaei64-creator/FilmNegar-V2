@@ -107,17 +107,24 @@ S={...DEF,...mg(mg(old,loc),c[0]?.data)};
 await push();
 if(old&&SYNC==='ok'){localStorage.setItem('mt_old',JSON.stringify(old));localStorage.removeItem('mt')}}
 async function boot(){
-applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}
-const s0=sess();
-if(s0){AU=s0;try{await enter()}catch(e){
-if(e.status===401||e.status===400||e.status===403){localStorage.removeItem('sb');AU=null}
-else{PF=jl('pf_'+AU.id);S={...DEF,...(jl('mt_'+AU.id)||{})}}}}
-const lp=new URLSearchParams(location.search).get('l');if(lp){viewShared(lp);return}
-render()}
+ applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}
+ const recovery=recoveryFromUrl();
+ if(recovery){
+  if(recovery.token){showRecoveryPassword(recovery.token);return}
+  shell(`<div class="card"><h2>لینک بازیابی معتبر نیست</h2><div class="mu">ممکن است لینک منقضی یا تکراری باشد. دوباره درخواست بازیابی بده.</div><button class="b p" onclick="history.replaceState(null,'',location.pathname);authView('in')">بازگشت به ورود</button></div>`);return
+ }
+ const s0=sess();
+ if(s0){AU=s0;try{await enter()}catch(e){
+  if(e.status===401||e.status===400||e.status===403){localStorage.removeItem('sb');AU=null}
+  else{PF=jl('pf_'+AU.id);S={...DEF,...(jl('mt_'+AU.id)||{})}}
+ }}
+ const lp=new URLSearchParams(location.search).get('l');if(lp){viewShared(lp);return}
+ render();
+}
 const ERR={'Invalid login credentials':'ایمیل یا رمز عبور اشتباه است','User already registered':'این ایمیل قبلاً ثبت شده است'};
 const em=e=>ERR[e.msg]||(e.status?e.msg:'اتصال به سرور برقرار نشد؛ اینترنت را بررسی کنید');
 function shell(h){document.getElementById('nav').innerHTML='';document.getElementById('app').innerHTML=`<div style="max-width:380px;margin:36px auto"><h2 style="text-align:center;font-size:24px">🎬 فیلم نگار</h2>${h}</div>`}
-function authView(m){m=m||'in';shell(`<div class="card"><input id="ae" type="email" dir="ltr" placeholder="ایمیل" autocomplete="email"><input id="ap" type="password" dir="ltr" placeholder="رمز عبور (حداقل ۶ کاراکتر)" autocomplete="${m==='in'?'current-password':'new-password'}"><div id="aerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="abtn" class="b p" style="width:100%" onclick="doAuth('${m}')">${m==='in'?'ورود':'ساخت حساب'}</button><div style="text-align:center;margin-top:12px"><a href="#" style="color:var(--ac);font-size:13px" onclick="authView('${m==='in'?'up':'in'}');return false">${m==='in'?'حساب ندارید؟ ثبت‌نام':'حساب دارید؟ ورود'}</a></div></div>`)}
+function authView(m){m=m||'in';shell(`<div class="card"><input id="ae" type="email" dir="ltr" placeholder="ایمیل" autocomplete="email"><input id="ap" type="password" dir="ltr" placeholder="رمز عبور (حداقل ۶ کاراکتر)" autocomplete="${m==='in'?'current-password':'new-password'}"><div id="aerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="abtn" class="b p" style="width:100%" onclick="doAuth('${m}')">${m==='in'?'ورود':'ساخت حساب'}</button>${m==='in'?`<div style="text-align:center;margin-top:12px"><a href="#" style="color:var(--ac);font-size:13px" onclick="requestReset();return false">رمز عبور را فراموش کرده‌اید؟</a></div>`:''}<div style="text-align:center;margin-top:8px"><a href="#" style="color:var(--mu);font-size:13px" onclick="authView('${m==='in'?'up':'in'}');return false">${m==='in'?'حساب ندارید؟ ثبت‌نام':'حساب دارید؟ ورود'}</a></div></div>`)}
 async function doAuth(m){
 const g=i=>document.getElementById(i),e=g('ae').value.trim(),p=g('ap').value,er=g('aerr'),b=g('abtn');er.textContent='';
 if(!e||p.length<6){er.textContent='ایمیل و رمز عبور (حداقل ۶ کاراکتر) را وارد کنید';return}
@@ -133,8 +140,48 @@ const u=document.getElementById('au').value.trim().toLowerCase(),er=document.get
 if(!/^[a-z0-9_]{3,20}$/.test(u)){er.textContent='نام کاربری معتبر نیست';return}
 try{await ensure();await sb('/rest/v1/profiles',{method:'POST',body:JSON.stringify({id:AU.id,username:u})});PF={username:u};localStorage.setItem('pf_'+AU.id,JSON.stringify(PF));render()}
 catch(x){er.textContent=x.status===409?'این نام کاربری قبلاً گرفته شده':em(x)}}
+let RECOVERY_TOKEN='';
+async function requestReset(){
+  const email=document.getElementById('ae')?.value.trim();
+  const error=document.getElementById('aerr');
+  if(!email){if(error)error.textContent='اول ایمیل حساب خود را وارد کنید.';return}
+  if(error)error.textContent='در حال ارسال درخواست…';
+  try{
+    const redirectTo=location.origin+location.pathname;
+    await sb('/auth/v1/recover?redirect_to='+encodeURIComponent(redirectTo),{method:'POST',anon:1,body:JSON.stringify({email})});
+    if(error)error.textContent='اگر این ایمیل در سامانه ثبت شده باشد، لینک بازیابی برایش ارسال می‌شود. ایمیل و پوشهٔ Spam را بررسی کنید.';
+  }catch(e){if(error)error.textContent=em(e)}
+}
+function recoveryFromUrl(){
+  const p=new URLSearchParams(location.hash.replace(/^#/,''));if(p.get('type')==='recovery'&&p.get('access_token'))return{token:p.get('access_token')};if(p.get('error_description'))return{error:p.get('error_description')};return null;
+}
+function showRecoveryPassword(token){
+ RECOVERY_TOKEN=token;
+ shell(`<div class="card"><h2>تعیین رمز جدید</h2><div class="mu">یک رمز جدید انتخاب و دوباره وارد کنید.</div><input id="newpw" type="password" autocomplete="new-password" placeholder="رمز جدید، حداقل ۶ کاراکتر"><input id="newpw2" type="password" autocomplete="new-password" placeholder="تکرار رمز جدید"><div id="pwrerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="pwrbtn" class="b p" style="width:100%" onclick="saveRecoveryPassword()">ذخیرهٔ رمز جدید</button></div>`)
+}
+async function saveRecoveryPassword(){
+ const pw=document.getElementById('newpw').value;const pw2=document.getElementById('newpw2').value;const error=document.getElementById('pwrerr');const button=document.getElementById('pwrbtn');error.textContent='';
+ if(pw.length<6){error.textContent='رمز باید حداقل ۶ کاراکتر باشد.';return}
+ if(pw!==pw2){error.textContent='دو رمز واردشده یکسان نیستند.';return}
+ if(!RECOVERY_TOKEN){error.textContent='لینک بازیابی معتبر نیست یا منقضی شده است. دوباره درخواست بازیابی بده.';return}
+ button.disabled=true;button.textContent='در حال ذخیره…';
+ try{
+  await sb('/auth/v1/user',{method:'PUT',anon:1,headers:{Authorization:'Bearer '+RECOVERY_TOKEN},body:JSON.stringify({password:pw})});
+  RECOVERY_TOKEN='';history.replaceState(null,'',location.pathname);localStorage.removeItem('sb');AU=null;PF=null;alert('رمز عبور با موفقیت تغییر کرد. حالا با رمز جدید وارد شو.');authView('in');
+ }catch(e){error.textContent=em(e);button.disabled=false;button.textContent='ذخیرهٔ رمز جدید'}
+}
 function logout(){localStorage.removeItem('sb');AU=null;PF=null;SYNC='';S={...DEF};render()}
-function me(){return `<h2>👤 پروفایل</h2><div class="card"><b>@${esc(PF?.username)}</b><div class="mu" dir="ltr" style="text-align:right">${esc(AU.email)}</div><div class="mu" id="sync" style="margin-top:6px">${syncTxt()}</div><br><button class="b" onclick="logout()">خروج از حساب</button></div><div class="card"><b>🎨 ظاهر برنامه</b><div class="tabs">${[['light','☀️ روشن'],['dark','🌙 تاریک'],['auto','📱 مطابق دستگاه']].map(([k,v])=>`<button class="${TH()===k?'on':''}" onclick="setTheme('${k}')">${v}</button>`).join('')}</div></div><div class="card mu">لیست‌های شما به حساب‌تان متصل است و با ورود به همین حساب، از هر گوشی در دسترس است.</div><div class="mu" style="text-align:center;font-size:11px;margin:10px">فیلم نگار · نسخهٔ ${APP_VER}</div>`}
+function openPasswordChange(){
+ open_(`<h3>تغییر رمز عبور</h3><input id="cpw" type="password" autocomplete="new-password" placeholder="رمز جدید، حداقل ۶ کاراکتر"><input id="cpw2" type="password" autocomplete="new-password" placeholder="تکرار رمز جدید"><div id="cpwerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="cpwbtn" class="b p" onclick="savePasswordChange()">ذخیرهٔ رمز جدید</button><button class="b" onclick="close_()">انصراف</button>`)
+}
+async function savePasswordChange(){
+ const pw=document.getElementById('cpw').value;const pw2=document.getElementById('cpw2').value;const error=document.getElementById('cpwerr');const button=document.getElementById('cpwbtn');error.textContent='';
+ if(pw.length<6){error.textContent='رمز باید حداقل ۶ کاراکتر باشد.';return}
+ if(pw!==pw2){error.textContent='دو رمز واردشده یکسان نیستند.';return}
+ button.disabled=true;button.textContent='در حال ذخیره…';
+ try{await ensure();await sb('/auth/v1/user',{method:'PUT',body:JSON.stringify({password:pw})});close_();alert('رمز عبور با موفقیت تغییر کرد.')}catch(e){error.textContent=em(e);button.disabled=false;button.textContent='ذخیرهٔ رمز جدید'}
+}
+function me(){return `<h2>👤 پروفایل</h2><div class="card"><b>@${esc(PF?.username)}</b><div class="mu" dir="ltr" style="text-align:right">${esc(AU.email)}</div><div class="mu" id="sync" style="margin-top:6px">${syncTxt()}</div><br><button class="b" onclick="openPasswordChange()">تغییر رمز عبور</button><button class="b" onclick="logout()">خروج از حساب</button></div><div class="card"><b>🎨 ظاهر برنامه</b><div class="tabs">${[['light','☀️ روشن'],['dark','🌙 تاریک'],['auto','📱 مطابق دستگاه']].map(([k,v])=>`<button class="${TH()===k?'on':''}" onclick="setTheme('${k}')">${v}</button>`).join('')}</div></div><div class="card mu">لیست‌های شما به حساب‌تان متصل است و با ورود به همین حساب، از هر گوشی در دسترس است.</div><div class="mu" style="text-align:center;font-size:11px;margin:10px">فیلم نگار · نسخهٔ ${APP_VER}</div>`}
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const all=()=>[...DB,...S.custom];
 const get=id=>all().find(m=>m.id===id)||HM2[id]||TR.find(m=>m.id===id);
@@ -283,7 +330,7 @@ if(m){if(!all().find(x=>x.id===m.id))S.custom.push({...m,custom:1,tm:1})}
 else{const x=r.s.x||{};m={id:'c'+Date.now()+'_'+i,t:r.s.t,k:x.k||'film',o:x.o||(/[\u0600-\u06FF]/.test(r.s.t)?'ایرانی':'خارجی'),y:r.s.y||x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
 S.lib[m.id]={...(S.lib[m.id]||{}),st:IM.st};c++});
 save();close_();history.replaceState(null,'',location.pathname);S.tab='lists';S.lt=IM.st;render();alert(c+' مورد اضافه شد')}
-const APP_VER='1.8.0';
+const APP_VER='1.8.1';
 const TH=()=>localStorage.getItem('theme')||'auto';
 function applyTheme(){const t=TH(),r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
 const dk=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches),m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dk?'#0b1b33':'#f3f6fb'}
