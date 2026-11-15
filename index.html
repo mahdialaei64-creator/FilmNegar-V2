@@ -285,7 +285,7 @@ const cl=S.cl.find(c=>'c:'+c.id===S.lt);const L=cl?cl.ids.map(get).filter(Boolea
 return `<button class="b p" onclick="openForm()" style="width:100%;margin:8px 0">＋ افزودن دستی فیلم یا سریال به لیست</button><div class="row" style="margin-bottom:4px"><button class="b grow" onclick="shareList()">📤 ارسال لیست</button><button class="b grow" onclick="impOpen()">📥 ورود لیست</button></div><div class="tabs"><button class="${S.lt==='all'?'on':''}" onclick="S.lt='all';render()">همه</button>${Object.entries(ST).map(([k,v])=>`<button class="${S.lt===k?'on':''}" onclick="S.lt='${k}';render()">${v}</button>`).join('')}${S.cl.map(c=>`<button class="${S.lt==='c:'+c.id?'on':''}" onclick="S.lt='c:${c.id}';render()">📁 ${esc(c.name)}</button>`).join('')}<button onclick="newCl()">＋ لیست جدید</button></div>${cl?`<button class="b" onclick="delCl('${cl.id}')">🗑 حذف این لیست</button>`:''}
 ${L.map(m=>item(m,cl?`<button class="b" onclick="rmCl('${cl.id}','${m.id}')">✕ حذف از لیست</button>`:S.lt==='all'?`<div style="color:var(--ac);font-weight:700;font-size:12px;margin-bottom:4px">${ST[S.lib[m.id].st]}</div>`+stSel(m.id):'')).join('')||'<div class="card mu">این لیست خالی است. از جزئیات هر فیلم می‌توانید آن را به لیست اضافه کنید.</div>'}
 <div class="mu">وضعیت هر مورد را مستقیماً از منوی کنار آن تغییر دهید؛ با انتخاب «— افزودن —» از لیست حذف می‌شود.</div>`}
-let SOCIAL_USERS=[],SOCIAL_FOLLOWING=[],SOCIAL_FOLLOWERS=[],SOCIAL_NOTIFS=[],SOCIAL_BUSY=false;
+let SOCIAL_USERS=[],SOCIAL_FOLLOWING=[],SOCIAL_FOLLOWERS=[],SOCIAL_NOTIFS=[],SOCIAL_BUSY=false,SOCIAL_RENDERING=false;
 function friends(){
 const unread=SOCIAL_NOTIFS.filter(n=>!n.read_at).length;
 return `<h2>👥 دوستان و دنبال‌کنندگان</h2><div class="card"><div class="row"><b>✉️ پیام‌های خصوصی</b><span class="grow"></span>${CHAT_UNREAD?`<span class="tag">${CHAT_UNREAD} پیام جدید</span>`:''}<button class="b p" onclick="openInbox()">ورود به صندوق پیام‌ها</button></div></div>
@@ -320,7 +320,7 @@ const actors=await socialProfiles([...new Set(nn.map(x=>x.actor_id))]);
 SOCIAL_NOTIFS=nn.map(n=>({...n,actor_name:actors.find(a=>a.id===n.actor_id)?.username||'کاربر'}));
 const navFriend=[...document.querySelectorAll('#nav button')].find(b=>b.textContent.includes('دوستان'));
 if(navFriend){const unread=SOCIAL_NOTIFS.some(n=>!n.read_at)||CHAT_UNREAD>0;navFriend.innerHTML='👥<br>دوستان'+(unread?' <span style="color:var(--ac)">●</span>':'')}
-if(S.tab==='friends')render();
+if(S.tab==='friends'){SOCIAL_RENDERING=true;render();SOCIAL_RENDERING=false;}
 }catch(e){console.error('Social refresh',e);if(S.tab==='friends')document.getElementById('socialresults')?.insertAdjacentHTML('beforeend','<div class="mu">بارگذاری اطلاعات اجتماعی ممکن نشد. ابتدا مهاجرت دیتابیس نسخه ۱.۹ را اجرا کنید.</div>')}
 finally{SOCIAL_BUSY=false}
 }
@@ -440,7 +440,7 @@ if(!m){
  try{
   const rr=await tmSearch((x.e||x.t)+(x.y?' '+x.y:''));
   const wanted=[normTitle(x.t),normTitle(x.e)].filter(Boolean);
-  m=rr.find(z=>wanted.includes(normTitle(z.t))||wanted.includes(normTitle(z.en))&&(!x.k||!z.k||z.k===x.k)&&(!x.y||!z.y||String(z.y)===String(x.y)))||null;
+  m=rr.find(z=>(wanted.includes(normTitle(z.t))||wanted.includes(normTitle(z.en)))&&(!x.k||!z.k||z.k===x.k)&&(!x.y||!z.y||String(z.y)===String(x.y)))||null;
   if(m&&x.y&&m.y&&String(m.y)!==String(x.y))m=null;
  }catch(e){}
 }
