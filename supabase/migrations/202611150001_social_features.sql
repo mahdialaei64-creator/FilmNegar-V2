@@ -17,6 +17,7 @@ drop policy if exists "follows visible to participants" on public.follows;
 create policy "follows visible to participants" on public.follows
   for select to authenticated
   using (auth.uid() = follower_id or auth.uid() = following_id);
+grant select, insert, delete on public.follows to authenticated;
 drop policy if exists "users follow as themselves" on public.follows;
 create policy "users follow as themselves" on public.follows
   for insert to authenticated
@@ -59,6 +60,7 @@ create policy "recipient marks messages read" on public.messages
   using (auth.uid() = recipient_id)
   with check (auth.uid() = recipient_id);
 revoke update on public.messages from authenticated;
+grant select, insert on public.messages to authenticated;
 grant update (read_at) on public.messages to authenticated;
 
 -- Existing profiles are already readable by authenticated users in backend-schema.sql.
@@ -88,6 +90,7 @@ create policy "users update own notifications" on public.notifications
   for update to authenticated using (auth.uid() = recipient_id)
   with check (auth.uid() = recipient_id);
 revoke update on public.notifications from authenticated;
+grant select on public.notifications to authenticated;
 grant update (read_at) on public.notifications to authenticated;
 
 create or replace function public.notify_new_follow()
