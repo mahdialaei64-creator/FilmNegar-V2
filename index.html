@@ -346,7 +346,7 @@ try{await sb('/rest/v1/notifications?id=eq.'+id,{method:'PATCH',body:JSON.string
 catch(e){alert('به‌روزرسانی اعلان انجام نشد.')}
 }
 
-let CHAT_USERS=[],CHAT_MESSAGES=[],CHAT_TARGET=null,CHAT_BUSY=false;
+let CHAT_USERS=[],CHAT_MESSAGES=[],CHAT_TARGET=null,CHAT_BUSY=false,CHAT_SHARE_ITEMS=[];
 function openInbox(){
 open_('<h3>✉️ پیام‌های خصوصی</h3><div class="row"><input id="msgsearch" class="grow" dir="ltr" placeholder="نام کاربری برای شروع گفتگو"><button class="b p" onclick="findMessageUser()">جستجو</button></div><div id="msgusers"></div><div id="inboxlist" class="mu" style="margin-top:12px">در حال بارگذاری گفتگوها…</div><button class="b" onclick="close_()">بستن</button>');
 loadInbox();
@@ -397,10 +397,10 @@ catch(e){alert('ارسال پیام انجام نشد: '+em(e))}
 function shareCurrentListToChat(){
 if(!CHAT_TARGET)return;const {name,L}=curList();if(!L.length){alert('این فهرست خالی است');return}
 const items=L.map(m=>{const l=S.lib[m.id]||{};return{id:m.id,t:m.t,e:m.en||'',k:m.k,o:m.o,y:m.y,g:m.g,img:/^https?:/.test(m.img||'')?m.img:'',r:l.rating||0,n:l.review||'',st:l.st||''}});
-open_('<h3>ارسال فهرست برای @'+esc(CHAT_TARGET.username)+'</h3><input id="chatlisttitle" value="'+esc(name)+'" placeholder="عنوان فهرست"><div class="mu">'+items.length+' عنوان در فهرست</div><button class="b p" onclick="sendListSnapshot('+JSON.stringify(items).replace(/</g,'\\u003c')+')">ارسال فهرست</button> <button class="b" onclick="close_()">انصراف</button>');
+CHAT_SHARE_ITEMS=items;open_('<h3>ارسال فهرست برای @'+esc(CHAT_TARGET.username)+'</h3><input id="chatlisttitle" value="'+esc(name)+'" placeholder="عنوان فهرست"><div class="mu">'+items.length+' عنوان در فهرست</div><button class="b p" onclick="sendListSnapshot()">ارسال فهرست</button> <button class="b" onclick="close_()">انصراف</button>');
 }
-async function sendListSnapshot(items){
-const title=(document.getElementById('chatlisttitle')?.value||'فهرست پیشنهادی').trim();
+async function sendListSnapshot(){
+const items=CHAT_SHARE_ITEMS;const title=(document.getElementById('chatlisttitle')?.value||'فهرست پیشنهادی').trim();
 try{await sb('/rest/v1/messages',{method:'POST',body:JSON.stringify({sender_id:AU.id,recipient_id:CHAT_TARGET.id,shared_list:{title,author:PF.username,items}})});openChat(CHAT_TARGET.id,CHAT_TARGET.username)}
 catch(e){alert('ارسال فهرست ناموفق بود: '+em(e))}
 }
@@ -529,7 +529,7 @@ if(m){if(!all().find(x=>x.id===m.id))S.custom.push({...m,custom:1,tm:1})}
 else{const x=r.s.x||{};m={id:'c'+Date.now()+'_'+i,t:r.s.t,k:x.k||'film',o:x.o||(/[\u0600-\u06FF]/.test(r.s.t)?'ایرانی':'خارجی'),y:r.s.y||x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
 S.lib[m.id]={...(S.lib[m.id]||{}),st:IM.st};c++});
 save();close_();history.replaceState(null,'',location.pathname);S.tab='lists';S.lt=IM.st;render();alert(c+' مورد اضافه شد')}
-const APP_VER='1.8.2';
+const APP_VER='1.9.0';
 const TH=()=>localStorage.getItem('theme')||'auto';
 function applyTheme(){const t=TH(),r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
 const dk=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches),m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dk?'#0b1b33':'#f3f6fb'}
