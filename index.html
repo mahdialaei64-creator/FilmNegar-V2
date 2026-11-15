@@ -338,11 +338,13 @@ return `<div class="row" style="padding:8px 0"><div class="grow" dir="ltr" style
 }catch(e){box.innerHTML='<div class="mu">جستجو انجام نشد؛ مهاجرت دیتابیس را بررسی کنید.</div>'}
 }
 async function followUser(id){
-try{await ensure();await sb('/rest/v1/follows',{method:'POST',body:JSON.stringify({follower_id:AU.id,following_id:id})});await refreshSocial();searchUsers()}
+const q=document.getElementById('socialq')?.value||'';
+try{await ensure();await sb('/rest/v1/follows',{method:'POST',body:JSON.stringify({follower_id:AU.id,following_id:id})});await refreshSocial();const input=document.getElementById('socialq');if(input){input.value=q;await searchUsers()}}
 catch(e){alert('دنبال‌کردن انجام نشد: '+em(e))}
 }
 async function unfollowUser(id){
-try{await ensure();await sb('/rest/v1/follows?follower_id=eq.'+AU.id+'&following_id=eq.'+id,{method:'DELETE'});await refreshSocial();searchUsers()}
+const q=document.getElementById('socialq')?.value||'';
+try{await ensure();await sb('/rest/v1/follows?follower_id=eq.'+AU.id+'&following_id=eq.'+id,{method:'DELETE'});await refreshSocial();const input=document.getElementById('socialq');if(input){input.value=q;await searchUsers()}}
 catch(e){alert('لغو دنبال‌کردن انجام نشد: '+em(e))}
 }
 async function readNotif(id){
@@ -428,16 +430,17 @@ if(!target){alert('فهرست انتخاب‌شده پیدا نشد');return}
 open_('<h3>در حال آماده‌سازی فهرست…</h3><div class="mu">در حال تطبیق عنوان‌ها با کتابخانه فیلم نگار</div>');
 const normTitle=v=>(v||'').toString().toLowerCase().replace(/[\\s\\p{P}\\p{S}]+/gu,'').trim();
 const resolved=await Promise.all(items.map(async x=>{
-let m=all().find(z=>z.id===x.id)||null;
+let m=all().find(z=>z.id===x.id&&(/^t(movie|tv)\\d+$/.test(x.id)||/^d\\d+$/.test(x.id)))||null;
 if(!m){
  const wanted=[normTitle(x.t),normTitle(x.e)].filter(Boolean);
  m=all().find(z=>wanted.includes(normTitle(z.t))||wanted.includes(normTitle(z.en)))||null;
+ if(m&&((x.k&&m.k&&m.k!==x.k)||(x.y&&m.y&&String(m.y)!==String(x.y))))m=null;
 }
 if(!m){
  try{
   const rr=await tmSearch((x.e||x.t)+(x.y?' '+x.y:''));
   const wanted=[normTitle(x.t),normTitle(x.e)].filter(Boolean);
-  m=rr.find(z=>wanted.includes(normTitle(z.t))||wanted.includes(normTitle(z.en)))||null;
+  m=rr.find(z=>wanted.includes(normTitle(z.t))||wanted.includes(normTitle(z.en))&&(!x.k||!z.k||z.k===x.k)&&(!x.y||!z.y||String(z.y)===String(x.y)))||null;
   if(m&&x.y&&m.y&&String(m.y)!==String(x.y))m=null;
  }catch(e){}
 }
@@ -592,7 +595,7 @@ const TABS=[['home','🏠','خانه'],['catalog','🔍','کاتالوگ'],['lis
 function render(keep){
 if(!AU){authView();return}if(!PF){nameView();return}const v={home,catalog,lists,friends,me}[S.tab]();
 const a=document.getElementById('app');a.innerHTML=v;if(S.tab==='catalog'&&S.q.trim().length>1)tmdb();
-document.getElementById('nav').innerHTML=TABS.map(([k,i,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';render()">${i}<br>${t}${k==='friends'&&SOCIAL_NOTIFS.some(n=>!n.read_at)?' <span style=\"color:var(--ac)\">●</span>':''}</button>`).join('');
+document.getElementById('nav').innerHTML=TABS.map(([k,i,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';render()">${i}<br>${t}${k==='friends'&&(SOCIAL_NOTIFS.some(n=>!n.read_at)||CHAT_UNREAD>0)?' <span style=\"color:var(--ac)\">●</span>':''}</button>`).join('');
  if(S.tab==='friends')refreshSocial();
 if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}}
 boot();
