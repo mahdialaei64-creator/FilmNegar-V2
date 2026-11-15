@@ -58,6 +58,8 @@ create policy "recipient marks messages read" on public.messages
   for update to authenticated
   using (auth.uid() = recipient_id)
   with check (auth.uid() = recipient_id);
+revoke update on public.messages from authenticated;
+grant update (read_at) on public.messages to authenticated;
 
 -- Existing profiles are already readable by authenticated users in backend-schema.sql.
 -- The messages table intentionally stores a snapshot of shared list items so later edits
