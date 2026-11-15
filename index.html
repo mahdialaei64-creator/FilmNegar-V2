@@ -596,7 +596,7 @@ function render(keep){
 if(!AU){authView();return}if(!PF){nameView();return}const v={home,catalog,lists,friends,me}[S.tab]();
 const a=document.getElementById('app');a.innerHTML=v;if(S.tab==='catalog'&&S.q.trim().length>1)tmdb();
 document.getElementById('nav').innerHTML=TABS.map(([k,i,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';render()">${i}<br>${t}${k==='friends'&&(SOCIAL_NOTIFS.some(n=>!n.read_at)||CHAT_UNREAD>0)?' <span style=\"color:var(--ac)\">●</span>':''}</button>`).join('');
- if(S.tab==='friends')refreshSocial();
+ if(S.tab==='friends'&&!SOCIAL_RENDERING)refreshSocial();
 if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}}
 boot();
 window.addEventListener('focus',()=>{if(AU&&!SOCIAL_BUSY)refreshSocial()});
