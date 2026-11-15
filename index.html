@@ -407,28 +407,32 @@ catch(e){alert('ارسال فهرست ناموفق بود: '+em(e))}
 async function importReceivedList(messageId){
 const msg=CHAT_MESSAGES.find(m=>m.id===messageId);if(!msg?.shared_list)return;
 const src=msg.shared_list,items=src.items||[];
-open_('<h3>📥 دریافت فهرست</h3><div class="mu">عنوان اصلی: '+esc(src.title||'فهرست')+' · '+items.length+' عنوان</div><input id="receivedTitle" placeholder="عنوان دلخواه شما" value="'+esc('پیشنهادهای @'+CHAT_TARGET.username)+'"><div class="mu">فهرست جدید و مستقل ساخته می‌شود؛ تغییرات فرستنده روی نسخه شما اثری ندارد.</div><button class="b p" onclick="commitReceivedList('+messageId+')">ساخت فهرست شخصی</button><button class="b" onclick="close_()">انصراف</button>');
+open_('<h3>📥 دریافت فهرست</h3><div class="mu">عنوان اصلی: '+esc(src.title||'فهرست')+' · '+items.length+' عنوان</div><label class="mu">مقصد فهرست</label><select id="receivedDest" class="grow"><option value="new">ساخت فهرست جدید</option>'+S.cl.map(c=>'<option value="'+esc(c.id)+'">افزودن به: '+esc(c.name)+'</option>').join('')+'</select><input id="receivedTitle" placeholder="عنوان دلخواه فهرست جدید" value="'+esc('پیشنهادهای @'+CHAT_TARGET.username)+'"><div class="mu">فهرست دریافتی مستقل از نسخه فرستنده است؛ در صورت انتخاب فهرست موجود، فقط آثار جدید به آن اضافه می‌شوند.</div><button class="b p" onclick="commitReceivedList('+messageId+')">افزودن به فهرست‌های من</button><button class="b" onclick="close_()">انصراف</button>');
 }
 async function commitReceivedList(messageId){
 const msg=CHAT_MESSAGES.find(m=>m.id===messageId);if(!msg?.shared_list)return;
-const title=(document.getElementById('receivedTitle')?.value||'فهرست دریافتی').trim();if(!title){alert('عنوان فهرست را وارد کنید');return}
+const dest=document.getElementById('receivedDest')?.value||'new';
+const title=(document.getElementById('receivedTitle')?.value||'فهرست دریافتی').trim();
+if(dest==='new'&&!title){alert('عنوان فهرست را وارد کنید');return}
 const src=msg.shared_list,items=src.items||[];
-const clid='l'+Date.now(),newList={id:clid,name:title,ids:[]};
+const target=dest==='new'?{id:'l'+Date.now(),name:title,ids:[]}:S.cl.find(c=>c.id===dest);
+if(!target){alert('فهرست انتخاب‌شده پیدا نشد');return}
 open_('<h3>در حال آماده‌سازی فهرست…</h3><div class="mu">در حال تطبیق عنوان‌ها با کتابخانه فیلم نگار</div>');
 const resolved=await Promise.all(items.map(async x=>{
 let m=all().find(z=>z.id===x.id)||null;
 if(!m){try{const rr=await tmSearch((x.e||x.t)+(x.y?' '+x.y:''));m=(x.y&&rr.find(z=>String(z.y)===String(x.y)))||rr.find(z=>z.k===(x.k||'film'))||rr[0]||null}catch(e){}}
 return {x,m};
 }));
-let added=0;
+let added=0,skipped=0;
 resolved.forEach(({x,m},i)=>{
 if(!m){m={id:'c'+Date.now()+'_'+i,t:x.t,k:x.k||'film',o:x.o||'خارجی',y:x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
 else if(!all().some(z=>z.id===m.id))S.custom.push({...m,custom:1});
-if(!newList.ids.includes(m.id)){newList.ids.push(m.id);if(!S.lib[m.id])S.lib[m.id]={st:x.st||'want'};added++}
+if(target.ids.includes(m.id)){skipped++;return}
+target.ids.push(m.id);if(!S.lib[m.id])S.lib[m.id]={st:x.st||'want'};added++;
 });
-S.cl.push(newList);save();close_();S.tab='lists';S.lt='c:'+clid;render();alert('فهرست «'+title+'» با '+added+' عنوان به کتابخانه شما اضافه شد.');
+if(dest==='new')S.cl.push(target);
+save();close_();S.tab='lists';S.lt='c:'+target.id;render();alert(added+' عنوان به فهرست «'+target.name+'» اضافه شد.'+(skipped?' '+skipped+' مورد تکراری نادیده گرفته شد.':''));
 }
-
 function detail(id){
 const m=get(id),l=S.lib[id]||{};
 const rv=FR.flatMap(f=>S.fol.includes(f.id)?f.act.filter(a=>a[0]===id&&a[3]).map(a=>`<div class="card">${f.e} <b>${f.n}</b> ⭐${a[2]}<div>${esc(a[3])}</div></div>`):[]).join('');
