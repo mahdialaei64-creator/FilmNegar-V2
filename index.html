@@ -486,5 +486,7 @@ document.getElementById('nav').innerHTML=TABS.map(([k,i,t])=>`<button class="${S
  if(S.tab==='friends')refreshSocial();
 if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}}
 boot();
+window.addEventListener('focus',()=>{if(AU&&!SOCIAL_BUSY)refreshSocial()});
+setInterval(()=>{if(AU&&!SOCIAL_BUSY&&document.visibilityState==='visible')refreshSocial()},45000);
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script></body></html>
