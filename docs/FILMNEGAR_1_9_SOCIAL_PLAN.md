@@ -2,7 +2,7 @@
 
 ## Product scope
 1. Real user discovery by username.
-2. Follow / unfollow and follower/following counts and lists.
+2. Follow / unfollow and follower/following counts and lists. Every new follow automatically creates an in-app notification for the followed user; unread notifications are shown with a badge and refreshed while the app is open.
 3. Private one-to-one conversations and unread-message indicators.
 4. Share a complete custom list or watch-status list inside a conversation.
 5. Recipient can save a received list as a new personal list with their own title, or append its items to an existing custom list.
