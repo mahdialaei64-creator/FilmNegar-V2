@@ -85,6 +85,8 @@ drop policy if exists "users update own notifications" on public.notifications;
 create policy "users update own notifications" on public.notifications
   for update to authenticated using (auth.uid() = recipient_id)
   with check (auth.uid() = recipient_id);
+revoke update on public.notifications from authenticated;
+grant update (read_at) on public.notifications to authenticated;
 
 create or replace function public.notify_new_follow()
 returns trigger
