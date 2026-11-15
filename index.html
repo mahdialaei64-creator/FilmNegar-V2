@@ -315,6 +315,8 @@ SOCIAL_FOLLOWING=await socialProfiles(f1.map(x=>x.following_id));
 SOCIAL_FOLLOWERS=await socialProfiles(f2.map(x=>x.follower_id));
 const actors=await socialProfiles([...new Set(nn.map(x=>x.actor_id))]);
 SOCIAL_NOTIFS=nn.map(n=>({...n,actor_name:actors.find(a=>a.id===n.actor_id)?.username||'کاربر'}));
+const navFriend=[...document.querySelectorAll('#nav button')].find(b=>b.textContent.includes('دوستان'));
+if(navFriend){const unread=SOCIAL_NOTIFS.some(n=>!n.read_at);navFriend.innerHTML='👥<br>دوستان'+(unread?' <span style="color:var(--ac)">●</span>':'')}
 if(S.tab==='friends')render();
 }catch(e){console.error('Social refresh',e);if(S.tab==='friends')document.getElementById('socialresults')?.insertAdjacentHTML('beforeend','<div class="mu">بارگذاری اطلاعات اجتماعی ممکن نشد. ابتدا مهاجرت دیتابیس نسخه ۱.۹ را اجرا کنید.</div>')}
 finally{SOCIAL_BUSY=false}
