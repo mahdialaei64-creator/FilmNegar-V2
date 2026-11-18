@@ -150,6 +150,9 @@ button.b.p{background:linear-gradient(135deg,#e99a3e,#f4bd6c);color:#172033;box-
 @media(max-width:700px){main{width:calc(100% - 26px);padding-top:14px}.fn-cover{min-height:178px;padding:22px 20px;border-radius:22px}.fn-cover-mark{width:94px;height:94px;font-size:46px}.fn-cover h1{font-size:27px}.fn-cover p{font-size:12px}.fn-cover-tags{margin-top:12px}.fn-cover-tags span{font-size:10px;padding:4px 9px}}
 @media(max-width:420px){main{width:calc(100% - 20px);padding:12px 0 28px}.fn-cover{gap:10px;padding:18px 15px;min-height:155px}.fn-cover-mark{width:70px;height:70px;font-size:34px}.fn-cover-mark:after{inset:-6px}.fn-cover h1{font-size:23px}.fn-cover p{font-size:11px}.fn-cover-kicker{font-size:9px;letter-spacing:2px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.card{padding:12px}}
 
+
+/* 2.1: compact personal-list presentation */
+.list-compact{min-height:54px;padding:9px 12px;gap:10px;margin:6px 0;border-radius:12px;align-items:center}.list-compact .grow{min-width:0}.list-compact .grow>b{font-size:14px;line-height:1.5}.list-compact select,.list-compact .b{font-size:12px;max-width:145px;padding:4px 7px}.list-search-hit{padding:10px 12px;margin:6px 0}#listSearch{width:100%;min-width:0}
 </style></head><body>
 <main id="app"></main>
 <nav id="nav"></nav>
@@ -297,7 +300,10 @@ const pos=m=>m.img?`<div class="poster" style="background:url(${px(m.img)}) cent
 function adopt(id){const m=get(id);if(m&&!all().find(x=>x.id===id))S.custom.push({...m,custom:1,tm:1})}
 function setSt(id,st){if(st)adopt(id);if(!st){delete S.lib[id]}else S.lib[id]={...(S.lib[id]||{}),st};save();render()}
 function stSel(id){const c=S.lib[id]?.st||'';return `<select onchange="setSt('${id}',this.value)"><option value="">— افزودن به لیست —</option>${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${c===k?'selected':''}>${v}</option>`).join('')}</select>`}
-function item(m,extra=''){const l=S.lib[m.id];return `<div class="card row" onclick="detail('${m.id}')" style="cursor:pointer">${pos(m)}<div class="grow"><b>${esc(m.t)}</b>${enT(m)} ${m.custom?`<span class="tag">${m.tm?'TMDB':'دستی'}</span>`:''}<div class="mu">${kt(m)} ${esc(m.o)} · ${esc(m.y||'—')} · ${esc(m.g||'')}</div>${l?.se||l?.ep?`<div class="mu">📺 فصل ${l.se||'؟'} · قسمت ${l.ep||'؟'}</div>`:''}${l?.rating?`<div class="mu">⭐ ${l.rating}/۵</div>`:''}${S.tab==='lists'?`<div><button class="b" style="font-size:12px;padding:1px 8px;margin-top:4px" onclick="event.stopPropagation();whereOpen('${m.id}')">📺 کجا ببینم؟</button></div>`:''}</div><div onclick="event.stopPropagation()">${extra||stSel(m.id)}</div></div>`}
+function item(m,extra=''){
+const l=S.lib[m.id],compact=S.tab==='lists'&&LIST_VIEW==='compact';
+return '<div class="card row '+(compact?'list-compact':'')+'" onclick="detail(\''+m.id+'\')" style="cursor:pointer">'+(compact?'':pos(m))+'<div class="grow"><b>'+esc(m.t)+'</b>'+(compact?'':enT(m))+(compact?'':(m.custom?'<span class="tag">'+(m.tm?'TMDB':'دستی')+'</span>':''))+(compact?'':'<div class="mu">'+kt(m)+' '+esc(m.o)+' · '+esc(m.y||'—')+' · '+esc(m.g||'')+'</div>')+(!compact&&(l?.se||l?.ep)?'<div class="mu">📺 فصل '+(l.se||'؟')+' · قسمت '+(l.ep||'؟')+'</div>':'')+(!compact&&l?.rating?'<div class="mu">⭐ '+l.rating+'/۵</div>':'')+(S.tab==='lists'&&!compact?'<div><button class="b" style="font-size:12px;padding:1px 8px;margin-top:4px" onclick="event.stopPropagation();whereOpen(\''+m.id+'\')">📺 کجا ببینم؟</button></div>':'')+'</div><div onclick="event.stopPropagation()">'+(extra||stSel(m.id))+'</div></div>'
+}
 let HM=null,HM2={},HMLOAD=0,HMERR=0;
 function idx(d){HM2={};['trending','now','upcoming','tv'].forEach(k=>(d[k]||[]).forEach(m=>HM2[m.id]=m))}
 async function loadHome(){const c=jl('hm2');if(c){HM=c.d;idx(HM)}if(c&&Date.now()-c.t<108e5)return;
@@ -325,11 +331,27 @@ return `<input id="q" placeholder="🔍 جستجوی فیلم یا سریال...
 <button class="b p" onclick="openForm()">＋ افزودن دستی</button><div id="res">${res()}</div><div id="tm"></div>`}
 function nz(s){return String(s||'').replace(/ي/g,'ی').replace(/ك/g,'ک').toLowerCase()}
 function res(){const L=all().filter(m=>(S.fk==='all'||m.k===S.fk)&&(S.fo==='all'||m.o===S.fo)&&(nz(m.t)+' '+nz(m.en)).includes(nz(S.q)));return `<h2>${L.length} نتیجه</h2>${L.map(m=>item(m)).join('')||`<div class="card mu">پیدا نشد. می‌توانید «${esc(S.q)}» را دستی اضافه کنید.</div>`}`}
+function listSearchResults(q){
+const query=nz(q).trim(),box=document.getElementById('listSearchResults');
+if(!box)return;if(!query){box.innerHTML='';return}
+const rows=Object.entries(S.lib).map(([id,entry])=>({m:get(id),entry,id})).filter(x=>x.m&&(nz(x.m.t)+' '+nz(x.m.en||'')).includes(query));
+if(!rows.length){box.innerHTML='<div class="card mu" style="margin:8px 0">یافت نشد</div>';return}
+box.innerHTML='<div class="mu" style="margin:8px 2px">نتیجه جستجو در لیست‌های من</div>'+rows.map(({m,entry,id})=>{
+const cats=[ST[entry.st]||'بدون دسته‌بندی',...S.cl.filter(c=>(c.ids||[]).includes(id)).map(c=>'📁 '+c.name)];
+return '<div class="card row list-search-hit" onclick="detail(\''+id+'\')" style="cursor:pointer"><div class="grow"><b>'+esc(m.t)+'</b>'+(m.en?' <bdi class="mu" dir="ltr" style="font-size:12px">· '+esc(m.en)+'</bdi>':'')+'<div class="mu" style="font-size:12px;margin-top:3px">موجود در: '+cats.map(esc).join('، ')+'</div></div><span class="tag">مشاهده</span></div>'
+}).join('')
+}
+function setListView(mode){LIST_VIEW=mode;try{localStorage.setItem('filmnegar_list_view',mode)}catch(e){}render()}
 function lists(){
-const cl=S.cl.find(c=>'c:'+c.id===S.lt);const L=cl?cl.ids.map(get).filter(Boolean):all().filter(m=>S.lt==='all'?S.lib[m.id]?.st:S.lib[m.id]?.st===S.lt);
-return `<button class="b p" onclick="openForm()" style="width:100%;margin:8px 0">＋ افزودن دستی فیلم یا سریال به لیست</button><div class="row" style="margin-bottom:4px"><button class="b grow" onclick="shareList()">📤 ارسال لیست</button><button class="b grow" onclick="impOpen()">📥 ورود لیست</button></div><div class="tabs"><button class="${S.lt==='all'?'on':''}" onclick="S.lt='all';render()">همه</button>${Object.entries(ST).map(([k,v])=>`<button class="${S.lt===k?'on':''}" onclick="S.lt='${k}';render()">${v}</button>`).join('')}${S.cl.map(c=>`<button class="${S.lt==='c:'+c.id?'on':''}" onclick="S.lt='c:${c.id}';render()">📁 ${esc(c.name)}</button>`).join('')}<button onclick="newCl()">＋ لیست جدید</button></div>${cl?`<button class="b" onclick="delCl('${cl.id}')">🗑 حذف این لیست</button>`:''}
-${L.map(m=>item(m,cl?`<button class="b" onclick="rmCl('${cl.id}','${m.id}')">✕ حذف از لیست</button>`:S.lt==='all'?`<div style="color:var(--ac);font-weight:700;font-size:12px;margin-bottom:4px">${ST[S.lib[m.id].st]}</div>`+stSel(m.id):'')).join('')||'<div class="card mu">این لیست خالی است. از جزئیات هر فیلم می‌توانید آن را به لیست اضافه کنید.</div>'}
-<div class="mu">وضعیت هر مورد را مستقیماً از منوی کنار آن تغییر دهید؛ با انتخاب «— افزودن —» از لیست حذف می‌شود.</div>`}
+const cl=S.cl.find(c=>'c:'+c.id===S.lt);
+const L=cl?cl.ids.map(get).filter(Boolean):all().filter(m=>S.lt==='all'?S.lib[m.id]?.st:S.lib[m.id]?.st===S.lt);
+const listItems=L.length?L.map(m=>item(m,cl?'<button class="b" onclick="rmCl(\''+cl.id+'\',\''+m.id+'\')">✕ حذف از لیست</button>':S.lt==='all'?'<div style="color:var(--ac);font-weight:700;font-size:12px;margin-bottom:4px">'+ST[S.lib[m.id].st]+'</div>'+stSel(m.id):'')).join(''):'<div class="card mu">این لیست خالی است. از جزئیات هر فیلم می‌توانید آن را به لیست اضافه کنید.</div>';
+return '<button class="b p" onclick="openForm()" style="width:100%;margin:8px 0">＋ افزودن دستی فیلم یا سریال به لیست</button><div class="row" style="margin-bottom:4px"><button class="b grow" onclick="shareList()">📤 ارسال لیست</button><button class="b grow" onclick="impOpen()">📥 ورود لیست</button></div>'+
+'<div class="card" style="margin:8px 0;padding:10px"><b style="font-size:14px">🔎 جستجو در لیست‌های من</b><input id="listSearch" placeholder="نام فیلم یا سریال را وارد کنید..." oninput="listSearchResults(this.value)" style="margin-top:6px"><div id="listSearchResults"></div></div>'+
+'<div class="tabs"><button class="'+(LIST_VIEW==='normal'?'on':'')+'" onclick="setListView(\'normal\')">🖼️ نمایش عادی</button><button class="'+(LIST_VIEW==='compact'?'on':'')+'" onclick="setListView(\'compact\')">☰ فقط نام‌ها</button></div>'+
+'<div class="tabs"><button class="'+(S.lt==='all'?'on':'')+'" onclick="S.lt=\'all\';render()">همه</button>'+Object.entries(ST).map(([k,v])=>'<button class="'+(S.lt===k?'on':'')+'" onclick="S.lt=\''+k+'\';render()">'+v+'</button>').join('')+S.cl.map(c=>'<button class="'+(S.lt==='c:'+c.id?'on':'')+'" onclick="S.lt=\'c:'+c.id+'\';render()">📁 '+esc(c.name)+'</button>').join('')+'<button onclick="newCl()">＋ لیست جدید</button></div>'+(cl?'<button class="b" onclick="delCl(\''+cl.id+'\')">🗑 حذف این لیست</button>':'')+listItems+
+'<div class="mu">وضعیت هر مورد را مستقیماً از منوی کنار آن تغییر دهید؛ با انتخاب «— افزودن —» از لیست حذف می‌شود.</div>'
+}
 let SOCIAL_USERS=[],SOCIAL_FOLLOWING=[],SOCIAL_FOLLOWERS=[],SOCIAL_NOTIFS=[],SOCIAL_BUSY=false,SOCIAL_RENDERING=false;
 function friends(){
 const unread=SOCIAL_NOTIFS.filter(n=>!n.read_at).length;
@@ -631,7 +653,8 @@ if(m){if(!all().find(x=>x.id===m.id))S.custom.push({...m,custom:1,tm:1})}
 else{const x=r.s.x||{};m={id:'c'+Date.now()+'_'+i,t:r.s.t,k:x.k||'film',o:x.o||(/[\u0600-\u06FF]/.test(r.s.t)?'ایرانی':'خارجی'),y:r.s.y||x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
 S.lib[m.id]={...(S.lib[m.id]||{}),st:IM.st};c++});
 save();close_();history.replaceState(null,'',location.pathname);S.tab='lists';S.lt=IM.st;render();alert(c+' مورد اضافه شد')}
-const APP_VER='2.0.1';
+const APP_VER='2.1';
+let LIST_VIEW='normal';try{LIST_VIEW=localStorage.getItem('filmnegar_list_view')==='compact'?'compact':'normal'}catch(e){}
 const TH=()=>localStorage.getItem('theme')||'auto';
 function applyTheme(){const t=TH(),r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
 const dk=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches),m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dk?'#0b1b33':'#f3f6fb'}
