@@ -13,3 +13,7 @@
 
 ## Backup
 A pre-release backup branch is maintained separately in GitHub.
+
+## Follow-up visual patch 2.0.1
+- Added the supplied FilmNegar cover artwork as a compact circular brand mark in the homepage hero.
+- Optimized the image asset for web delivery.
