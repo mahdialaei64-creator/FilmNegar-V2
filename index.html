@@ -105,6 +105,45 @@ input:focus,textarea:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 
  .poster-tile img{height:150px!important}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* FilmNegar 2.0 cinematic wide layout */
+:root{--bg:#070d19;--card:#101a2b;--tx:#f3f5fb;--mu:#a4b1c7;--ac:#f0a34a;--bd:rgba(117,153,202,.2);--soft:#17263d;--shadow:0 16px 42px rgba(0,0,0,.28);color-scheme:dark}
+:root[data-theme="light"]{--bg:#eef2f8;--card:#fff;--tx:#172033;--mu:#68758a;--ac:#c47b2e;--bd:#dce4ef;--soft:#e8eef7;--shadow:0 14px 34px rgba(32,53,83,.09);color-scheme:light}
+body{background:var(--bg);padding-bottom:112px}
+body::before{background:radial-gradient(ellipse at 50% -15%,rgba(31,111,210,.24),transparent 48%),radial-gradient(ellipse at 100% 42%,rgba(237,145,56,.10),transparent 35%),linear-gradient(145deg,#070d19,#0b1424 55%,#080e19)}
+:root[data-theme="light"] body::before{background:radial-gradient(ellipse at 50% -15%,rgba(64,130,220,.13),transparent 48%),linear-gradient(145deg,#eef2f8,#e8edf5)}
+body::after{opacity:.1;background-size:26px 26px}
+main{width:min(100% - 40px,1440px);max-width:1440px;padding:26px 0 42px}
+.card{border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,var(--card) 96%,#24456e),var(--card));border-color:var(--bd);box-shadow:var(--shadow);padding:16px}
+h2{font-size:19px;margin:30px 2px 14px}
+h2:after{max-width:54px}
+.grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.poster-strip{gap:14px}
+.poster-tile{width:132px}
+.poster-tile img{width:132px!important;height:190px!important}
+.home-search{margin:0 0 18px!important;border-radius:18px;padding:10px 12px}
+.home-search input{font-size:15px}
+.home-search button{min-width:100px}
+.brand-title{display:none}
+.fn-cover{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:28px;min-height:230px;margin:0 0 22px;padding:30px 38px;border:1px solid rgba(107,168,255,.28);border-radius:28px;background:radial-gradient(ellipse at 78% 15%,rgba(25,120,255,.25),transparent 36%),radial-gradient(ellipse at 12% 100%,rgba(245,151,56,.19),transparent 34%),linear-gradient(120deg,#0a1426,#101e34 60%,#0b1424);box-shadow:0 24px 60px rgba(0,0,0,.28)}
+.fn-cover:before{content:"";position:absolute;inset:12px;border:1px solid rgba(255,255,255,.08);border-radius:21px;pointer-events:none}
+.fn-cover-copy{position:relative;z-index:1;max-width:650px}
+.fn-cover-kicker{font-size:12px;font-weight:800;letter-spacing:3px;color:#82baff;text-transform:uppercase}
+.fn-cover h1{font-size:clamp(28px,4vw,48px);line-height:1.25;margin:8px 0;color:#fff;font-weight:900}
+.fn-cover h1 span{color:#ffbd69}
+.fn-cover p{margin:0;color:#c4d0e2;font-size:15px}
+.fn-cover-mark{position:relative;z-index:1;flex:none;width:156px;height:156px;display:grid;place-items:center;border-radius:50%;font-size:78px;color:#ffbd69;background:radial-gradient(circle,#162c49 0 55%,#0b1526 56%);border:2px solid rgba(94,169,255,.75);box-shadow:0 0 0 9px rgba(42,120,220,.08),0 0 42px rgba(28,132,255,.24)}
+.fn-cover-mark:after{content:"";position:absolute;inset:-10px;border:1px solid rgba(255,180,92,.45);border-radius:50%;transform:rotate(-22deg) scaleX(1.08)}
+.fn-cover-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+.fn-cover-tags span{border:1px solid rgba(143,183,235,.25);border-radius:30px;padding:5px 12px;color:#dbe9ff;font-size:11px;background:rgba(255,255,255,.05)}
+nav{width:min(calc(100% - 32px),850px);border-radius:24px;background:rgba(12,23,40,.88);border-color:rgba(132,172,226,.22)}
+nav button.on{color:#ffc16e;background:rgba(240,163,74,.13)}
+button.b.p{background:linear-gradient(135deg,#e99a3e,#f4bd6c);color:#172033;box-shadow:0 7px 20px rgba(224,145,56,.2)}
+#box{background:var(--card)}
+@media(min-width:900px){main{padding-top:32px}.fn-cover{min-height:250px}.grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}}
+@media(max-width:700px){main{width:calc(100% - 26px);padding-top:14px}.fn-cover{min-height:178px;padding:22px 20px;border-radius:22px}.fn-cover-mark{width:94px;height:94px;font-size:46px}.fn-cover h1{font-size:27px}.fn-cover p{font-size:12px}.fn-cover-tags{margin-top:12px}.fn-cover-tags span{font-size:10px;padding:4px 9px}}
+@media(max-width:420px){main{width:calc(100% - 20px);padding:12px 0 28px}.fn-cover{gap:10px;padding:18px 15px;min-height:155px}.fn-cover-mark{width:70px;height:70px;font-size:34px}.fn-cover-mark:after{inset:-6px}.fn-cover h1{font-size:23px}.fn-cover p{font-size:11px}.fn-cover-kicker{font-size:9px;letter-spacing:2px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.card{padding:12px}}
+
 </style></head><body>
 <main id="app"></main>
 <nav id="nav"></nav>
@@ -264,7 +303,7 @@ const h=(HM.trending||[]).find(m=>m.bd)||(HM.now||[])[0];
 const row=(t,L)=>L&&L.length?`<h2>${t}</h2><div class="poster-strip">${L.map(m=>`<div class="poster-tile" onclick="detail('${m.id}')">${m.img?`<img src="${px(m.img)}" loading="lazy" alt="" style="width:104px;height:150px;object-fit:cover;border-radius:10px;background:var(--card)">`:pos(m)}<div style="font-size:12px;line-height:1.4;margin-top:4px">${esc(m.t)}</div>${m.en?`<div class="mu" dir="ltr" style="font-size:10px">${esc(m.en)}</div>`:''}<div class="mu">${m.r?'⭐ '+m.r:''}</div></div>`).join('')}</div>`:'';
 return (h?`<div class="hero-banner" onclick="detail('${h.id}')" style="cursor:pointer;background:#222 url(${px(h.bd||h.img)}) center/cover"><div class="hero-caption" style="color:#fff"><b style="font-size:17px">${esc(h.t)}</b>${h.en?` <span dir="ltr" style="opacity:.75;font-size:13px">${esc(h.en)}</span>`:''}<div style="font-size:12px;opacity:.85">${kt(h)} · ${esc(h.y)} ${h.r?'· ⭐ '+h.r:''}</div></div></div>`:'')+row('🔥 ترند امروز',HM.trending)+row('🎬 در حال اکران',HM.now)+row('⏳ به‌زودی',HM.upcoming)+row('📺 سریال‌های محبوب',HM.tv)+'<div class="mu" style="font-size:11px;margin-top:6px">داده‌ها و تصاویر: TMDB. این محصول از API شرکت TMDB استفاده می‌کند ولی توسط آن تأیید نشده است.</div>'}
 function hs(){const q=document.getElementById('hq');S.q=q.value;S.tab='catalog';render()}
-function home(){if(!HMLOAD){HMLOAD=1;loadHome()}return `<div class="row home-search" style="margin:6px 0 13px"><input id="hq" enterkeyhint="search" placeholder="🔍 جستجوی فیلم و سریال..." onkeydown="if(event.key==='Enter')hs()"><button class="b p" onclick="hs()">جستجو</button></div>`+hm()+home0()}
+function home(){if(!HMLOAD){HMLOAD=1;loadHome()}return `<section class="fn-cover"><div class="fn-cover-copy"><div class="fn-cover-kicker">MOVIES · SERIES · YOUR CINEMA WORLD</div><h1>Film<span>Negar</span></h1><p>خانه‌ای برای کشف، ثبت و به‌اشتراک‌گذاشتن دنیای فیلم و سریال</p><div class="fn-cover-tags"><span>کاتالوگ فیلم و سریال</span><span>آرشیو شخصی</span><span>شبکه دوستداران سینما</span></div></div><div class="fn-cover-mark" aria-hidden="true">🎞</div></section><div class="row home-search" style="margin:6px 0 13px"><input id="hq" enterkeyhint="search" placeholder="🔍 جستجوی فیلم و سریال..." onkeydown="if(event.key==='Enter')hs()"><button class="b p" onclick="hs()">جستجو</button></div>`+hm()+home0()}
 function home0(){
 const day=Math.floor(Date.now()/864e5),pick=[0,1,2,3].map(i=>DB[(day*4+i)%DB.length]);
 const c=s=>Object.values(S.lib).filter(x=>x.st===s).length;
@@ -586,7 +625,7 @@ if(m){if(!all().find(x=>x.id===m.id))S.custom.push({...m,custom:1,tm:1})}
 else{const x=r.s.x||{};m={id:'c'+Date.now()+'_'+i,t:r.s.t,k:x.k||'film',o:x.o||(/[\u0600-\u06FF]/.test(r.s.t)?'ایرانی':'خارجی'),y:r.s.y||x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
 S.lib[m.id]={...(S.lib[m.id]||{}),st:IM.st};c++});
 save();close_();history.replaceState(null,'',location.pathname);S.tab='lists';S.lt=IM.st;render();alert(c+' مورد اضافه شد')}
-const APP_VER='1.9.1';
+const APP_VER='2.0.0';
 const TH=()=>localStorage.getItem('theme')||'auto';
 function applyTheme(){const t=TH(),r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
 const dk=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches),m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dk?'#0b1b33':'#f3f6fb'}
