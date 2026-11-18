@@ -575,16 +575,25 @@ ${rv?`<h2>نقد دوستان</h2>${rv}`:''}<br><button class="b" onclick="close
 function rate(id){adopt(id);S.lib[id]={...(S.lib[id]||{st:'watched'}),rating:+document.getElementById('rt').value||0,review:document.getElementById('rv').value,se:+(document.getElementById('se')?.value)||0,ep:+(document.getElementById('ep')?.value)||0};save();close_();render()}
 function openForm(id){
 const m=id?get(id):{t:S.q,k:'film',o:'ایرانی',y:'',g:'',d:''};
+const currentStatus=S.lib[id]?.st||'want';
+const currentCustom=S.cl.find(c=>(c.ids||[]).includes(id));
+const categoryOptions='<optgroup label="دسته‌بندی‌های وضعیت">'+Object.entries(ST).map(([k,v])=>'<option value="status:'+k+'" '+(!currentCustom&&currentStatus===k?'selected':'')+'>'+v+'</option>').join('')+'</optgroup>'+(S.cl.length?'<optgroup label="فهرست‌های منتخب من">'+S.cl.map(c=>'<option value="custom:'+esc(c.id)+'" '+(currentCustom?.id===c.id?'selected':'')+'>📁 '+esc(c.name)+'</option>').join('')+'</optgroup>':'');
 IMG=m.img||null;open_(`<h3>${id?'ویرایش':'افزودن دستی'}</h3><input id="ft" placeholder="نام" value="${esc(m.t)}">
 <div class="row"><select id="fk" class="grow"><option value="film" ${m.k==='film'?'selected':''}>فیلم</option><option value="series" ${m.k==='series'?'selected':''}>سریال</option></select>
 <select id="fo" class="grow"><option ${m.o==='ایرانی'?'selected':''}>ایرانی</option><option ${m.o==='خارجی'?'selected':''}>خارجی</option></select></div><br>
+<label for="fcategory" class="mu" style="display:block;margin:8px 0 5px">📂 انتخاب دسته‌بندی قبل از ذخیره</label><select id="fcategory" style="width:100%;margin-bottom:10px">${categoryOptions}</select>
+<div class="mu" style="font-size:12px;margin:-4px 0 10px">می‌توانی وضعیت تماشا یا یکی از فهرست‌های منتخب خودت را انتخاب کنی.</div>
 <input id="fy" placeholder="سال" value="${esc(m.y)}"><input id="fg" placeholder="ژانر" value="${esc(m.g)}"><textarea id="fd" rows="3" placeholder="توضیحات">${esc(m.d)}</textarea>
 <div class="mu">پوستر (اختیاری)</div><input type="file" id="fi" accept="image/*" onchange="pickImg(this)"><img id="pv" src="${IMG||''}" style="display:${IMG?'block':'none'};width:90px;border-radius:8px;margin-bottom:8px"><button class="b p" onclick="saveF('${id||''}')">ذخیره</button> <button class="b" onclick="close_()">انصراف</button>`)}
 function saveF(id){
 const v=i=>document.getElementById(i).value.trim();if(!v('ft'))return;
+const destination=v('fcategory')||'status:want';
 const o={t:v('ft'),k:v('fk'),o:v('fo'),y:v('fy'),g:v('fg'),d:v('fd'),img:IMG,custom:1};
-if(id){Object.assign(get(id),o)}else{const n='c'+Date.now();S.custom.push({id:n,...o});S.lib[n]={st:'want'}}
-save();close_();S.tab='lists';S.lt='want';render()}
+let movieId=id;
+if(id){Object.assign(get(id),o)}else{movieId='c'+Date.now();S.custom.push({id:movieId,...o});S.lib[movieId]={st:'want'}}
+if(destination.startsWith('status:')){S.lib[movieId]={...(S.lib[movieId]||{}),st:destination.slice(7)}}
+else if(destination.startsWith('custom:')){const target=S.cl.find(c=>c.id===destination.slice(7));if(target&&!target.ids.includes(movieId))target.ids.push(movieId);if(!S.lib[movieId])S.lib[movieId]={st:'want'}}
+save();close_();S.tab='lists';S.lt=destination.startsWith('status:')?destination.slice(7):'c:'+destination.slice(7);render()}
 let IMG=null;
 function pickImg(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,220/im.width);c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);IMG=c.toDataURL('image/jpeg',.7);const p=document.getElementById('pv');p.src=IMG;p.style.display='block'};im.src=r.result};r.readAsDataURL(f)}
 const clSel=id=>S.cl.length?`<select onchange="toCl('${id}',this.value)"><option value="">📁 افزودن به لیست سفارشی…</option>${S.cl.map(c=>`<option value="${c.id}" ${c.ids.includes(id)?'disabled':''}>${esc(c.name)}${c.ids.includes(id)?' ✓':''}</option>`).join('')}</select>`:'';
@@ -660,7 +669,7 @@ if(m){if(!all().find(x=>x.id===m.id))S.custom.push({...m,custom:1,tm:1})}
 else{const x=r.s.x||{};m={id:'c'+Date.now()+'_'+i,t:r.s.t,k:x.k||'film',o:x.o||(/[\u0600-\u06FF]/.test(r.s.t)?'ایرانی':'خارجی'),y:r.s.y||x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
 S.lib[m.id]={...(S.lib[m.id]||{}),st:IM.st};c++});
 save();close_();history.replaceState(null,'',location.pathname);S.tab='lists';S.lt=IM.st;render();alert(c+' مورد اضافه شد')}
-const APP_VER='2.2.0';
+const APP_VER='2.2.1';
 let LIST_VIEW='normal';try{LIST_VIEW=localStorage.getItem('filmnegar_list_view')==='compact'?'compact':'normal'}catch(e){}
 const TH=()=>localStorage.getItem('theme')||'auto';
 function applyTheme(){const t=TH(),r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
