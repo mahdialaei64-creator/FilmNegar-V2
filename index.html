@@ -154,30 +154,6 @@ button.b.p{background:linear-gradient(135deg,#e99a3e,#f4bd6c);color:#172033;box-
 /* 2.1: compact personal-list presentation */
 .list-compact{min-height:54px;padding:9px 12px;gap:10px;margin:6px 0;border-radius:12px;align-items:center}.list-compact .grow{min-width:0}.list-compact .grow>b{font-size:14px;line-height:1.5}.list-compact select,.list-compact .b{font-size:12px;max-width:145px;padding:4px 7px}.list-search-hit{padding:10px 12px;margin:6px 0}#listSearch{width:100%;min-width:0}
 
-/* 2.1.1 visual correction: show the complete supplied artwork without circular cropping */
-.fn-cover-mark{
-  width:clamp(116px,18vw,196px);
-  height:auto;
-  aspect-ratio:1/1;
-  padding:7px;
-  overflow:hidden;
-  border-radius:22px;
-  background:rgba(5,12,24,.72);
-  border:1px solid rgba(126,177,255,.55);
-  box-shadow:0 12px 34px rgba(0,0,0,.32),0 0 30px rgba(28,132,255,.18);
-}
-.fn-cover-mark:after{inset:2px;border-radius:17px;transform:none;pointer-events:none}
-.fn-cover-logo{
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  object-position:center;
-  border-radius:15px;
-}
-@media(max-width:700px){.fn-cover-mark{width:clamp(104px,25vw,136px);height:auto}}
-@media(max-width:420px){.fn-cover-mark{width:96px;height:auto}}
-
 </style></head><body>
 <main id="app"></main>
 <nav id="nav"></nav>
@@ -340,7 +316,7 @@ const h=(HM.trending||[]).find(m=>m.bd)||(HM.now||[])[0];
 const row=(t,L)=>L&&L.length?`<h2>${t}</h2><div class="poster-strip">${L.map(m=>`<div class="poster-tile" onclick="detail('${m.id}')">${m.img?`<img src="${px(m.img)}" loading="lazy" alt="" style="width:104px;height:150px;object-fit:cover;border-radius:10px;background:var(--card)">`:pos(m)}<div style="font-size:12px;line-height:1.4;margin-top:4px">${esc(m.t)}</div>${m.en?`<div class="mu" dir="ltr" style="font-size:10px">${esc(m.en)}</div>`:''}<div class="mu">${m.r?'⭐ '+m.r:''}</div></div>`).join('')}</div>`:'';
 return (h?`<div class="hero-banner" onclick="detail('${h.id}')" style="cursor:pointer;background:#222 url(${px(h.bd||h.img)}) center/cover"><div class="hero-caption" style="color:#fff"><b style="font-size:17px">${esc(h.t)}</b>${h.en?` <span dir="ltr" style="opacity:.75;font-size:13px">${esc(h.en)}</span>`:''}<div style="font-size:12px;opacity:.85">${kt(h)} · ${esc(h.y)} ${h.r?'· ⭐ '+h.r:''}</div></div></div>`:'')+row('🔥 ترند امروز',HM.trending)+row('🎬 در حال اکران',HM.now)+row('⏳ به‌زودی',HM.upcoming)+row('📺 سریال‌های محبوب',HM.tv)+'<div class="mu" style="font-size:11px;margin-top:6px">داده‌ها و تصاویر: TMDB. این محصول از API شرکت TMDB استفاده می‌کند ولی توسط آن تأیید نشده است.</div>'}
 function hs(){const q=document.getElementById('hq');S.q=q.value;S.tab='catalog';render()}
-function home(){if(!HMLOAD){HMLOAD=1;loadHome()}return `<section class="fn-cover"><div class="fn-cover-copy"><div class="fn-cover-kicker">MOVIES · SERIES · YOUR CINEMA WORLD</div><h1>Film<span>Negar</span></h1><p>خانه‌ای برای کشف، ثبت و به‌اشتراک‌گذاشتن دنیای فیلم و سریال</p><div class="fn-cover-tags"><span>کاتالوگ فیلم و سریال</span><span>آرشیو شخصی</span><span>شبکه دوستداران سینما</span></div></div><div class="fn-cover-mark"><img class="fn-cover-logo" src="./assets/filmnegar-cover.jpg?v=2.1" alt="لوگوی FilmNegar"></div></section><div class="row home-search" style="margin:6px 0 13px"><input id="hq" enterkeyhint="search" placeholder="🔍 جستجوی فیلم و سریال..." onkeydown="if(event.key==='Enter')hs()"><button class="b p" onclick="hs()">جستجو</button></div>`+hm()+home0()}
+function home(){if(!HMLOAD){HMLOAD=1;loadHome()}return `<section class="fn-cover"><div class="fn-cover-copy"><div class="fn-cover-kicker">MOVIES · SERIES · YOUR CINEMA WORLD</div><h1>Film<span>Negar</span></h1><p>خانه‌ای برای کشف، ثبت و به‌اشتراک‌گذاشتن دنیای فیلم و سریال</p><div class="fn-cover-tags"><span>کاتالوگ فیلم و سریال</span><span>آرشیو شخصی</span><span>شبکه دوستداران سینما</span></div></div><div class="fn-cover-mark" aria-hidden="true">🎞</div></section><div class="row home-search" style="margin:6px 0 13px"><input id="hq" enterkeyhint="search" placeholder="🔍 جستجوی فیلم و سریال..." onkeydown="if(event.key==='Enter')hs()"><button class="b p" onclick="hs()">جستجو</button></div>`+hm()+home0()}
 function home0(){
 const day=Math.floor(Date.now()/864e5),pick=[0,1,2,3].map(i=>DB[(day*4+i)%DB.length]);
 const c=s=>Object.values(S.lib).filter(x=>x.st===s).length;
@@ -678,7 +654,7 @@ if(m){if(!all().find(x=>x.id===m.id))S.custom.push({...m,custom:1,tm:1})}
 else{const x=r.s.x||{};m={id:'c'+Date.now()+'_'+i,t:r.s.t,k:x.k||'film',o:x.o||(/[\u0600-\u06FF]/.test(r.s.t)?'ایرانی':'خارجی'),y:r.s.y||x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
 S.lib[m.id]={...(S.lib[m.id]||{}),st:IM.st};c++});
 save();close_();history.replaceState(null,'',location.pathname);S.tab='lists';S.lt=IM.st;render();alert(c+' مورد اضافه شد')}
-const APP_VER='2.1.1';
+const APP_VER='2.1.2';
 let LIST_VIEW='normal';try{LIST_VIEW=localStorage.getItem('filmnegar_list_view')==='compact'?'compact':'normal'}catch(e){}
 const TH=()=>localStorage.getItem('theme')||'auto';
 function applyTheme(){const t=TH(),r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);

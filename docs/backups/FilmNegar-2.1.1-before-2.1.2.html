@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>فیلم نگار</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1b33">
+<script>try{var _t=localStorage.getItem("theme");if(_t&&_t!=="auto")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<link rel="icon" type="image/png" href="favicon-48.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="فیلم نگار">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --bg:#f5f2ed;--card:#fffdf9;--tx:#24252b;--mu:#777781;--ac:#b83e32;--bd:#e8dfd5;
+ --soft:#f1e8df;--shadow:0 10px 28px rgba(47,32,23,.08);--veil:0%;
+ color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
+}
+@media(prefers-color-scheme:dark){
+ :root:not([data-theme="light"]){--bg:#090f1b;--card:#111c2c;--tx:#f4f1ec;--mu:#a7b0bf;--ac:#f07858;--bd:#26364b;--soft:#18283d;--shadow:0 12px 32px rgba(0,0,0,.24);--veil:0%;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#090f1b;--card:#111c2c;--tx:#f4f1ec;--mu:#a7b0bf;--ac:#f07858;--bd:#26364b;--soft:#18283d;--shadow:0 12px 32px rgba(0,0,0,.24);--veil:0%;color-scheme:dark}
+:root[data-theme="light"]{color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--tx);font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.75;padding-bottom:100px;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 8% 0%,rgba(224,130,88,.15),transparent 34%),radial-gradient(ellipse at 95% 28%,rgba(73,137,180,.12),transparent 34%),linear-gradient(155deg,var(--bg),var(--bg))}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.22;background-image:radial-gradient(rgba(140,120,105,.2) .7px,transparent .7px);background-size:18px 18px}
+main{width:100%;max-width:820px;margin:auto;padding:16px 15px 26px}
+h2{font-size:17px;font-weight:800;letter-spacing:-.25px;margin:23px 2px 11px;display:flex;align-items:center;gap:8px}
+h2:after{content:"";height:2px;flex:1;max-width:34px;border-radius:9px;background:linear-gradient(90deg,var(--ac),transparent);opacity:.65}
+.paper{background:#fff;color:#1b1b1b;max-width:720px;margin:18px auto;padding:26px 20px;border-radius:12px;box-shadow:0 6px 30px #0002;line-height:1.9}
+.paper h1{font-size:21px;margin:0 0 4px;border-bottom:2px solid #c0392b;padding-bottom:8px}
+.paper .mu{color:#666}.paper .it{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #eee}
+.paper img{width:46px;height:68px;object-fit:cover;border-radius:7px;flex:none}
+.paper .nt{background:#fff8e1;border-right:3px solid #f1c40f;padding:2px 8px;font-size:13px;margin-top:4px}
+@media print{nav,.noprint{display:none!important}body::before,body::after{display:none}.paper{box-shadow:none;margin:0}}
+nav{position:fixed;bottom:max(10px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(calc(100% - 24px),790px);display:flex;align-items:center;justify-content:space-around;gap:3px;background:color-mix(in srgb,var(--card) 90%,transparent);border:1px solid color-mix(in srgb,var(--bd) 85%,transparent);border-radius:22px;padding:7px 5px;z-index:20;box-shadow:0 12px 35px rgba(0,0,0,.16);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+nav button{flex:1;min-width:0;border:0;background:transparent;color:var(--mu);padding:7px 2px 6px;font:inherit;font-size:11px;line-height:1.45;cursor:pointer;border-radius:15px;transition:background .2s,color .2s,transform .2s}
+nav button:first-line{font-size:17px}
+nav button.on{color:var(--ac);font-weight:800;background:color-mix(in srgb,var(--ac) 11%,transparent)}
+nav button:active{transform:scale(.94)}
+.card{background:linear-gradient(145deg,color-mix(in srgb,var(--card) 97%,white),var(--card));border:1px solid var(--bd);border-radius:17px;padding:13px;margin-bottom:10px;box-shadow:var(--shadow);transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:active{transform:scale(.992)}
+.row{display:flex;gap:10px;align-items:center}
+.poster{width:52px;height:72px;border-radius:10px;display:grid;place-items:center;font-size:24px;flex:none;background-color:var(--soft);box-shadow:0 4px 12px rgba(0,0,0,.12);background-size:cover!important;background-position:center!important}
+.grow{flex:1;min-width:0}.mu{color:var(--mu);font-size:12px}
+.tag{display:inline-block;font-size:10px;border:1px solid var(--bd);border-radius:20px;padding:1px 8px;margin-left:4px;color:var(--mu);background:var(--soft)}
+button.b,select,input,textarea{font:inherit;font-size:13px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;padding:9px 12px;outline:none;transition:border-color .2s,box-shadow .2s,transform .15s}
+button.b{cursor:pointer;font-weight:700;min-height:39px}
+button.b:active{transform:scale(.97)}
+button.p{background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 75%,#a84b27));color:#fff;border-color:transparent;box-shadow:0 6px 16px color-mix(in srgb,var(--ac) 25%,transparent)}
+input,textarea{width:100%;margin-bottom:9px}
+input:focus,textarea:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 14%,transparent)}
+.tabs{display:flex;gap:7px;margin:11px 0 13px;flex-wrap:nowrap;overflow-x:auto;padding:2px 1px 7px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;border:1px solid var(--bd);background:var(--card);color:var(--mu);border-radius:22px;padding:7px 14px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac);box-shadow:0 5px 14px color-mix(in srgb,var(--ac) 22%,transparent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+.grid>.card{margin:0;overflow:hidden}
+.stat{text-align:center;position:relative;overflow:hidden;padding:13px 5px!important;font-size:11px;color:var(--mu)}
+.stat:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--ac),#e6b36d,transparent)}
+.stat b{font-size:25px;line-height:1.35;display:block;color:var(--tx);font-weight:900}
+#modal{position:fixed;inset:0;background:rgba(3,8,16,.68);display:none;align-items:flex-end;justify-content:center;z-index:30;backdrop-filter:blur(5px)}
+#modal.show{display:flex}
+#box{background:var(--bg);border:1px solid var(--bd);width:100%;max-width:590px;max-height:90dvh;overflow:auto;border-radius:24px 24px 0 0;padding:19px 17px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -12px 50px rgba(0,0,0,.25);animation:sheetIn .22s ease-out}
+#box:before{content:"";display:block;width:42px;height:4px;border-radius:9px;background:var(--mu);opacity:.35;margin:-8px auto 15px}
+#box h3{font-size:18px;margin:5px 0 13px}
+.hero-banner{position:relative;isolation:isolate;min-height:225px!important;border-radius:22px!important;margin:4px 0 16px!important;box-shadow:0 15px 35px rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12)}
+.hero-banner:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(3,8,16,.96),rgba(3,8,16,.04) 78%)}
+.hero-caption{padding:115px 17px 17px!important}
+.hero-caption b{font-size:20px!important;line-height:1.4;text-shadow:0 2px 12px #000}
+.poster-strip{display:flex;gap:11px;overflow-x:auto;padding:2px 1px 12px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.poster-strip::-webkit-scrollbar{display:none}
+.poster-tile{flex:none;width:112px;cursor:pointer;scroll-snap-align:start;transition:transform .2s}
+.poster-tile:active{transform:scale(.96)}
+.poster-tile img{width:112px!important;height:162px!important;object-fit:cover;border-radius:13px!important;box-shadow:0 7px 18px rgba(0,0,0,.2);background:var(--soft)}
+.home-search{background:var(--card);border:1px solid var(--bd);border-radius:17px;padding:8px;box-shadow:var(--shadow)}
+.home-search input{border:0;background:transparent;box-shadow:none;margin:0;padding:7px 9px}
+.home-search button{min-width:76px}
+.brand-title{font-size:21px;margin-top:15px}
+.brand-title:after{display:none}
+@keyframes sheetIn{from{transform:translateY(18px);opacity:.5}to{transform:translateY(0);opacity:1}}
+@media(min-width:650px){
+ main{padding:22px 20px 35px}
+ .hero-banner{min-height:270px!important}
+ .hero-caption{padding-top:155px!important}
+ .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+ .card:hover{border-color:color-mix(in srgb,var(--ac) 35%,var(--bd));box-shadow:0 14px 32px rgba(0,0,0,.12)}
+}
+@media(max-width:420px){
+ main{padding:12px 11px 25px}
+ nav{bottom:max(8px,env(safe-area-inset-bottom));width:calc(100% - 16px);border-radius:19px}
+ nav button{font-size:10px;padding:7px 1px}
+ .card{padding:11px;border-radius:15px}
+ .poster{width:48px;height:66px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .stat{font-size:10px}
+ .stat b{font-size:22px}
+ .hero-banner{min-height:205px!important}
+ .hero-caption{padding:105px 14px 14px!important}
+ .poster-tile,.poster-tile img{width:104px!important}
+ .poster-tile img{height:150px!important}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* FilmNegar 2.0 cinematic wide layout */
+:root{--bg:#070d19;--card:#101a2b;--tx:#f3f5fb;--mu:#a4b1c7;--ac:#f0a34a;--bd:rgba(117,153,202,.2);--soft:#17263d;--shadow:0 16px 42px rgba(0,0,0,.28);color-scheme:dark}
+:root[data-theme="light"]{--bg:#eef2f8;--card:#fff;--tx:#172033;--mu:#68758a;--ac:#c47b2e;--bd:#dce4ef;--soft:#e8eef7;--shadow:0 14px 34px rgba(32,53,83,.09);color-scheme:light}
+body{background:var(--bg);padding-bottom:112px}
+body::before{background:radial-gradient(ellipse at 50% -15%,rgba(31,111,210,.24),transparent 48%),radial-gradient(ellipse at 100% 42%,rgba(237,145,56,.10),transparent 35%),linear-gradient(145deg,#070d19,#0b1424 55%,#080e19)}
+:root[data-theme="light"] body::before{background:radial-gradient(ellipse at 50% -15%,rgba(64,130,220,.13),transparent 48%),linear-gradient(145deg,#eef2f8,#e8edf5)}
+body::after{opacity:.1;background-size:26px 26px}
+main{width:min(100% - 40px,1440px);max-width:1440px;padding:26px 0 42px}
+.card{border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,var(--card) 96%,#24456e),var(--card));border-color:var(--bd);box-shadow:var(--shadow);padding:16px}
+h2{font-size:19px;margin:30px 2px 14px}
+h2:after{max-width:54px}
+.grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.poster-strip{gap:14px}
+.poster-tile{width:132px}
+.poster-tile img{width:132px!important;height:190px!important}
+.home-search{margin:0 0 18px!important;border-radius:18px;padding:10px 12px}
+.home-search input{font-size:15px}
+.home-search button{min-width:100px}
+.brand-title{display:none}
+.fn-cover{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:28px;min-height:230px;margin:0 0 22px;padding:30px 38px;border:1px solid rgba(107,168,255,.28);border-radius:28px;background:radial-gradient(ellipse at 78% 15%,rgba(25,120,255,.25),transparent 36%),radial-gradient(ellipse at 12% 100%,rgba(245,151,56,.19),transparent 34%),linear-gradient(120deg,#0a1426,#101e34 60%,#0b1424);box-shadow:0 24px 60px rgba(0,0,0,.28)}
+.fn-cover:before{content:"";position:absolute;inset:12px;border:1px solid rgba(255,255,255,.08);border-radius:21px;pointer-events:none}
+.fn-cover-copy{position:relative;z-index:1;max-width:650px}
+.fn-cover-kicker{font-size:12px;font-weight:800;letter-spacing:3px;color:#82baff;text-transform:uppercase}
+.fn-cover h1{font-size:clamp(28px,4vw,48px);line-height:1.25;margin:8px 0;color:#fff;font-weight:900}
+.fn-cover h1 span{color:#ffbd69}
+.fn-cover p{margin:0;color:#c4d0e2;font-size:15px}
+.fn-cover-mark{position:relative;z-index:1;flex:none;width:156px;height:156px;display:grid;place-items:center;border-radius:50%;font-size:78px;color:#ffbd69;background:radial-gradient(circle,#162c49 0 55%,#0b1526 56%);border:2px solid rgba(94,169,255,.75);box-shadow:0 0 0 9px rgba(42,120,220,.08),0 0 42px rgba(28,132,255,.24)}
+
+.fn-cover-mark{width:176px;height:176px;padding:0;overflow:hidden;border-radius:50%;background:#07101d;border:2px solid rgba(94,169,255,.8);box-shadow:0 0 0 9px rgba(42,120,220,.08),0 0 42px rgba(28,132,255,.24)}
+.fn-cover-mark:after{inset:-8px}
+.fn-cover-logo{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}
+@media(max-width:700px){.fn-cover-mark{width:108px;height:108px}}
+@media(max-width:420px){.fn-cover-mark{width:82px;height:82px}}
+.fn-cover-mark:after{content:"";position:absolute;inset:-10px;border:1px solid rgba(255,180,92,.45);border-radius:50%;transform:rotate(-22deg) scaleX(1.08)}
+.fn-cover-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+.fn-cover-tags span{border:1px solid rgba(143,183,235,.25);border-radius:30px;padding:5px 12px;color:#dbe9ff;font-size:11px;background:rgba(255,255,255,.05)}
+nav{width:min(calc(100% - 32px),850px);border-radius:24px;background:rgba(12,23,40,.88);border-color:rgba(132,172,226,.22)}
+nav button.on{color:#ffc16e;background:rgba(240,163,74,.13)}
+button.b.p{background:linear-gradient(135deg,#e99a3e,#f4bd6c);color:#172033;box-shadow:0 7px 20px rgba(224,145,56,.2)}
+#box{background:var(--card)}
+@media(min-width:900px){main{padding-top:32px}.fn-cover{min-height:250px}.grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}}
+@media(max-width:700px){main{width:calc(100% - 26px);padding-top:14px}.fn-cover{min-height:178px;padding:22px 20px;border-radius:22px}.fn-cover-mark{width:94px;height:94px;font-size:46px}.fn-cover h1{font-size:27px}.fn-cover p{font-size:12px}.fn-cover-tags{margin-top:12px}.fn-cover-tags span{font-size:10px;padding:4px 9px}}
+@media(max-width:420px){main{width:calc(100% - 20px);padding:12px 0 28px}.fn-cover{gap:10px;padding:18px 15px;min-height:155px}.fn-cover-mark{width:70px;height:70px;font-size:34px}.fn-cover-mark:after{inset:-6px}.fn-cover h1{font-size:23px}.fn-cover p{font-size:11px}.fn-cover-kicker{font-size:9px;letter-spacing:2px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.card{padding:12px}}
+
+
+/* 2.1: compact personal-list presentation */
+.list-compact{min-height:54px;padding:9px 12px;gap:10px;margin:6px 0;border-radius:12px;align-items:center}.list-compact .grow{min-width:0}.list-compact .grow>b{font-size:14px;line-height:1.5}.list-compact select,.list-compact .b{font-size:12px;max-width:145px;padding:4px 7px}.list-search-hit{padding:10px 12px;margin:6px 0}#listSearch{width:100%;min-width:0}
+
+/* 2.1.1 visual correction: show the complete supplied artwork without circular cropping */
+.fn-cover-mark{
+  width:clamp(116px,18vw,196px);
+  height:auto;
+  aspect-ratio:1/1;
+  padding:7px;
+  overflow:hidden;
+  border-radius:22px;
+  background:rgba(5,12,24,.72);
+  border:1px solid rgba(126,177,255,.55);
+  box-shadow:0 12px 34px rgba(0,0,0,.32),0 0 30px rgba(28,132,255,.18);
+}
+.fn-cover-mark:after{inset:2px;border-radius:17px;transform:none;pointer-events:none}
+.fn-cover-logo{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  border-radius:15px;
+}
+@media(max-width:700px){.fn-cover-mark{width:clamp(104px,25vw,136px);height:auto}}
+@media(max-width:420px){.fn-cover-mark{width:96px;height:auto}}
+
+</style></head><body>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div id="modal"><div id="box"></div></div>
+<script>
+const COL=['#e74c3c','#3498db','#27ae60','#8e44ad','#e67e22','#16a085','#2c3e50','#d35400'];
+const DB=[
+[1,'جدایی نادر از سیمین','film','ایرانی',2011,'درام','روایت یک جدایی و پیامدهای اخلاقی آن؛ برنده اسکار بهترین فیلم خارجی.'],
+[2,'فروشنده','film','ایرانی',2016,'درام','زوجی بازیگر پس از حادثه‌ای در خانه جدید با بحران روبه‌رو می‌شوند.'],
+[3,'قهرمان','film','ایرانی',2021,'درام','مردی زندانی با یک کیف پر از سکه شهرتی غیرمنتظره پیدا می‌کند.'],
+[4,'پایتخت','series','ایرانی',2011,'کمدی','ماجراهای خانواده نقی معمولی در فصل‌های مختلف.'],
+[5,'شهرزاد','series','ایرانی',2015,'درام','سریالی دربارهٔ دوران پس از کودتای ۲۸ مرداد.'],
+[6,'آژانس شیشه‌ای','film','ایرانی',1998,'درام','جانباز جنگ و گروگان‌گیری در یک آژانس مسافرتی.'],
+[7,'طعم گیلاس','film','ایرانی',1997,'درام','مردی در جستجوی کسی است که در کارش به او کمک کند؛ نخل طلای کن.'],
+[8,'ماهی و گربه','film','ایرانی',2013,'هیجانی','فیلمی تک‌برش دربارهٔ گروهی جوان در کنار دریای خزر.'],
+[9,'بازی مرکب','series','خارجی',2021,'هیجانی','صدها نفر برای جایزه‌ای کلان در بازی‌های مرگبار شرکت می‌کنند.'],
+[10,'برکینگ بد','series','خارجی',2008,'جنایی','معلم شیمی بیمار وارد دنیای تولید مواد مخدر می‌شود.'],
+[11,'تلقین','film','خارجی',2010,'علمی‌تخیلی','دزدی که ایده‌ها را از رویاها می‌دزدد.'],
+[12,'پدرخوانده','film','خارجی',1972,'جنایی','حماسهٔ یک خانوادهٔ مافیایی ایتالیایی‌تبار.'],
+[13,'بین‌ستارگانی','film','خارجی',2014,'علمی‌تخیلی','سفر فضانوردان برای یافتن سیارهٔ جدید برای بشر.'],
+[14,'انگل','film','خارجی',2019,'درام','خانواده‌ای فقیر به زندگی خانواده‌ای ثروتمند نفوذ می‌کند.'],
+[15,'چرنوبیل','series','خارجی',2019,'درام','بازسازی فاجعهٔ هسته‌ای چرنوبیل.'],
+[16,'اوپنهایمر','film','خارجی',2023,'زندگی‌نامه','داستان پدر بمب اتم و پیامدهای اخلاقی ساخت آن.'],
+[17,'بازی تاج و تخت','series','خارجی',2011,'فانتزی','نبرد خاندان‌ها بر سر تخت آهنین.'],
+[18,'رستگاری در شاوشنک','film','خارجی',1994,'درام','دوستی دو زندانی و امید به آزادی.']
+].map(a=>({id:'d'+a[0],t:a[1],en:({1:'A Separation',2:'The Salesman',3:'A Hero',4:'Paytakht',5:'Shahrzad',6:'The Glass Agency',7:'Taste of Cherry',8:'Fish & Cat',9:'Squid Game',10:'Breaking Bad',11:'Inception',12:'The Godfather',13:'Interstellar',14:'Parasite',15:'Chernobyl',16:'Oppenheimer',17:'Game of Thrones',18:'The Shawshank Redemption'})[a[0]]||'',k:a[2],o:a[3],y:a[4],g:a[5],d:a[6]}));
+const FR=[
+{id:'f1',n:'سارا',e:'👩‍🎤',act:[['d14','watched',5,'شاهکار طبقاتی، حتماً ببینید.'],['d9','watching'],['d3','want']]},
+{id:'f2',n:'علی',e:'🧔',act:[['d1','watched',5,'بهترین فیلم ایرانی دهه اخیر.'],['d16','watched',4,'سنگین ولی ارزشمند.'],['d5','watching']]},
+{id:'f3',n:'مهسا',e:'👩',act:[['d12','watched',4,'کلاسیک بی‌نقص.'],['d13','want'],['d4','watched',3,'سرگرم‌کننده.']]}];
+const ST={want:'می‌خواهم ببینم',watching:'در حال تماشا',watched:'دیده‌ام'};
+const DEF={custom:[],lib:{},fol:[],tab:'home',lt:'want',q:'',fk:'all',fo:'all',cl:[]};
+let S={...DEF};
+const SBU='https://mrshvucwpohsrkmjhmfi.supabase.co',SBK='sb_publishable_cllLZZIC9Ejjp5pxDJAqmw_SWVUoD38';
+let AU=null,PF=null,SYNC='',PT;
+const pk=()=>({custom:S.custom,lib:S.lib,fol:S.fol,cl:S.cl});
+const save=()=>{if(!AU)return;try{localStorage.setItem('mt_'+AU.id,JSON.stringify(pk()))}catch(e){}clearTimeout(PT);SYNC='saving';PT=setTimeout(push,800)};
+async function sb(path,o={}){
+const {anon,...f}=o;const h={apikey:SBK,'Content-Type':'application/json',...(f.headers||{})};
+if(!anon&&AU)h.Authorization='Bearer '+AU.access_token;
+const r=await fetch(SBU+path,{...f,headers:h});const x=await r.text();let j=null;try{j=x?JSON.parse(x):null}catch(e){}
+if(!r.ok)throw {status:r.status,msg:(j&&(j.msg||j.error_description||j.message||j.error))||'خطا'};return j}
+const sess=()=>{try{return JSON.parse(localStorage.getItem('sb')||'null')}catch(e){return null}};
+function setSess(d){AU={access_token:d.access_token,refresh_token:d.refresh_token,exp:Date.now()+(d.expires_in-60)*1000,id:d.user.id,email:d.user.email};localStorage.setItem('sb',JSON.stringify(AU))}
+async function ensure(){if(AU&&Date.now()>=AU.exp){const d=await sb('/auth/v1/token?grant_type=refresh_token',{method:'POST',anon:1,body:JSON.stringify({refresh_token:AU.refresh_token})});setSess(d)}}
+const syncTxt=()=>SYNC==='ok'?'✅ همگام با حساب شما':SYNC==='saving'?'⏳ در حال ذخیره…':SYNC==='err'?'⚠️ ذخیرهٔ ابری ناموفق بود؛ دوباره تلاش می‌شود':'';
+function updSync(){const e=document.getElementById('sync');if(e)e.textContent=syncTxt()}
+async function push(){if(!AU)return;try{await ensure();await sb('/rest/v1/user_data',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify({user_id:AU.id,data:pk(),updated_at:new Date().toISOString()})});SYNC='ok'}catch(e){SYNC='err';setTimeout(push,15000)}updSync()}
+function mg(a,b){a=a||{};b=b||{};const u=(x,y)=>{const m=new Map();[...(x||[]),...(y||[])].forEach(i=>m.set(i.id,i));return[...m.values()]};
+return{custom:u(a.custom,b.custom),lib:{...(a.lib||{}),...(b.lib||{})},cl:u(a.cl,b.cl),fol:[...new Set([...(a.fol||[]),...(b.fol||[])])]}}
+const jl=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}};
+async function enter(){
+await ensure();
+const p=await sb('/rest/v1/profiles?select=username&id=eq.'+AU.id);PF=p[0]||null;
+if(PF)localStorage.setItem('pf_'+AU.id,JSON.stringify(PF));
+const loc=jl('mt_'+AU.id),old=jl('mt');
+const c=await sb('/rest/v1/user_data?select=data&user_id=eq.'+AU.id);
+S={...DEF,...mg(mg(old,loc),c[0]?.data)};
+await push();
+if(old&&SYNC==='ok'){localStorage.setItem('mt_old',JSON.stringify(old));localStorage.removeItem('mt')}}
+async function boot(){
+ applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}
+ const recovery=recoveryFromUrl();
+ if(recovery){
+  if(recovery.token){showRecoveryPassword(recovery.token);return}
+  shell(`<div class="card"><h2>لینک بازیابی معتبر نیست</h2><div class="mu">ممکن است لینک منقضی یا تکراری باشد. دوباره درخواست بازیابی بده.</div><button class="b p" onclick="history.replaceState(null,'',location.pathname);authView('in')">بازگشت به ورود</button></div>`);return
+ }
+ const s0=sess();
+ if(s0){AU=s0;try{await enter()}catch(e){
+  if(e.status===401||e.status===400||e.status===403){localStorage.removeItem('sb');AU=null}
+  else{PF=jl('pf_'+AU.id);S={...DEF,...(jl('mt_'+AU.id)||{})}}
+ }}
+ const lp=new URLSearchParams(location.search).get('l');if(lp){viewShared(lp);return}
+ render();
+}
+const ERR={'Invalid login credentials':'ایمیل یا رمز عبور اشتباه است','User already registered':'این ایمیل قبلاً ثبت شده است'};
+const em=e=>ERR[e.msg]||(e.status?e.msg:'اتصال به سرور برقرار نشد؛ اینترنت را بررسی کنید');
+function shell(h){document.getElementById('nav').innerHTML='';document.getElementById('app').innerHTML=`<div style="max-width:380px;margin:36px auto"><h2 style="text-align:center;font-size:24px">🎬 فیلم نگار</h2>${h}</div>`}
+function authView(m){m=m||'in';shell(`<div class="card"><input id="ae" type="email" dir="ltr" placeholder="ایمیل" autocomplete="email"><input id="ap" type="password" dir="ltr" placeholder="رمز عبور (حداقل ۶ کاراکتر)" autocomplete="${m==='in'?'current-password':'new-password'}"><div id="aerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="abtn" class="b p" style="width:100%" onclick="doAuth('${m}')">${m==='in'?'ورود':'ساخت حساب'}</button>${m==='in'?`<div style="text-align:center;margin-top:12px"><a href="#" style="color:var(--ac);font-size:13px" onclick="requestReset();return false">رمز عبور را فراموش کرده‌اید؟</a></div>`:''}<div style="text-align:center;margin-top:8px"><a href="#" style="color:var(--mu);font-size:13px" onclick="authView('${m==='in'?'up':'in'}');return false">${m==='in'?'حساب ندارید؟ ثبت‌نام':'حساب دارید؟ ورود'}</a></div></div>`)}
+async function doAuth(m){
+const g=i=>document.getElementById(i),e=g('ae').value.trim(),p=g('ap').value,er=g('aerr'),b=g('abtn');er.textContent='';
+if(!e||p.length<6){er.textContent='ایمیل و رمز عبور (حداقل ۶ کاراکتر) را وارد کنید';return}
+b.disabled=true;b.textContent='صبر کنید…';
+try{
+const d=await sb(m==='in'?'/auth/v1/token?grant_type=password':'/auth/v1/signup',{method:'POST',anon:1,body:JSON.stringify({email:e,password:p})});
+if(!d.access_token)throw {msg:'ثبت‌نام انجام شد ولی ورود خودکار ممکن نیست؛ ایمیل خود را تأیید کنید و وارد شوید.',status:1};
+setSess(d);await enter();render()}
+catch(x){er.textContent=em(x);b.disabled=false;b.textContent=m==='in'?'ورود':'ساخت حساب'}}
+function nameView(){shell(`<div class="card"><b>یک نام کاربری انتخاب کنید</b><div class="mu" style="margin:4px 0 8px">دوستانتان با همین نام پیدایتان می‌کنند. ۳ تا ۲۰ حرف انگلیسی کوچک، عدد یا _</div><input id="au" dir="ltr" placeholder="username" autocapitalize="none" autocomplete="off"><div id="aerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="abtn" class="b p" style="width:100%" onclick="saveName()">ادامه</button><div style="text-align:center;margin-top:12px"><a href="#" style="color:var(--mu);font-size:13px" onclick="logout();return false">خروج</a></div></div>`)}
+async function saveName(){
+const u=document.getElementById('au').value.trim().toLowerCase(),er=document.getElementById('aerr');er.textContent='';
+if(!/^[a-z0-9_]{3,20}$/.test(u)){er.textContent='نام کاربری معتبر نیست';return}
+try{await ensure();await sb('/rest/v1/profiles',{method:'POST',body:JSON.stringify({id:AU.id,username:u})});PF={username:u};localStorage.setItem('pf_'+AU.id,JSON.stringify(PF));render()}
+catch(x){er.textContent=x.status===409?'این نام کاربری قبلاً گرفته شده':em(x)}}
+let RECOVERY_TOKEN='';
+async function requestReset(){
+  const email=document.getElementById('ae')?.value.trim();
+  const error=document.getElementById('aerr');
+  if(!email){if(error)error.textContent='اول ایمیل حساب خود را وارد کنید.';return}
+  if(error)error.textContent='در حال ارسال درخواست…';
+  try{
+    const redirectTo=location.origin+location.pathname;
+    await sb('/auth/v1/recover?redirect_to='+encodeURIComponent(redirectTo),{method:'POST',anon:1,body:JSON.stringify({email})});
+    if(error)error.textContent='اگر این ایمیل در سامانه ثبت شده باشد، لینک بازیابی برایش ارسال می‌شود. ایمیل و پوشهٔ Spam را بررسی کنید.';
+  }catch(e){if(error)error.textContent=em(e)}
+}
+function recoveryFromUrl(){
+  const p=new URLSearchParams(location.hash.replace(/^#/,''));if(p.get('type')==='recovery'&&p.get('access_token'))return{token:p.get('access_token')};if(p.get('error_description'))return{error:p.get('error_description')};return null;
+}
+function showRecoveryPassword(token){
+ RECOVERY_TOKEN=token;
+ shell(`<div class="card"><h2>تعیین رمز جدید</h2><div class="mu">یک رمز جدید انتخاب و دوباره وارد کنید.</div><input id="newpw" type="password" autocomplete="new-password" placeholder="رمز جدید، حداقل ۶ کاراکتر"><input id="newpw2" type="password" autocomplete="new-password" placeholder="تکرار رمز جدید"><div id="pwrerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="pwrbtn" class="b p" style="width:100%" onclick="saveRecoveryPassword()">ذخیرهٔ رمز جدید</button></div>`)
+}
+async function saveRecoveryPassword(){
+ const pw=document.getElementById('newpw').value;const pw2=document.getElementById('newpw2').value;const error=document.getElementById('pwrerr');const button=document.getElementById('pwrbtn');error.textContent='';
+ if(pw.length<6){error.textContent='رمز باید حداقل ۶ کاراکتر باشد.';return}
+ if(pw!==pw2){error.textContent='دو رمز واردشده یکسان نیستند.';return}
+ if(!RECOVERY_TOKEN){error.textContent='لینک بازیابی معتبر نیست یا منقضی شده است. دوباره درخواست بازیابی بده.';return}
+ button.disabled=true;button.textContent='در حال ذخیره…';
+ try{
+  await sb('/auth/v1/user',{method:'PUT',anon:1,headers:{Authorization:'Bearer '+RECOVERY_TOKEN},body:JSON.stringify({password:pw})});
+  RECOVERY_TOKEN='';history.replaceState(null,'',location.pathname);localStorage.removeItem('sb');AU=null;PF=null;alert('رمز عبور با موفقیت تغییر کرد. حالا با رمز جدید وارد شو.');authView('in');
+ }catch(e){error.textContent=em(e);button.disabled=false;button.textContent='ذخیرهٔ رمز جدید'}
+}
+function logout(){localStorage.removeItem('sb');AU=null;PF=null;SYNC='';S={...DEF};render()}
+function openPasswordChange(){
+ open_(`<h3>تغییر رمز عبور</h3><input id="cpw" type="password" autocomplete="new-password" placeholder="رمز جدید، حداقل ۶ کاراکتر"><input id="cpw2" type="password" autocomplete="new-password" placeholder="تکرار رمز جدید"><div id="cpwerr" style="color:var(--ac);font-size:13px;min-height:22px"></div><button id="cpwbtn" class="b p" onclick="savePasswordChange()">ذخیرهٔ رمز جدید</button><button class="b" onclick="close_()">انصراف</button>`)
+}
+async function savePasswordChange(){
+ const pw=document.getElementById('cpw').value;const pw2=document.getElementById('cpw2').value;const error=document.getElementById('cpwerr');const button=document.getElementById('cpwbtn');error.textContent='';
+ if(pw.length<6){error.textContent='رمز باید حداقل ۶ کاراکتر باشد.';return}
+ if(pw!==pw2){error.textContent='دو رمز واردشده یکسان نیستند.';return}
+ button.disabled=true;button.textContent='در حال ذخیره…';
+ try{await ensure();await sb('/auth/v1/user',{method:'PUT',body:JSON.stringify({password:pw})});close_();alert('رمز عبور با موفقیت تغییر کرد.')}catch(e){error.textContent=em(e);button.disabled=false;button.textContent='ذخیرهٔ رمز جدید'}
+}
+function me(){return `<h2>👤 پروفایل</h2><div class="card"><b>@${esc(PF?.username)}</b><div class="mu" dir="ltr" style="text-align:right">${esc(AU.email)}</div><div class="mu" id="sync" style="margin-top:6px">${syncTxt()}</div><br><button class="b" onclick="openPasswordChange()">تغییر رمز عبور</button><button class="b" onclick="logout()">خروج از حساب</button></div><div class="card"><b>🎨 ظاهر برنامه</b><div class="tabs">${[['light','☀️ روشن'],['dark','🌙 تاریک'],['auto','📱 مطابق دستگاه']].map(([k,v])=>`<button class="${TH()===k?'on':''}" onclick="setTheme('${k}')">${v}</button>`).join('')}</div></div><div class="card mu">لیست‌های شما به حساب‌تان متصل است و با ورود به همین حساب، از هر گوشی در دسترس است.</div><div class="mu" style="text-align:center;font-size:11px;margin:10px">فیلم نگار · نسخهٔ ${APP_VER}</div>`}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const all=()=>[...DB,...S.custom];
+const get=id=>all().find(m=>m.id===id)||HM2[id]||TR.find(m=>m.id===id);
+const kt=m=>m.k==='series'?'سریال':'فیلم';
+const col=id=>COL[[...id].reduce((a,c)=>a+c.charCodeAt(0),0)%COL.length];
+const px=u=>{const m=/^https:\/\/image\.tmdb\.org\/t\/p\/(w\d+)(\/[\w-]+\.\w+)$/.exec(u||'');return m?SBU+'/functions/v1/tmdb?img='+m[2]+'&amp;w='+m[1]:esc(u||'')};
+const enT=m=>m.en?` <bdi class="mu" dir="ltr" style="font-size:12px">· ${esc(m.en)}</bdi>`:'';
+const pos=m=>m.img?`<div class="poster" style="background:url(${px(m.img)}) center/cover"></div>`:`<div class="poster" style="background:${col(m.id)}33">${m.k==='series'?'📺':'🎬'}</div>`;
+function adopt(id){const m=get(id);if(m&&!all().find(x=>x.id===id))S.custom.push({...m,custom:1,tm:1})}
+function setSt(id,st){if(st)adopt(id);if(!st){delete S.lib[id]}else S.lib[id]={...(S.lib[id]||{}),st};save();render()}
+function stSel(id){const c=S.lib[id]?.st||'';return `<select onchange="setSt('${id}',this.value)"><option value="">— افزودن به لیست —</option>${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${c===k?'selected':''}>${v}</option>`).join('')}</select>`}
+function item(m,extra=''){
+const l=S.lib[m.id],compact=S.tab==='lists'&&LIST_VIEW==='compact';
+return '<div class="card row '+(compact?'list-compact':'')+'" onclick="detail(\''+m.id+'\')" style="cursor:pointer">'+(compact?'':pos(m))+'<div class="grow"><b>'+esc(m.t)+'</b>'+(compact?'':enT(m))+(compact?'':(m.custom?'<span class="tag">'+(m.tm?'TMDB':'دستی')+'</span>':''))+(compact?'':'<div class="mu">'+kt(m)+' '+esc(m.o)+' · '+esc(m.y||'—')+' · '+esc(m.g||'')+'</div>')+(!compact&&(l?.se||l?.ep)?'<div class="mu">📺 فصل '+(l.se||'؟')+' · قسمت '+(l.ep||'؟')+'</div>':'')+(!compact&&l?.rating?'<div class="mu">⭐ '+l.rating+'/۵</div>':'')+(S.tab==='lists'&&!compact?'<div><button class="b" style="font-size:12px;padding:1px 8px;margin-top:4px" onclick="event.stopPropagation();whereOpen(\''+m.id+'\')">📺 کجا ببینم؟</button></div>':'')+'</div><div onclick="event.stopPropagation()">'+(extra||stSel(m.id))+'</div></div>'
+}
+let HM=null,HM2={},HMLOAD=0,HMERR=0;
+function idx(d){HM2={};['trending','now','upcoming','tv'].forEach(k=>(d[k]||[]).forEach(m=>HM2[m.id]=m))}
+async function loadHome(){const c=jl('hm2');if(c){HM=c.d;idx(HM)}if(c&&Date.now()-c.t<108e5)return;
+try{await ensure();HM=await sb('/functions/v1/tmdb',{method:'POST',body:JSON.stringify({action:'home'})});idx(HM);localStorage.setItem('hm2',JSON.stringify({t:Date.now(),d:HM}));HMERR=0}catch(e){HMERR=!HM}
+if(S.tab==='home')render()}
+function hm(){
+if(!HM)return HMERR?'<div class="card mu">دریافت تازه‌های سینما ممکن نشد.</div>':'<div class="card mu">در حال دریافت تازه‌ترین‌ها…</div>';
+const h=(HM.trending||[]).find(m=>m.bd)||(HM.now||[])[0];
+const row=(t,L)=>L&&L.length?`<h2>${t}</h2><div class="poster-strip">${L.map(m=>`<div class="poster-tile" onclick="detail('${m.id}')">${m.img?`<img src="${px(m.img)}" loading="lazy" alt="" style="width:104px;height:150px;object-fit:cover;border-radius:10px;background:var(--card)">`:pos(m)}<div style="font-size:12px;line-height:1.4;margin-top:4px">${esc(m.t)}</div>${m.en?`<div class="mu" dir="ltr" style="font-size:10px">${esc(m.en)}</div>`:''}<div class="mu">${m.r?'⭐ '+m.r:''}</div></div>`).join('')}</div>`:'';
+return (h?`<div class="hero-banner" onclick="detail('${h.id}')" style="cursor:pointer;background:#222 url(${px(h.bd||h.img)}) center/cover"><div class="hero-caption" style="color:#fff"><b style="font-size:17px">${esc(h.t)}</b>${h.en?` <span dir="ltr" style="opacity:.75;font-size:13px">${esc(h.en)}</span>`:''}<div style="font-size:12px;opacity:.85">${kt(h)} · ${esc(h.y)} ${h.r?'· ⭐ '+h.r:''}</div></div></div>`:'')+row('🔥 ترند امروز',HM.trending)+row('🎬 در حال اکران',HM.now)+row('⏳ به‌زودی',HM.upcoming)+row('📺 سریال‌های محبوب',HM.tv)+'<div class="mu" style="font-size:11px;margin-top:6px">داده‌ها و تصاویر: TMDB. این محصول از API شرکت TMDB استفاده می‌کند ولی توسط آن تأیید نشده است.</div>'}
+function hs(){const q=document.getElementById('hq');S.q=q.value;S.tab='catalog';render()}
+function home(){if(!HMLOAD){HMLOAD=1;loadHome()}return `<section class="fn-cover"><div class="fn-cover-copy"><div class="fn-cover-kicker">MOVIES · SERIES · YOUR CINEMA WORLD</div><h1>Film<span>Negar</span></h1><p>خانه‌ای برای کشف، ثبت و به‌اشتراک‌گذاشتن دنیای فیلم و سریال</p><div class="fn-cover-tags"><span>کاتالوگ فیلم و سریال</span><span>آرشیو شخصی</span><span>شبکه دوستداران سینما</span></div></div><div class="fn-cover-mark"><img class="fn-cover-logo" src="./assets/filmnegar-cover.jpg?v=2.1" alt="لوگوی FilmNegar"></div></section><div class="row home-search" style="margin:6px 0 13px"><input id="hq" enterkeyhint="search" placeholder="🔍 جستجوی فیلم و سریال..." onkeydown="if(event.key==='Enter')hs()"><button class="b p" onclick="hs()">جستجو</button></div>`+hm()+home0()}
+function home0(){
+const day=Math.floor(Date.now()/864e5),pick=[0,1,2,3].map(i=>DB[(day*4+i)%DB.length]);
+const c=s=>Object.values(S.lib).filter(x=>x.st===s).length;
+const feed=S.fol.flatMap(fid=>{const f=FR.find(x=>x.id===fid);return f.act.map(a=>({f,a}))}).slice(0,6);
+return `<h2 class="brand-title">🎬 فیلم‌نگار</h2><div class="card row" style="border-color:var(--ac)"><div class="grow"><b>لیست شخصی خودت رو بساز</b><div class="mu">هر فیلم یا سریالی که در کاتالوگ نبود را دستی اضافه کن؛ بدون محدودیت.</div></div><button class="b p" onclick="openForm()">＋ افزودن دستی</button></div><div class="row" style="gap:7px"><div class="card stat grow"><b>${c('want')}</b>می‌خواهم ببینم</div><div class="card stat grow"><b>${c('watching')}</b>در حال تماشا</div><div class="card stat grow"><b>${c('watched')}</b>دیده‌ام</div></div>
+<h2>🎞 از کاتالوگ ما</h2><div class="grid">${pick.map(m=>`<div class="card" onclick="detail('${m.id}')" style="cursor:pointer;text-align:center"><div class="poster" style="width:100%;height:90px;background:${col(m.id)}33;font-size:34px">${m.k==='series'?'📺':'🎬'}</div><b>${esc(m.t)}</b>${m.en?`<div class="mu" dir="ltr" style="font-size:11px">${esc(m.en)}</div>`:''}<div class="mu">${m.o} · ${m.y}</div></div>`).join('')}</div>
+<h2>🧑‍🤝‍🧑 فعالیت دوستان</h2>${feed.length?feed.map(({f,a})=>`<div class="card">${f.e} <b>${f.n}</b> ${a[1]==='watched'?'دید':a[1]==='watching'?'در حال دیدن است':'می‌خواهد ببیند'}: <a href="#" onclick="detail('${a[0]}');return false" style="color:var(--ac)">${esc(get(a[0]).t)}</a>${a[2]?` ⭐${a[2]}`:''}</div>`).join(''):'<div class="card mu">هنوز کسی را دنبال نکرده‌اید.</div>'}
+<h2>💡 نکته</h2><div class="card mu">فیلم مورد نظر در کاتالوگ نیست؟ از تب «کاتالوگ» با دکمهٔ «افزودن دستی» اضافه‌اش کنید.</div>`}
+function catalog(){
+let L=all().filter(m=>(S.fk==='all'||m.k===S.fk)&&(S.fo==='all'||m.o===S.fo)&&m.t.includes(S.q));
+return `<input id="q" placeholder="🔍 جستجوی فیلم یا سریال..." value="${esc(S.q)}" oninput="S.q=this.value;document.getElementById('res').innerHTML=res();tmdb()">
+<div class="tabs">${[['all','همه'],['film','فیلم'],['series','سریال']].map(([k,v])=>`<button class="${S.fk===k?'on':''}" onclick="S.fk='${k}';render()">${v}</button>`).join('')}${[['all','هر مبدأ'],['ایرانی','ایرانی'],['خارجی','خارجی']].map(([k,v])=>`<button class="${S.fo===k?'on':''}" onclick="S.fo='${k}';render()">${v}</button>`).join('')}</div>
+<button class="b p" onclick="openForm()">＋ افزودن دستی</button><div id="res">${res()}</div><div id="tm"></div>`}
+function nz(s){return String(s||'').replace(/ي/g,'ی').replace(/ك/g,'ک').toLowerCase()}
+function res(){const L=all().filter(m=>(S.fk==='all'||m.k===S.fk)&&(S.fo==='all'||m.o===S.fo)&&(nz(m.t)+' '+nz(m.en)).includes(nz(S.q)));return `<h2>${L.length} نتیجه</h2>${L.map(m=>item(m)).join('')||`<div class="card mu">پیدا نشد. می‌توانید «${esc(S.q)}» را دستی اضافه کنید.</div>`}`}
+function listSearchResults(q){
+const query=nz(q).trim(),box=document.getElementById('listSearchResults');
+if(!box)return;if(!query){box.innerHTML='';return}
+const rows=Object.entries(S.lib).map(([id,entry])=>({m:get(id),entry,id})).filter(x=>x.m&&(nz(x.m.t)+' '+nz(x.m.en||'')).includes(query));
+if(!rows.length){box.innerHTML='<div class="card mu" style="margin:8px 0">یافت نشد</div>';return}
+box.innerHTML='<div class="mu" style="margin:8px 2px">نتیجه جستجو در لیست‌های من</div>'+rows.map(({m,entry,id})=>{
+const cats=[ST[entry.st]||'بدون دسته‌بندی',...S.cl.filter(c=>(c.ids||[]).includes(id)).map(c=>'📁 '+c.name)];
+return '<div class="card row list-search-hit" onclick="detail(\''+id+'\')" style="cursor:pointer"><div class="grow"><b>'+esc(m.t)+'</b>'+(m.en?' <bdi class="mu" dir="ltr" style="font-size:12px">· '+esc(m.en)+'</bdi>':'')+'<div class="mu" style="font-size:12px;margin-top:3px">موجود در: '+cats.map(esc).join('، ')+'</div></div><span class="tag">مشاهده</span></div>'
+}).join('')
+}
+function setListView(mode){LIST_VIEW=mode;try{localStorage.setItem('filmnegar_list_view',mode)}catch(e){}render()}
+function lists(){
+const cl=S.cl.find(c=>'c:'+c.id===S.lt);
+const L=cl?cl.ids.map(get).filter(Boolean):all().filter(m=>S.lt==='all'?S.lib[m.id]?.st:S.lib[m.id]?.st===S.lt);
+const listItems=L.length?L.map(m=>item(m,cl?'<button class="b" onclick="rmCl(\''+cl.id+'\',\''+m.id+'\')">✕ حذف از لیست</button>':S.lt==='all'?'<div style="color:var(--ac);font-weight:700;font-size:12px;margin-bottom:4px">'+ST[S.lib[m.id].st]+'</div>'+stSel(m.id):'')).join(''):'<div class="card mu">این لیست خالی است. از جزئیات هر فیلم می‌توانید آن را به لیست اضافه کنید.</div>';
+return '<button class="b p" onclick="openForm()" style="width:100%;margin:8px 0">＋ افزودن دستی فیلم یا سریال به لیست</button><div class="row" style="margin-bottom:4px"><button class="b grow" onclick="shareList()">📤 ارسال لیست</button><button class="b grow" onclick="impOpen()">📥 ورود لیست</button></div>'+
+'<div class="card" style="margin:8px 0;padding:10px"><b style="font-size:14px">🔎 جستجو در لیست‌های من</b><input id="listSearch" placeholder="نام فیلم یا سریال را وارد کنید..." oninput="listSearchResults(this.value)" style="margin-top:6px"><div id="listSearchResults"></div></div>'+
+'<div class="tabs"><button class="'+(LIST_VIEW==='normal'?'on':'')+'" onclick="setListView(\'normal\')">🖼️ نمایش عادی</button><button class="'+(LIST_VIEW==='compact'?'on':'')+'" onclick="setListView(\'compact\')">☰ فقط نام‌ها</button></div>'+
+'<div class="tabs"><button class="'+(S.lt==='all'?'on':'')+'" onclick="S.lt=\'all\';render()">همه</button>'+Object.entries(ST).map(([k,v])=>'<button class="'+(S.lt===k?'on':'')+'" onclick="S.lt=\''+k+'\';render()">'+v+'</button>').join('')+S.cl.map(c=>'<button class="'+(S.lt==='c:'+c.id?'on':'')+'" onclick="S.lt=\'c:'+c.id+'\';render()">📁 '+esc(c.name)+'</button>').join('')+'<button onclick="newCl()">＋ لیست جدید</button></div>'+(cl?'<button class="b" onclick="delCl(\''+cl.id+'\')">🗑 حذف این لیست</button>':'')+listItems+
+'<div class="mu">وضعیت هر مورد را مستقیماً از منوی کنار آن تغییر دهید؛ با انتخاب «— افزودن —» از لیست حذف می‌شود.</div>'
+}
+let SOCIAL_USERS=[],SOCIAL_FOLLOWING=[],SOCIAL_FOLLOWERS=[],SOCIAL_NOTIFS=[],SOCIAL_BUSY=false,SOCIAL_RENDERING=false;
+function friends(){
+const unread=SOCIAL_NOTIFS.filter(n=>!n.read_at).length;
+return `<h2>👥 دوستان و دنبال‌کنندگان</h2><div class="card"><div class="row"><b>✉️ پیام‌های خصوصی</b><span class="grow"></span>${CHAT_UNREAD?`<span class="tag">${CHAT_UNREAD} پیام جدید</span>`:''}<button class="b p" onclick="openInbox()">ورود به صندوق پیام‌ها</button></div></div>
+<div class="card"><b>🔎 پیدا کردن کاربران</b><div class="row" style="margin-top:8px"><input id="socialq" class="grow" dir="ltr" placeholder="نام کاربری، مثلاً filmfan" onkeydown="if(event.key==='Enter')searchUsers()"><button class="b p" onclick="searchUsers()">جستجو</button></div><div id="socialresults"></div></div>
+<div class="card"><div class="row"><b>🔔 اعلان‌ها</b><span class="grow"></span><span class="tag">${unread} خوانده‌نشده</span></div>
+${SOCIAL_NOTIFS.length?SOCIAL_NOTIFS.map(n=>`<div class="row" style="padding:8px 0;border-bottom:1px solid var(--bd)"><div class="grow"><b>@${esc(n.actor_name||'کاربر')}</b> شما را دنبال کرد<div class="mu">${new Date(n.created_at).toLocaleString('fa-IR')}</div></div>${!n.read_at?`<button class="b" onclick="readNotif(${n.id})">خواندم</button>`:''}</div>`).join(''):'<div class="mu" style="margin-top:8px">هنوز اعلانی ندارید.</div>'}
+</div>
+<div class="card"><b>شما دنبال می‌کنید (${SOCIAL_FOLLOWING.length})</b>
+${SOCIAL_FOLLOWING.map(u=>`<div class="row" style="padding:8px 0"><div class="grow">@${esc(u.username)}</div><button class="b" onclick="unfollowUser('${u.id}')">لغو دنبال‌کردن</button></div>`).join('')||'<div class="mu">هنوز کسی را دنبال نمی‌کنید.</div>'}</div>
+<div class="card"><b>دنبال‌کنندگان شما (${SOCIAL_FOLLOWERS.length})</b>
+${SOCIAL_FOLLOWERS.map(u=>`<div class="row" style="padding:8px 0"><div class="grow">@${esc(u.username)}</div><span class="tag">دنبال‌کننده</span></div>`).join('')||'<div class="mu">هنوز دنبال‌کننده‌ای ندارید.</div>'}</div>`;
+}
+async function socialProfiles(ids){
+if(!ids.length)return [];
+const q=ids.map(x=>'"'+x+'"').join(',');
+return await sb('/rest/v1/profiles?select=id,username&id=in.('+encodeURIComponent(q)+')');
+}
+async function refreshSocial(){
+if(!AU||SOCIAL_BUSY)return;SOCIAL_BUSY=true;
+try{
+await ensure();
+const [f1,f2,nn,unreadMessages]=await Promise.all([
+sb('/rest/v1/follows?select=following_id&follower_id=eq.'+AU.id),
+sb('/rest/v1/follows?select=follower_id&following_id=eq.'+AU.id),
+sb('/rest/v1/notifications?select=id,actor_id,created_at,read_at&recipient_id=eq.'+AU.id+'&order=created_at.desc&limit=30'),
+sb('/rest/v1/messages?select=id&recipient_id=eq.'+AU.id+'&read_at=is.null&limit=100')
+]);
+CHAT_UNREAD=unreadMessages.length;
+SOCIAL_FOLLOWING=await socialProfiles(f1.map(x=>x.following_id));
+SOCIAL_FOLLOWERS=await socialProfiles(f2.map(x=>x.follower_id));
+const actors=await socialProfiles([...new Set(nn.map(x=>x.actor_id))]);
+SOCIAL_NOTIFS=nn.map(n=>({...n,actor_name:actors.find(a=>a.id===n.actor_id)?.username||'کاربر'}));
+const navFriend=[...document.querySelectorAll('#nav button')].find(b=>b.textContent.includes('دوستان'));
+if(navFriend){const unread=SOCIAL_NOTIFS.some(n=>!n.read_at)||CHAT_UNREAD>0;navFriend.innerHTML='👥<br>دوستان'+(unread?' <span style="color:var(--ac)">●</span>':'')}
+if(S.tab==='friends'){SOCIAL_RENDERING=true;render();SOCIAL_RENDERING=false;}
+}catch(e){console.error('Social refresh',e);if(S.tab==='friends')document.getElementById('socialresults')?.insertAdjacentHTML('beforeend','<div class="mu">بارگذاری اطلاعات اجتماعی ممکن نشد. ابتدا مهاجرت دیتابیس نسخه ۱.۹ را اجرا کنید.</div>')}
+finally{SOCIAL_BUSY=false}
+}
+async function searchUsers(){
+await ensure();
+const q=(document.getElementById('socialq')?.value||'').trim().toLowerCase(),box=document.getElementById('socialresults');
+if(!box)return;if(q.length<3){box.innerHTML='<div class="mu">حداقل ۳ حرف وارد کنید.</div>';return}
+box.innerHTML='<div class="mu">در حال جستجو…</div>';
+try{
+const rows=await sb('/rest/v1/profiles?select=id,username&username=ilike.*'+encodeURIComponent(q)+'*&limit=20');
+box.innerHTML=rows.filter(u=>u.id!==AU.id).map(u=>{
+const following=SOCIAL_FOLLOWING.some(x=>x.id===u.id);
+return `<div class="row" style="padding:8px 0"><div class="grow" dir="ltr" style="text-align:right">@${esc(u.username)}</div><button class="b ${following?'':'p'}" onclick="${following?`unfollowUser('${u.id}')`:`followUser('${u.id}')`}">${following?'دنبال می‌کنید':'＋ دنبال کردن'}</button></div>`
+}).join('')||'<div class="mu">کاربری با این نام پیدا نشد.</div>';
+}catch(e){box.innerHTML='<div class="mu">جستجو انجام نشد؛ مهاجرت دیتابیس را بررسی کنید.</div>'}
+}
+async function followUser(id){
+const q=document.getElementById('socialq')?.value||'';
+try{await ensure();await sb('/rest/v1/follows',{method:'POST',body:JSON.stringify({follower_id:AU.id,following_id:id})});await refreshSocial();const input=document.getElementById('socialq');if(input){input.value=q;await searchUsers()}}
+catch(e){alert('دنبال‌کردن انجام نشد: '+em(e))}
+}
+async function unfollowUser(id){
+const q=document.getElementById('socialq')?.value||'';
+try{await ensure();await sb('/rest/v1/follows?follower_id=eq.'+AU.id+'&following_id=eq.'+id,{method:'DELETE'});await refreshSocial();const input=document.getElementById('socialq');if(input){input.value=q;await searchUsers()}}
+catch(e){alert('لغو دنبال‌کردن انجام نشد: '+em(e))}
+}
+async function readNotif(id){
+try{await ensure();await sb('/rest/v1/notifications?id=eq.'+id,{method:'PATCH',body:JSON.stringify({read_at:new Date().toISOString()})});await refreshSocial()}
+catch(e){alert('به‌روزرسانی اعلان انجام نشد.')}
+}
+
+let CHAT_USERS=[],CHAT_MESSAGES=[],CHAT_TARGET=null,CHAT_BUSY=false,CHAT_SHARE_ITEMS=[],CHAT_UNREAD=0;
+function openInbox(){
+open_('<h3>✉️ پیام‌های خصوصی</h3><div class="row"><input id="msgsearch" class="grow" dir="ltr" placeholder="نام کاربری برای شروع گفتگو"><button class="b p" onclick="findMessageUser()">جستجو</button></div><div id="msgusers"></div><div id="inboxlist" class="mu" style="margin-top:12px">در حال بارگذاری گفتگوها…</div><button class="b" onclick="close_()">بستن</button>');
+loadInbox();
+}
+async function findMessageUser(){
+await ensure();
+const q=(document.getElementById('msgsearch')?.value||'').trim().toLowerCase(),box=document.getElementById('msgusers');
+if(!box)return;if(q.length<3){box.textContent='حداقل ۳ حرف وارد کنید.';return}
+try{
+const rows=await sb('/rest/v1/profiles?select=id,username&username=ilike.*'+encodeURIComponent(q)+'*&limit=15');
+box.innerHTML=rows.filter(u=>u.id!==AU.id).map(u=>`<button class="b" style="margin:4px" onclick="openChat('${u.id}','${esc(u.username)}')">@${esc(u.username)} · گفتگو</button>`).join('')||'کاربری پیدا نشد.';
+}catch(e){box.textContent='جستجوی کاربران ممکن نشد.'}
+}
+async function loadInbox(){
+await ensure();
+const box=document.getElementById('inboxlist');if(!box)return;
+try{
+const rows=await sb('/rest/v1/messages?select=id,sender_id,recipient_id,body,shared_list,created_at,read_at&or=(sender_id.eq.'+AU.id+',recipient_id.eq.'+AU.id+')&order=created_at.desc&limit=100');
+const peers=[...new Set(rows.map(m=>m.sender_id===AU.id?m.recipient_id:m.sender_id))];
+const users=await socialProfiles(peers);
+const last=new Map();rows.forEach(m=>{const id=m.sender_id===AU.id?m.recipient_id:m.sender_id;if(!last.has(id))last.set(id,m)});
+box.innerHTML=[...last.entries()].map(([id,m])=>{const u=users.find(x=>x.id===id);const unread=m.recipient_id===AU.id&&!m.read_at;return `<div class="row card" style="padding:10px"><div class="grow"><b>@${esc(u?.username||'کاربر')}</b><div class="mu">${m.shared_list?'🎬 فهرست فیلم: '+esc(m.shared_list.title||'بدون عنوان'):esc(m.body||'پیام')}</div></div><button class="b ${unread?'p':''}" onclick="openChat('${id}','${esc(u?.username||'کاربر')}')">بازکردن</button></div>`}).join('')||'هنوز گفتگویی ندارید.';
+}catch(e){box.textContent='دریافت پیام‌ها ممکن نشد. مهاجرت دیتابیس نسخه ۱.۹ را بررسی کنید.'}
+}
+async function openChat(id,username){
+CHAT_TARGET={id,username};
+const box=document.getElementById('inboxlist')||document.getElementById('box');
+if(!box)return;
+document.getElementById('box').innerHTML=`<h3>گفتگو با @${esc(username)}</h3><div id="chatbody" style="max-height:48vh;overflow:auto"></div><textarea id="chattext" rows="2" placeholder="پیام شما…"></textarea><div class="row"><button class="b p grow" onclick="sendChatMessage()">ارسال پیام</button><button class="b grow" onclick="shareCurrentListToChat()">🎬 انتخاب فهرست برای ارسال</button></div><button class="b" onclick="openInbox()">بازگشت به پیام‌ها</button>`;
+await loadChat();
+}
+async function loadChat(){
+if(!CHAT_TARGET)return;await ensure();
+const body=document.getElementById('chatbody');if(!body)return;
+try{
+const id=CHAT_TARGET.id;
+const rows=await sb('/rest/v1/messages?select=id,sender_id,recipient_id,body,shared_list,created_at,read_at&or=(and(sender_id.eq.'+AU.id+',recipient_id.eq.'+id+'),and(sender_id.eq.'+id+',recipient_id.eq.'+AU.id+'))&order=created_at.asc&limit=100');
+CHAT_MESSAGES=rows;
+const unread=rows.filter(m=>m.recipient_id===AU.id&&!m.read_at).map(m=>m.id);
+if(unread.length)await sb('/rest/v1/messages?id=in.('+unread.join(',')+')',{method:'PATCH',body:JSON.stringify({read_at:new Date().toISOString()})});
+body.innerHTML=rows.map(m=>`<div class="card" style="margin:6px 0;padding:9px"><div class="mu">${m.sender_id===AU.id?'شما':'@'+esc(CHAT_TARGET.username)} · ${new Date(m.created_at).toLocaleString('fa-IR')}</div>${m.body?'<div>'+esc(m.body)+'</div>':''}${m.shared_list?'<div style="margin-top:6px;border-top:1px solid var(--bd);padding-top:6px"><b>🎬 '+esc(m.shared_list.title||'فهرست پیشنهادی')+'</b><div class="mu">'+(m.shared_list.items||[]).length+' عنوان</div><button class="b p" onclick="importReceivedList('+m.id+')">افزودن به فهرست‌های من</button></div>':''}</div>`).join('')||'<div class="mu">شروع گفتگو</div>';
+body.scrollTop=body.scrollHeight;
+}catch(e){body.textContent='بارگذاری گفتگو ممکن نشد.'}
+}
+async function sendChatMessage(){
+await ensure();
+const el=document.getElementById('chattext'),body=(el?.value||'').trim();if(!body||!CHAT_TARGET)return;
+try{await sb('/rest/v1/messages',{method:'POST',body:JSON.stringify({sender_id:AU.id,recipient_id:CHAT_TARGET.id,body})});el.value='';await loadChat()}
+catch(e){alert('ارسال پیام انجام نشد: '+em(e))}
+}
+function chatShareListData(value){
+if(!value)return {name:'',L:[]};
+if(value==='all')return {name:'همه آثار من',L:all().filter(m=>!!S.lib[m.id])};
+if(value.startsWith('status:')){
+const st=value.slice(7);return {name:ST[st]||'فهرست من',L:all().filter(m=>S.lib[m.id]?.st===st)};
+}
+if(value.startsWith('custom:')){
+const c=S.cl.find(x=>x.id===value.slice(7));return c?{name:c.name,L:c.ids.map(get).filter(Boolean)}:{name:'',L:[]};
+}
+return {name:'',L:[]};
+}
+function shareCurrentListToChat(){
+if(!CHAT_TARGET)return;
+const options=[
+{value:'all',name:'همه آثار من',count:all().filter(m=>!!S.lib[m.id]).length},
+...Object.entries(ST).map(([st,name])=>({value:'status:'+st,name,count:all().filter(m=>S.lib[m.id]?.st===st).length})),
+...S.cl.map(c=>({value:'custom:'+c.id,name:'📁 '+c.name,count:c.ids.map(get).filter(Boolean).length}))
+];
+const opts=options.map(o=>'<option value="'+esc(o.value)+'" '+(!o.count?'disabled':'')+'>'+esc(o.name)+' ('+o.count+' عنوان)</option>').join('');
+open_('<h3>🎬 انتخاب فهرست برای @'+esc(CHAT_TARGET.username)+'</h3><div class="mu">مشخص کن کدام دسته از فیلم‌ها و سریال‌ها برای دوستت ارسال شود.</div><select id="chatlistsource" class="grow" onchange="previewChatShareList()"><option value="">انتخاب دسته‌بندی…</option>'+opts+'</select><div id="chatlistpreview" class="card mu" style="margin:8px 0">ابتدا یک دسته‌بندی انتخاب کن.</div><label class="mu">عنوانی که دوستت می‌بیند</label><input id="chatlisttitle" placeholder="عنوان فهرست پیشنهادی" oninput="this.dataset.userEdited=1"><button id="sendchatlistbtn" class="b p" disabled onclick="sendListSnapshot()">ارسال فهرست انتخاب‌شده</button> <button class="b" onclick="close_()">انصراف</button>');
+}
+function previewChatShareList(){
+const value=document.getElementById('chatlistsource')?.value||'',src=chatShareListData(value);
+const preview=document.getElementById('chatlistpreview'),title=document.getElementById('chatlisttitle'),btn=document.getElementById('sendchatlistbtn');
+if(!preview||!title||!btn)return;
+if(!title.dataset.userEdited)title.value=src.name;
+btn.disabled=!src.L.length;
+preview.innerHTML=src.L.length?'<b>'+src.L.length+' عنوان انتخاب شده</b><div style="margin-top:5px">'+src.L.slice(0,8).map((m,i)=>(i+1)+'. '+esc(m.t)+(m.y?' ('+esc(m.y)+')':'')).join('<br>')+(src.L.length>8?'<br>… و '+(src.L.length-8)+' عنوان دیگر':'')+'</div>':'این دسته‌بندی هنوز فیلم یا سریالی ندارد.';
+}
+async function sendListSnapshot(){
+await ensure();
+if(!CHAT_TARGET)return;
+const value=document.getElementById('chatlistsource')?.value||'',src=chatShareListData(value),title=(document.getElementById('chatlisttitle')?.value||src.name||'فهرست پیشنهادی').trim();
+if(!src.L.length){alert('لطفاً یک فهرست دارای عنوان انتخاب کن.');return}
+if(!title){alert('عنوان فهرست را وارد کن.');return}
+const items=src.L.map(m=>{const l=S.lib[m.id]||{};return{id:m.id,t:m.t,e:m.en||'',k:m.k,o:m.o,y:m.y,g:m.g,img:/^https?:/.test(m.img||'')?m.img:'',r:l.rating||0,n:l.review||'',st:l.st||''}});
+CHAT_SHARE_ITEMS=items;
+try{await sb('/rest/v1/messages',{method:'POST',body:JSON.stringify({sender_id:AU.id,recipient_id:CHAT_TARGET.id,shared_list:{title,author:PF.username,items}})});openChat(CHAT_TARGET.id,CHAT_TARGET.username)}
+catch(e){alert('ارسال فهرست ناموفق بود: '+em(e))}
+}
+
+async function importReceivedList(messageId){
+const msg=CHAT_MESSAGES.find(m=>m.id===messageId);if(!msg?.shared_list)return;
+const src=msg.shared_list,items=src.items||[];
+open_('<h3>📥 دریافت فهرست</h3><div class="mu">عنوان اصلی: '+esc(src.title||'فهرست')+' · '+items.length+' عنوان</div><label class="mu">مقصد فهرست</label><select id="receivedDest" class="grow"><option value="new">ساخت فهرست جدید</option>'+S.cl.map(c=>'<option value="'+esc(c.id)+'">افزودن به: '+esc(c.name)+'</option>').join('')+'</select><input id="receivedTitle" placeholder="عنوان دلخواه فهرست جدید" value="'+esc('پیشنهادهای @'+CHAT_TARGET.username)+'"><div class="mu">فهرست دریافتی مستقل از نسخه فرستنده است؛ در صورت انتخاب فهرست موجود، فقط آثار جدید به آن اضافه می‌شوند.</div><button class="b p" onclick="commitReceivedList('+messageId+')">افزودن به فهرست‌های من</button><button class="b" onclick="close_()">انصراف</button>');
+}
+async function commitReceivedList(messageId){
+const msg=CHAT_MESSAGES.find(m=>m.id===messageId);if(!msg?.shared_list)return;
+const dest=document.getElementById('receivedDest')?.value||'new';
+const title=(document.getElementById('receivedTitle')?.value||'فهرست دریافتی').trim();
+if(dest==='new'&&!title){alert('عنوان فهرست را وارد کنید');return}
+const src=msg.shared_list,items=src.items||[];
+const target=dest==='new'?{id:'l'+Date.now(),name:title,ids:[]}:S.cl.find(c=>c.id===dest);
+if(!target){alert('فهرست انتخاب‌شده پیدا نشد');return}
+open_('<h3>در حال آماده‌سازی فهرست…</h3><div class="mu">در حال تطبیق عنوان‌ها با کتابخانه فیلم نگار</div>');
+const normTitle=v=>(v||'').toString().toLowerCase().replace(/[\\s\\p{P}\\p{S}]+/gu,'').trim();
+const resolved=await Promise.all(items.map(async x=>{
+let m=all().find(z=>z.id===x.id&&(/^t(movie|tv)\\d+$/.test(x.id)||/^d\\d+$/.test(x.id)))||null;
+if(!m){
+ const wanted=[normTitle(x.t),normTitle(x.e)].filter(Boolean);
+ m=all().find(z=>wanted.includes(normTitle(z.t))||wanted.includes(normTitle(z.en)))||null;
+ if(m&&((x.k&&m.k&&m.k!==x.k)||(x.y&&m.y&&String(m.y)!==String(x.y))))m=null;
+}
+if(!m){
+ try{
+  const rr=await tmSearch((x.e||x.t)+(x.y?' '+x.y:''));
+  const wanted=[normTitle(x.t),normTitle(x.e)].filter(Boolean);
+  m=rr.find(z=>(wanted.includes(normTitle(z.t))||wanted.includes(normTitle(z.en)))&&(!x.k||!z.k||z.k===x.k)&&(!x.y||!z.y||String(z.y)===String(x.y)))||null;
+  if(m&&x.y&&m.y&&String(m.y)!==String(x.y))m=null;
+ }catch(e){}
+}
+return {x,m};
+}));
+let added=0,skipped=0;
+resolved.forEach(({x,m},i)=>{
+if(!m){m={id:'c'+Date.now()+'_'+i,t:x.t,k:x.k||'film',o:x.o||'خارجی',y:x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
+else if(!all().some(z=>z.id===m.id))S.custom.push({...m,custom:1});
+if(target.ids.includes(m.id)){skipped++;return}
+target.ids.push(m.id);if(!S.lib[m.id])S.lib[m.id]={st:x.st||'want'};added++;
+});
+if(dest==='new')S.cl.push(target);
+save();close_();S.tab='lists';S.lt='c:'+target.id;render();alert(added+' عنوان به فهرست «'+target.name+'» اضافه شد.'+(skipped?' '+skipped+' مورد تکراری نادیده گرفته شد.':''));
+}
+function detail(id){
+const m=get(id),l=S.lib[id]||{};
+const rv=FR.flatMap(f=>S.fol.includes(f.id)?f.act.filter(a=>a[0]===id&&a[3]).map(a=>`<div class="card">${f.e} <b>${f.n}</b> ⭐${a[2]}<div>${esc(a[3])}</div></div>`):[]).join('');
+open_(`<div class="row">${pos(m)}<div class="grow"><h3 style="margin:0">${esc(m.t)}</h3>${m.en?`<div class="mu" dir="ltr" style="text-align:right">${esc(m.en)}</div>`:''}<div class="mu">${kt(m)} ${esc(m.o)} · ${esc(m.y||'—')} · ${esc(m.g||'')}</div></div></div>
+<p>${esc(m.d||'توضیحی ثبت نشده.')}</p>${stSel(id)}${clSel(id)}<div><button class="b" style="margin-top:6px" onclick="whereOpen('${id}')">📺 کجا ببینم؟</button></div>
+${m.k==='series'?`<h2>پیشرفت تماشا</h2><div class="row"><input id="se" type="number" min="0" placeholder="فصل" value="${l.se||''}"><input id="ep" type="number" min="0" placeholder="قسمت" value="${l.ep||''}"></div>`:''}
+<h2>نقد و امتیاز من</h2>
+<select id="rt"><option value="">بدون امتیاز</option>${[1,2,3,4,5].map(n=>`<option ${l.rating==n?'selected':''} value="${n}">${'⭐'.repeat(n)}</option>`).join('')}</select>
+<textarea id="rv" rows="4" placeholder="نقد یا یادداشت شما...">${esc(l.review||'')}</textarea>
+<button class="b p" onclick="rate('${id}')">ذخیرهٔ نقد</button>
+${m.custom?` <button class="b" onclick="openForm('${id}')">✏️ ویرایش</button> <button class="b" onclick="del('${id}')">🗑 حذف</button>`:''}
+${rv?`<h2>نقد دوستان</h2>${rv}`:''}<br><button class="b" onclick="close_()" style="margin-top:10px">بستن</button>`)}
+function rate(id){adopt(id);S.lib[id]={...(S.lib[id]||{st:'watched'}),rating:+document.getElementById('rt').value||0,review:document.getElementById('rv').value,se:+(document.getElementById('se')?.value)||0,ep:+(document.getElementById('ep')?.value)||0};save();close_();render()}
+function openForm(id){
+const m=id?get(id):{t:S.q,k:'film',o:'ایرانی',y:'',g:'',d:''};
+IMG=m.img||null;open_(`<h3>${id?'ویرایش':'افزودن دستی'}</h3><input id="ft" placeholder="نام" value="${esc(m.t)}">
+<div class="row"><select id="fk" class="grow"><option value="film" ${m.k==='film'?'selected':''}>فیلم</option><option value="series" ${m.k==='series'?'selected':''}>سریال</option></select>
+<select id="fo" class="grow"><option ${m.o==='ایرانی'?'selected':''}>ایرانی</option><option ${m.o==='خارجی'?'selected':''}>خارجی</option></select></div><br>
+<input id="fy" placeholder="سال" value="${esc(m.y)}"><input id="fg" placeholder="ژانر" value="${esc(m.g)}"><textarea id="fd" rows="3" placeholder="توضیحات">${esc(m.d)}</textarea>
+<div class="mu">پوستر (اختیاری)</div><input type="file" id="fi" accept="image/*" onchange="pickImg(this)"><img id="pv" src="${IMG||''}" style="display:${IMG?'block':'none'};width:90px;border-radius:8px;margin-bottom:8px"><button class="b p" onclick="saveF('${id||''}')">ذخیره</button> <button class="b" onclick="close_()">انصراف</button>`)}
+function saveF(id){
+const v=i=>document.getElementById(i).value.trim();if(!v('ft'))return;
+const o={t:v('ft'),k:v('fk'),o:v('fo'),y:v('fy'),g:v('fg'),d:v('fd'),img:IMG,custom:1};
+if(id){Object.assign(get(id),o)}else{const n='c'+Date.now();S.custom.push({id:n,...o});S.lib[n]={st:'want'}}
+save();close_();S.tab='lists';S.lt='want';render()}
+let IMG=null;
+function pickImg(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,220/im.width);c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);IMG=c.toDataURL('image/jpeg',.7);const p=document.getElementById('pv');p.src=IMG;p.style.display='block'};im.src=r.result};r.readAsDataURL(f)}
+const clSel=id=>S.cl.length?`<select onchange="toCl('${id}',this.value)"><option value="">📁 افزودن به لیست سفارشی…</option>${S.cl.map(c=>`<option value="${c.id}" ${c.ids.includes(id)?'disabled':''}>${esc(c.name)}${c.ids.includes(id)?' ✓':''}</option>`).join('')}</select>`:'';
+function toCl(id,cid){adopt(id);const c=S.cl.find(x=>x.id===cid);if(c&&!c.ids.includes(id))c.ids.push(id);save();detail(id)}
+function rmCl(cid,id){const c=S.cl.find(x=>x.id===cid);c.ids=c.ids.filter(x=>x!==id);save();render()}
+function newCl(){open_(`<h3>لیست جدید</h3><input id="cn" placeholder="نام لیست (مثلاً فیلم‌های آخر هفته)"><button class="b p" onclick="saveCl()">ساخت</button> <button class="b" onclick="close_()">انصراف</button>`)}
+function saveCl(){const n=document.getElementById('cn').value.trim();if(!n)return;const id='l'+Date.now();S.cl.push({id,name:n,ids:[]});S.tab='lists';S.lt='c:'+id;save();close_();render()}
+function delCl(cid){S.cl=S.cl.filter(c=>c.id!==cid);S.lt='want';save();render()}
+async function tmSmart(q){await ensure();return await sb('/functions/v1/tmdb',{method:'POST',body:JSON.stringify({action:'smart',q})})}
+async function tmSearch(q){await ensure();const d=await sb('/functions/v1/tmdb',{method:'POST',body:JSON.stringify({action:'search',q})});return d.results||[]}
+let TR=[],TT;
+function tmdb(){clearTimeout(TT);const b=document.getElementById('tm'),q=S.q.trim();if(!b)return;if(q.length<2){b.innerHTML='';return}
+b.innerHTML='<div class="mu">در حال جستجو در TMDB…</div>';
+TT=setTimeout(async()=>{try{const d=await tmSmart(q);TR=[];const sh=new Set();
+const add=a=>a.filter(m=>!sh.has(m.id)&&sh.add(m.id)).map(m=>{let i=TR.findIndex(x=>x.id===m.id);if(i<0){TR.push(m);i=TR.length-1}return tmCard(m,i)}).join('');
+let h='';
+if(d.both&&d.both.items.length)h+=`<h2>🎭 فیلم‌هایی که ${d.both.names.map(esc).join(' و ')} با هم بازی کرده‌اند</h2>`+add(d.both.items);
+if(d.results.length)h+='<h2>🎬 عنوان‌های مشابه</h2>'+add(d.results);
+(d.people||[]).forEach(p=>{const x=add(p.items);if(x)h+=`<h2>🎭 اگر دنبال «${esc(p.name)}» هستید</h2>`+x});
+b.innerHTML=h||'<div class="card mu">در TMDB هم پیدا نشد. می‌توانید دستی اضافه کنید.</div>'}catch(e){b.innerHTML='<div class="card mu">اتصال به TMDB برقرار نشد.</div>'}},400)}
+const tmCard=(m,i)=>get(m.id)?item(get(m.id)):`<div class="card row">${pos(m)}<div class="grow"><b>${esc(m.t)}</b>${enT(m)} <span class="tag">TMDB</span><div class="mu">${kt(m)} ${m.o} · ${esc(m.y||'—')} · ${esc(m.g||'')}</div></div><select onchange="addTm(${i},this.value)"><option value="">— افزودن به لیست —</option>${Object.entries(ST).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>`;
+function addTm(i,st){if(!st)return;const m={...TR[i],custom:1,tm:1};S.custom.push(m);S.lib[m.id]={st};save();render()}
+
+const KT=m=>m.k==='series'?'سریال':'فیلم';
+function curList(){const cl=S.cl.find(c=>'c:'+c.id===S.lt);
+if(cl)return{name:cl.name,L:cl.ids.map(get).filter(Boolean)};
+return{name:S.lt==='all'?'لیست فیلم‌های من':ST[S.lt],L:all().filter(m=>S.lt==='all'?S.lib[m.id]?.st:S.lib[m.id]?.st===S.lt)}}
+function shText(t,L,notes){return '🎬 '+t+'\nپیشنهاد '+(PF?'@'+PF.username+' ':'')+'از «فیلم نگار»\n\n'+L.map((m,i)=>{const l=S.lib[m.id]||{};return (i+1)+'. '+m.t+(m.en?' | '+m.en:'')+(m.y?' ('+m.y+')':'')+' — '+KT(m)+(l.rating?' ⭐'+l.rating:'')+(notes&&l.review?'\n   📝 '+l.review:'')}).join('\n')}
+function shareList(){const {name,L}=curList();if(!L.length){alert('این لیست خالی است');return}
+open_(`<h3>📤 ارسال لیست</h3><input id="st" value="${esc(name)}"><label class="mu"><input type="checkbox" id="sn" style="width:auto;margin:0 0 0 6px">نقد و یادداشت‌های من هم همراه باشد</label><br><br><button class="b p" style="width:100%;margin-bottom:8px" onclick="mkLink()">🔗 ساخت لینک صفحه (برای همه قابل‌مشاهده)</button><button class="b" style="width:100%" onclick="shTxt()">💬 ارسال به‌صورت متن (واتس‌اپ و ...)</button><div id="sres"></div><br><button class="b" onclick="close_()">بستن</button>`)}
+async function shTxt(){const {L}=curList(),x=shText(document.getElementById('st').value||'لیست من',L,document.getElementById('sn').checked);
+try{if(navigator.share){await navigator.share({text:x});return}}catch(e){if(e&&e.name==='AbortError')return}
+try{await navigator.clipboard.writeText(x);alert('متن کپی شد؛ در واتس‌اپ پیست کنید')}catch(e){prompt('متن را کپی کنید:',x)}}
+async function mkLink(){const {L}=curList(),t=document.getElementById('st').value||'لیست من',nt=document.getElementById('sn').checked,r=document.getElementById('sres');
+r.innerHTML='<div class="mu">در حال ساخت لینک…</div>';
+const items=L.map(m=>{const l=S.lib[m.id]||{};return{t:m.t,e:m.en||'',k:m.k,o:m.o,y:m.y,g:m.g,img:/^https?:/.test(m.img||'')?m.img:'',r:l.rating||0,n:nt?(l.review||''):''}});
+try{await ensure();const d=await sb('/rest/v1/shared_lists',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({title:t,author:PF.username,items})});
+const u=location.origin+location.pathname+'?l='+d[0].id;
+r.innerHTML=`<div class="card" style="margin-top:10px"><div class="mu">لینک آماده است:</div><input readonly dir="ltr" value="${u}" onfocus="this.select()"><button class="b p" onclick="sendLink('${u}')">ارسال</button> <button class="b" onclick="navigator.clipboard&&navigator.clipboard.writeText('${u}');this.textContent='کپی شد ✓'">کپی لینک</button></div>`}
+catch(e){r.innerHTML='<div class="card mu">ساخت لینک ناموفق بود: '+esc(e.status===404?'جدول shared_lists هنوز در Supabase ساخته نشده است.':em(e))+'</div>'}}
+function sendLink(u){const t=document.getElementById('st').value;if(navigator.share)navigator.share({title:t,text:'🎬 '+t,url:u}).catch(()=>{});else prompt('لینک را کپی کنید:',u)}
+let SH=null,IM=null,IMCSV=false;
+async function viewShared(id){document.getElementById('nav').innerHTML='';document.getElementById('app').innerHTML='<div class="card mu" style="margin:30px">در حال بارگذاری لیست…</div>';
+try{const d=await sb('/rest/v1/rpc/get_shared_list',{method:'POST',anon:1,body:JSON.stringify({p_id:id})});if(!d)throw 0;paper(d)}
+catch(e){document.getElementById('app').innerHTML='<div class="card mu" style="margin:30px">این لیست پیدا نشد یا حذف شده است.</div>'}}
+function paper(d){SH=d;const it=d.items||[],ok=AU&&PF;
+document.getElementById('app').innerHTML=`<div class="paper"><h1>🎬 ${esc(d.title)}</h1><div class="mu">پیشنهاد ${d.author?'@'+esc(d.author):''} · ${it.length} مورد</div>${it.map((m,i)=>`<div class="it"><div style="color:#c0392b;font-weight:700;min-width:22px">${i+1}.</div>${m.img?`<img src="${px(m.img)}" alt="">`:''}<div class="grow"><b>${esc(m.t)}</b>${m.e?` <bdi class="mu" dir="ltr" style="font-size:12px">· ${esc(m.e)}</bdi>`:''} <span class="mu" style="font-size:13px">${m.y?'('+esc(m.y)+') ':''}${KT(m)}${m.g?' · '+esc(m.g):''}${m.r?' · ⭐'+m.r:''}</span>${m.n?`<div class="nt">📝 ${esc(m.n)}</div>`:''}</div></div>`).join('')}<div class="mu" style="margin-top:14px;font-size:12px">ساخته‌شده با «فیلم نگار»</div></div><div class="noprint" style="max-width:720px;margin:0 auto 24px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="b p" onclick="${ok?'impShared()':'location.href=location.pathname'}">${ok?'🎬 افزودن به لیست‌های من':'🎬 ورود / ثبت‌نام در فیلم نگار'}</button><button class="b" onclick="window.print()">🖨 PDF / چاپ</button><button class="b" onclick="cpShared()">📋 کپی متن</button>${ok?'<button class="b" onclick="backApp()">↩︎ بازگشت به اپ</button>':''}</div>`}
+function backApp(){history.replaceState(null,'',location.pathname);render()}
+async function cpShared(){const x='🎬 '+SH.title+'\n\n'+SH.items.map((m,i)=>(i+1)+'. '+m.t+(m.e?' | '+m.e:'')+(m.y?' ('+m.y+')':'')+' — '+KT(m)+(m.n?'\n   📝 '+m.n:'')).join('\n');
+try{await navigator.clipboard.writeText(x);alert('کپی شد')}catch(e){prompt('متن را کپی کنید:',x)}}
+function impShared(){impRun(SH.items.map(i=>({t:i.t,y:i.y,x:i})),'want')}
+function impOpen(){open_(`<h3>📥 ورود لیست</h3><div class="mu" style="margin-bottom:6px">لیست را پیست کنید (هر خط یک فیلم) یا فایل متنی/CSV انتخاب کنید. اسم‌ها خودکار در TMDB پیدا می‌شوند.</div><textarea id="it" rows="7" placeholder="1. Inception (2010)&#10;2. جدایی نادر از سیمین"></textarea><input type="file" id="if" accept=".txt,.csv,text/plain,text/csv" onchange="impFile(this)"><div class="row"><span class="mu">اضافه شود به:</span><select id="is" class="grow">${Object.entries(ST).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div><br><button class="b p" onclick="impGo()">تطبیق خودکار</button> <button class="b" onclick="close_()">بستن</button>`)}
+function impFile(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{document.getElementById('it').value=r.result;IMCSV=/\.csv$/i.test(f.name)};r.readAsText(f)}
+function parseLines(t,csv){const o=[],seen=new Set();
+for(let ln of String(t).split(/\r?\n/)){ln=ln.trim();if(!ln||ln[0]==='#')continue;
+if(csv){const m=ln.match(/^"([^"]*)"|^([^,]*)/);ln=(m[1]??m[2]??'').trim()}
+ln=ln.replace(/^[\s\u200f\u200e]*(?:[\d۰-۹]+\s*[.\-)\]:،]|[-•*▪▫✅☑🎬▶►●○◦]+)\s*/u,'');
+let y='';const ym=ln.match(/[(\[]?\b((?:19|20)\d\d)\b[)\]]?/);if(ym){y=ym[1];ln=ln.replace(ym[0],'')}
+ln=ln.replace(/[⭐📝].*$/u,'').replace(/\s*[—–\-]\s*(فیلم|سریال)\s*$/,'').trim().replace(/^["«]+|["»]+$/g,'').trim();
+if(ln.length<2||ln.length>80||seen.has(ln.toLowerCase()))continue;seen.add(ln.toLowerCase());o.push({t:ln,y})}
+return o.slice(0,80)}
+function impGo(){const L=parseLines(document.getElementById('it').value,IMCSV);if(!L.length){alert('هیچ نامی پیدا نشد');return}impRun(L,document.getElementById('is').value)}
+async function impRun(items,st){IM={rows:items.map(s=>({s,m:undefined,on:true})),st};
+open_('<h3>در حال تطبیق با TMDB…</h3><div id="ipr" class="mu"></div>');let n=0,i=0;
+await Promise.all(Array.from({length:4},async()=>{while(i<IM.rows.length){const r=IM.rows[i++];
+try{const res=await tmSearch(r.s.t);r.m=(r.s.y&&res.find(m=>m.y==r.s.y))||res[0]||null}catch(e){r.m=null}
+n++;const e=document.getElementById('ipr');if(e)e.textContent=n+' از '+IM.rows.length}}));
+impShow()}
+function impShow(){const R=IM.rows;
+open_(`<h3>بررسی نتیجه (${R.length})</h3><div class="row"><span class="mu">افزودن به:</span><select class="grow" onchange="IM.st=this.value">${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${IM.st===k?'selected':''}>${v}</option>`).join('')}</select></div><div style="margin:8px 0">${R.map((r,i)=>{const dup=r.m&&S.lib[r.m.id];if(dup)r.on=false;return `<div class="card row"><input type="checkbox" style="width:auto;margin:0" ${r.on?'checked':''} onchange="IM.rows[${i}].on=this.checked">${r.m?pos(r.m):'<div class="poster" style="background:#8884">❔</div>'}<div class="grow"><b>${esc(r.m?r.m.t:r.s.t)}</b>${r.m?enT(r.m):''}<div class="mu">${r.m?KT(r.m)+' · '+esc(r.m.y||'—')+(dup?' · قبلاً در لیست شما':''):'پیدا نشد؛ دستی اضافه می‌شود'}</div>${r.m&&r.m.t.toLowerCase()!==r.s.t.toLowerCase()?`<div class="mu">از: ${esc(r.s.t)}</div>`:''}</div></div>`}).join('')}</div><button class="b p" onclick="impCommit()">افزودن موارد انتخاب‌شده</button> <button class="b" onclick="close_()">انصراف</button>`)}
+function impCommit(){let c=0;IM.rows.forEach((r,i)=>{if(!r.on)return;let m=r.m;
+if(m){if(!all().find(x=>x.id===m.id))S.custom.push({...m,custom:1,tm:1})}
+else{const x=r.s.x||{};m={id:'c'+Date.now()+'_'+i,t:r.s.t,k:x.k||'film',o:x.o||(/[\u0600-\u06FF]/.test(r.s.t)?'ایرانی':'خارجی'),y:r.s.y||x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
+S.lib[m.id]={...(S.lib[m.id]||{}),st:IM.st};c++});
+save();close_();history.replaceState(null,'',location.pathname);S.tab='lists';S.lt=IM.st;render();alert(c+' مورد اضافه شد')}
+const APP_VER='2.1.1';
+let LIST_VIEW='normal';try{LIST_VIEW=localStorage.getItem('filmnegar_list_view')==='compact'?'compact':'normal'}catch(e){}
+const TH=()=>localStorage.getItem('theme')||'auto';
+function applyTheme(){const t=TH(),r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
+const dk=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches),m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dk?'#0b1b33':'#f3f6fb'}
+function setTheme(t){try{localStorage.setItem('theme',t)}catch(e){}applyTheme();render()}
+
+let WP=null;
+const tmId=id=>{const m=/^t(movie|tv)(\d+)$/.exec(id);return m?{mt:m[1],id:m[2]}:null};
+async function whereOpen(id){
+const m=get(id);if(!m)return;
+open_(`<h3>📺 کجا ببینم؟</h3><b>${esc(m.t)}</b><div class="mu" style="margin-top:8px">در حال جستجو…</div>`);
+try{
+let t=tmId(id);
+if(!t){const r=await tmSearch(m.en||m.t);const b=(m.y&&r.find(x=>x.y==m.y&&x.k===m.k))||r.find(x=>x.k===m.k)||r[0];t=b&&tmId(b.id)}
+if(!t)throw {nf:1};
+await ensure();
+const d=await sb('/functions/v1/tmdb',{method:'POST',body:JSON.stringify({action:'providers',mt:t.mt,id:t.id})});
+WP={m,d:d.results||{},cc:null};whereShow()}
+catch(e){open_(`<h3>📺 کجا ببینم؟</h3><b>${esc(m.t)}</b><div class="card mu" style="margin-top:8px">${e&&e.nf?'این عنوان در TMDB پیدا نشد.':'دریافت اطلاعات ممکن نشد. اینترنت و به‌روز بودن تابع Supabase را بررسی کنید.'}</div><br><button class="b" onclick="close_()">بستن</button>`)}}
+function whereShow(){const {m,d}=WP,cs=Object.keys(d);
+const cn=c=>{try{return new Intl.DisplayNames(['fa'],{type:'region'}).of(c)||c}catch(e){return c}};
+cs.sort((a,b)=>cn(a).localeCompare(cn(b),'fa'));
+if(!WP.cc)WP.cc=d.IR?'IR':(d.US?'US':(cs[0]||''));
+const v=d[WP.cc],grp=[['flatrate','🎟 پخش آنلاین (اشتراکی)'],['free','🆓 رایگان'],['ads','📢 رایگان با تبلیغ'],['rent','💳 اجاره'],['buy','🛒 خرید']];
+const chips=a=>a.map(p=>`<span class="card row" style="display:inline-flex;margin:0 0 6px 6px;padding:4px 8px;gap:6px">${p.l?`<img src="${px('https://image.tmdb.org/t/p/w92'+p.l)}" alt="" style="width:26px;height:26px;border-radius:6px">`:''}<span style="font-size:12px">${esc(p.n)}</span></span>`).join('');
+const body=v?grp.map(([k,t])=>v[k]&&v[k].length?`<div class="mu" style="margin:8px 0 4px">${t}</div>${chips(v[k])}`:'').join('')+(v.link?`<div style="margin-top:8px"><a href="${esc(v.link)}" target="_blank" rel="noopener" style="color:var(--ac)">باز کردن صفحهٔ کامل ↗</a></div>`:''):'';
+open_(`<h3>📺 کجا ببینم؟</h3><b>${esc(m.t)}</b>${enT(m)}
+${cs.length?`<div class="row" style="margin:8px 0"><span class="mu">کشور:</span><select class="grow" onchange="WP.cc=this.value;whereShow()">${cs.map(c=>`<option value="${c}" ${c===WP.cc?'selected':''}>${esc(cn(c))}</option>`).join('')}</select></div>`:'<div class="card mu">برای این عنوان هیچ پلتفرمی در TMDB ثبت نشده است.</div>'}
+${cs.length&&!d.IR?'<div class="mu" style="margin-bottom:6px">برای ایران اطلاعاتی ثبت نشده است؛ کشور دیگری را ببینید.</div>':''}
+${body}
+<div class="mu" style="font-size:11px;margin-top:12px">داده‌های پخش: JustWatch (از طریق TMDB)</div><br><button class="b" onclick="close_()">بستن</button>`)}
+function del(id){S.custom=S.custom.filter(m=>m.id!==id);delete S.lib[id];save();close_();render()}
+function open_(h){document.getElementById('box').innerHTML=h;document.getElementById('modal').classList.add('show')}
+function close_(){document.getElementById('modal').classList.remove('show')}
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')close_()};
+const TABS=[['home','🏠','خانه'],['catalog','🔍','کاتالوگ'],['lists','📋','لیست‌های من'],['friends','👥','دوستان'],['me','👤','من']];
+function render(keep){
+if(!AU){authView();return}if(!PF){nameView();return}const v={home,catalog,lists,friends,me}[S.tab]();
+const a=document.getElementById('app');a.innerHTML=v;if(S.tab==='catalog'&&S.q.trim().length>1)tmdb();
+document.getElementById('nav').innerHTML=TABS.map(([k,i,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';render()">${i}<br>${t}${k==='friends'&&(SOCIAL_NOTIFS.some(n=>!n.read_at)||CHAT_UNREAD>0)?' <span style=\"color:var(--ac)\">●</span>':''}</button>`).join('');
+ if(S.tab==='friends'&&!SOCIAL_RENDERING)refreshSocial();
+if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}}
+boot();
+window.addEventListener('focus',()=>{if(AU&&!SOCIAL_BUSY)refreshSocial()});
+setInterval(()=>{if(AU&&!SOCIAL_BUSY&&document.visibilityState==='visible')refreshSocial()},15000);
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
