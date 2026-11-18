@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>فیلم نگار</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json"><meta name="description" content="آرشیو شخصی فیلم و سریال با امکان استفاده آفلاین">
 <meta name="theme-color" content="#0b1b33">
 <script>try{var _t=localStorage.getItem("theme");if(_t&&_t!=="auto")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
 <link rel="icon" type="image/png" href="favicon-48.png">
@@ -154,6 +154,7 @@ button.b.p{background:linear-gradient(135deg,#e99a3e,#f4bd6c);color:#172033;box-
 /* 2.1: compact personal-list presentation */
 .list-compact{min-height:54px;padding:9px 12px;gap:10px;margin:6px 0;border-radius:12px;align-items:center}.list-compact .grow{min-width:0}.list-compact .grow>b{font-size:14px;line-height:1.5}.list-compact select,.list-compact .b{font-size:12px;max-width:145px;padding:4px 7px}.list-search-hit{padding:10px 12px;margin:6px 0}#listSearch{width:100%;min-width:0}
 
+.offline-banner{display:flex;flex-direction:column;gap:2px;margin:0 0 12px;padding:10px 13px;border:1px solid #d59a45;border-radius:13px;background:color-mix(in srgb,#d59a45 12%,var(--card));font-size:12px;line-height:1.7}.offline-banner b{font-size:13px;color:var(--ac)}
 </style></head><body>
 <main id="app"></main>
 <nav id="nav"></nav>
@@ -190,7 +191,13 @@ let S={...DEF};
 const SBU='https://mrshvucwpohsrkmjhmfi.supabase.co',SBK='sb_publishable_cllLZZIC9Ejjp5pxDJAqmw_SWVUoD38';
 let AU=null,PF=null,SYNC='',PT;
 const pk=()=>({custom:S.custom,lib:S.lib,fol:S.fol,cl:S.cl});
-const save=()=>{if(!AU)return;try{localStorage.setItem('mt_'+AU.id,JSON.stringify(pk()))}catch(e){}clearTimeout(PT);SYNC='saving';PT=setTimeout(push,800)};
+let OFFLINE_DB_PROMISE=null;
+function offlineDB(){if(!('indexedDB'in window))return Promise.reject(new Error('IndexedDB unavailable'));if(!OFFLINE_DB_PROMISE)OFFLINE_DB_PROMISE=new Promise((resolve,reject)=>{const req=indexedDB.open('filmnegar_offline_v1',1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('snapshots'))db.createObjectStore('snapshots')};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});return OFFLINE_DB_PROMISE}
+async function offlineWrite(){if(!AU)return;const db=await offlineDB();await new Promise((resolve,reject)=>{const tx=db.transaction('snapshots','readwrite');tx.objectStore('snapshots').put({data:pk(),saved_at:Date.now()},AU.id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
+async function offlineRead(id){const db=await offlineDB();return await new Promise((resolve,reject)=>{const tx=db.transaction('snapshots','readonly');const req=tx.objectStore('snapshots').get(id);req.onsuccess=()=>resolve(req.result?.data||null);req.onerror=()=>reject(req.error)})}
+function mergeById(baseList,localList,remoteList){const b=new Map((baseList||[]).map(x=>[x.id,x])),l=new Map((localList||[]).map(x=>[x.id,x])),r=new Map((remoteList||[]).map(x=>[x.id,x]));const ids=new Set([...b.keys(),...l.keys(),...r.keys()]),out=[];for(const id of ids){const bs=b.get(id),ls=l.get(id),rs=r.get(id),lc=JSON.stringify(bs)!==JSON.stringify(ls),chosen=lc?ls:rs;if(chosen!==undefined)out.push(chosen)}return out}
+function mergeOffline(base,local,remote){base=base||{};local=local||{};remote=remote||{};const lib={},keys=new Set([...Object.keys(base.lib||{}),...Object.keys(local.lib||{}),...Object.keys(remote.lib||{})]);for(const id of keys){const b=base.lib?.[id],l=local.lib?.[id],r=remote.lib?.[id],lc=JSON.stringify(b)!==JSON.stringify(l),chosen=lc?l:r;if(chosen!==undefined)lib[id]=chosen}const fb=new Set(base.fol||[]),fl=new Set(local.fol||[]),fr=new Set(remote.fol||[]),fol=[...new Set([...fb,...fl,...fr])].filter(id=>{const b=fb.has(id),l=fl.has(id),r=fr.has(id);return l!==b?l:r});return{custom:mergeById(base.custom,local.custom,remote.custom),cl:mergeById(base.cl,local.cl,remote.cl),lib,fol}}
+const save=()=>{if(!AU)return;try{localStorage.setItem('mt_'+AU.id,JSON.stringify(pk()));localStorage.setItem('mt_dirty_'+AU.id,'1')}catch(e){}offlineWrite().catch(()=>{});clearTimeout(PT);if(navigator.onLine){SYNC='saving';PT=setTimeout(push,800)}else SYNC='offline';updSync()};
 async function sb(path,o={}){
 const {anon,...f}=o;const h={apikey:SBK,'Content-Type':'application/json',...(f.headers||{})};
 if(!anon&&AU)h.Authorization='Bearer '+AU.access_token;
@@ -199,9 +206,9 @@ if(!r.ok)throw {status:r.status,msg:(j&&(j.msg||j.error_description||j.message||
 const sess=()=>{try{return JSON.parse(localStorage.getItem('sb')||'null')}catch(e){return null}};
 function setSess(d){AU={access_token:d.access_token,refresh_token:d.refresh_token,exp:Date.now()+(d.expires_in-60)*1000,id:d.user.id,email:d.user.email};localStorage.setItem('sb',JSON.stringify(AU))}
 async function ensure(){if(AU&&Date.now()>=AU.exp){const d=await sb('/auth/v1/token?grant_type=refresh_token',{method:'POST',anon:1,body:JSON.stringify({refresh_token:AU.refresh_token})});setSess(d)}}
-const syncTxt=()=>SYNC==='ok'?'✅ همگام با حساب شما':SYNC==='saving'?'⏳ در حال ذخیره…':SYNC==='err'?'⚠️ ذخیرهٔ ابری ناموفق بود؛ دوباره تلاش می‌شود':'';
+const syncTxt=()=>!navigator.onLine?'📴 آفلاین؛ تغییرات روی همین دستگاه ذخیره می‌شوند':SYNC==='ok'?'✅ همگام با حساب شما':SYNC==='saving'?'⏳ در حال همگام‌سازی…':SYNC==='err'?'⚠️ همگام‌سازی ناموفق بود؛ دوباره تلاش می‌شود':'';
 function updSync(){const e=document.getElementById('sync');if(e)e.textContent=syncTxt()}
-async function push(){if(!AU)return;try{await ensure();await sb('/rest/v1/user_data',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify({user_id:AU.id,data:pk(),updated_at:new Date().toISOString()})});SYNC='ok'}catch(e){SYNC='err';setTimeout(push,15000)}updSync()}
+async function push(){if(!AU)return;if(!navigator.onLine){SYNC='offline';updSync();return}if(window.__filmNegarSyncBusy)return;window.__filmNegarSyncBusy=true;try{await ensure();const rows=await sb('/rest/v1/user_data?select=data&user_id=eq.'+AU.id);const base=jl('mt_base_'+AU.id)||{},local=pk(),remote=rows[0]?.data||{};S={...DEF,...mergeOffline(base,local,remote)};const data=pk();await sb('/rest/v1/user_data',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify({user_id:AU.id,data,updated_at:new Date().toISOString()})});localStorage.setItem('mt_'+AU.id,JSON.stringify(data));localStorage.setItem('mt_base_'+AU.id,JSON.stringify(data));localStorage.removeItem('mt_dirty_'+AU.id);await offlineWrite().catch(()=>{});SYNC='ok'}catch(e){SYNC='err'}finally{window.__filmNegarSyncBusy=false;updSync()}}
 function mg(a,b){a=a||{};b=b||{};const u=(x,y)=>{const m=new Map();[...(x||[]),...(y||[])].forEach(i=>m.set(i.id,i));return[...m.values()]};
 return{custom:u(a.custom,b.custom),lib:{...(a.lib||{}),...(b.lib||{})},cl:u(a.cl,b.cl),fol:[...new Set([...(a.fol||[]),...(b.fol||[])])]}}
 const jl=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}};
@@ -211,8 +218,7 @@ const p=await sb('/rest/v1/profiles?select=username&id=eq.'+AU.id);PF=p[0]||null
 if(PF)localStorage.setItem('pf_'+AU.id,JSON.stringify(PF));
 const loc=jl('mt_'+AU.id),old=jl('mt');
 const c=await sb('/rest/v1/user_data?select=data&user_id=eq.'+AU.id);
-S={...DEF,...mg(mg(old,loc),c[0]?.data)};
-await push();
+const cloud=c[0]?.data||{},local=mg(old,loc),base=jl('mt_base_'+AU.id)||{},dirty=localStorage.getItem('mt_dirty_'+AU.id)==='1';S={...DEF,...(dirty?mergeOffline(base,local,cloud):mg(local,cloud))};if(!dirty)localStorage.setItem('mt_base_'+AU.id,JSON.stringify(pk()));await offlineWrite().catch(()=>{});if(dirty)await push();
 if(old&&SYNC==='ok'){localStorage.setItem('mt_old',JSON.stringify(old));localStorage.removeItem('mt')}}
 async function boot(){
  applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}
@@ -224,7 +230,7 @@ async function boot(){
  const s0=sess();
  if(s0){AU=s0;try{await enter()}catch(e){
   if(e.status===401||e.status===400||e.status===403){localStorage.removeItem('sb');AU=null}
-  else{PF=jl('pf_'+AU.id);S={...DEF,...(jl('mt_'+AU.id)||{})}}
+  else{PF=jl('pf_'+AU.id);let cached=jl('mt_'+AU.id);if(!cached)cached=await offlineRead(AU.id).catch(()=>null);S={...DEF,...(cached||{})};SYNC='offline'}
  }}
  const lp=new URLSearchParams(location.search).get('l');if(lp){viewShared(lp);return}
  render();
@@ -654,7 +660,7 @@ if(m){if(!all().find(x=>x.id===m.id))S.custom.push({...m,custom:1,tm:1})}
 else{const x=r.s.x||{};m={id:'c'+Date.now()+'_'+i,t:r.s.t,k:x.k||'film',o:x.o||(/[\u0600-\u06FF]/.test(r.s.t)?'ایرانی':'خارجی'),y:r.s.y||x.y||'',g:x.g||'',en:x.e||'',d:'',img:x.img||'',custom:1};S.custom.push(m)}
 S.lib[m.id]={...(S.lib[m.id]||{}),st:IM.st};c++});
 save();close_();history.replaceState(null,'',location.pathname);S.tab='lists';S.lt=IM.st;render();alert(c+' مورد اضافه شد')}
-const APP_VER='2.1.2';
+const APP_VER='2.2.0';
 let LIST_VIEW='normal';try{LIST_VIEW=localStorage.getItem('filmnegar_list_view')==='compact'?'compact':'normal'}catch(e){}
 const TH=()=>localStorage.getItem('theme')||'auto';
 function applyTheme(){const t=TH(),r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
@@ -691,14 +697,7 @@ function open_(h){document.getElementById('box').innerHTML=h;document.getElement
 function close_(){document.getElementById('modal').classList.remove('show')}
 document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')close_()};
 const TABS=[['home','🏠','خانه'],['catalog','🔍','کاتالوگ'],['lists','📋','لیست‌های من'],['friends','👥','دوستان'],['me','👤','من']];
-function render(keep){
-if(!AU){authView();return}if(!PF){nameView();return}const v={home,catalog,lists,friends,me}[S.tab]();
-const a=document.getElementById('app');a.innerHTML=v;if(S.tab==='catalog'&&S.q.trim().length>1)tmdb();
-document.getElementById('nav').innerHTML=TABS.map(([k,i,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';render()">${i}<br>${t}${k==='friends'&&(SOCIAL_NOTIFS.some(n=>!n.read_at)||CHAT_UNREAD>0)?' <span style=\"color:var(--ac)\">●</span>':''}</button>`).join('');
- if(S.tab==='friends'&&!SOCIAL_RENDERING)refreshSocial();
-if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}}
+function render(keep){if(!AU){authView();return}if(!PF){nameView();return}const offline=!navigator.onLine;if(offline)S.tab='lists';const v={home,catalog,lists,friends,me}[S.tab]();const a=document.getElementById('app');a.innerHTML=(offline?'<div class="offline-banner" role="status"><b>📴 حالت آفلاین</b><span>فهرست‌های ذخیره‌شده در این دستگاه در دسترس‌اند. افزودن و ویرایش‌ها پس از اتصال همگام می‌شوند.</span></div>':'')+v;if(S.tab==='catalog'&&S.q.trim().length>1&&navigator.onLine)tmdb();const tabs=offline?[TABS.find(x=>x[0]==='lists')]:TABS;document.getElementById('nav').innerHTML=tabs.map(([k,i,t])=>'<button class="'+(S.tab===k?'on':'')+'" onclick="S.tab=\''+k+'\';render()">'+i+'<br>'+t+'</button>').join('');if(S.tab==='friends'&&!SOCIAL_RENDERING&&navigator.onLine)refreshSocial();if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}}
 boot();
-window.addEventListener('focus',()=>{if(AU&&!SOCIAL_BUSY)refreshSocial()});
-setInterval(()=>{if(AU&&!SOCIAL_BUSY&&document.visibilityState==='visible')refreshSocial()},15000);
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+window.addEventListener('focus',()=>{if(AU&&navigator.onLine&&!SOCIAL_BUSY)refreshSocial()});setInterval(()=>{if(AU&&navigator.onLine&&!SOCIAL_BUSY&&document.visibilityState==='visible')refreshSocial()},15000);window.addEventListener('offline',()=>{SYNC='offline';S.tab='lists';render()});window.addEventListener('online',async()=>{if(AU){SYNC='saving';updSync();await push();render();if(S.tab==='friends')refreshSocial()}});if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).catch(()=>{}));
 </script></body></html>

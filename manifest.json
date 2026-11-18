@@ -1,0 +1,21 @@
+{
+  "name": "FilmNegar | فیلم‌نگار",
+  "short_name": "FilmNegar",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090f1b",
+  "theme_color": "#0b1b33",
+  "description": "آرشیو شخصی فیلم و سریال با امکان استفاده آفلاین",
+  "icons": [
+    {
+      "src": "./assets/offline-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
